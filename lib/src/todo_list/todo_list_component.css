@@ -11,15 +11,15 @@ li:hover {
   background-color: #EEEEEE;
 }
 
-li material-checkbox {
-  vertical-align: middle;
+.messages {
+	flex-grow: 1;
 }
 
-li material-fab {
-  float: right;
-  vertical-align: middle;
+:host {
+	display: flex;
+	flex-direction: column;
 }
 
-.done {
-  text-decoration: line-through;
+.message-input {
+	
 }

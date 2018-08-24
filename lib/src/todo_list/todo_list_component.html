@@ -1,12 +1,12 @@
-<div *ngIf="items.isNotEmpty">
+<div class="messages" *ngIf="items.isNotEmpty">
   <ul>
     <li *ngFor="let item of items; let i=index">
-      <span>{{item}}</span>
+      <material-chip [removable]="false">{{item}}</material-chip>
     </li>
   </ul>
 </div>
 
-<div>
+<div class="message-input">
   <material-input label="Say something..."
                   autoFocus floatingLabel style="width:80%"
                   [(ngModel)]="newTodo"

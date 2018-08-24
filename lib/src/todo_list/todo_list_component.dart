@@ -10,7 +10,7 @@ import 'todo_list_service.dart';
   styleUrls: ['todo_list_component.css'],
   templateUrl: 'todo_list_component.html',
   directives: [
-    MaterialCheckboxComponent,
+    MaterialChipComponent,
     MaterialFabComponent,
     MaterialIconComponent,
     materialInputDirectives,
