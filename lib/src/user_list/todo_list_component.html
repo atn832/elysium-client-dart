@@ -1,7 +1,7 @@
 <div *ngIf="items.isNotEmpty">
   <ul>
     <li *ngFor="let item of items; let i=index">
-      <span>{{item}}</span>
+      <material-chip [removable]="false">{{item}}</material-chip>
     </li>
   </ul>
 </div>

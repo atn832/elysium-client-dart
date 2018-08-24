@@ -6,7 +6,6 @@ ul {
 li {
 	display: inline-block;
   line-height: 3em;
-	border: 1px solid gray;
 }
 
 li:hover {
