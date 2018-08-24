@@ -1,0 +1,7 @@
+<div *ngIf="items.isNotEmpty">
+  <ul>
+    <li *ngFor="let item of items; let i=index">
+      <span>{{item}}</span>
+    </li>
+  </ul>
+</div>

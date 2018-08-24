@@ -1,0 +1,21 @@
+<div *ngIf="items.isNotEmpty">
+  <ul>
+    <li *ngFor="let item of items; let i=index">
+      <span>{{item}}</span>
+    </li>
+  </ul>
+</div>
+
+<div>
+  <material-input label="Say something..."
+                  autoFocus floatingLabel style="width:80%"
+                  [(ngModel)]="newTodo"
+                  (keyup.enter)="add()">
+  </material-input>
+
+  <material-fab mini raised
+                (trigger)="add()"
+                [disabled]="newTodo.isEmpty">
+    <material-icon icon="add"></material-icon>
+  </material-fab>
+</div>
