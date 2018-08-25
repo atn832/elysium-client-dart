@@ -4,6 +4,8 @@ import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 
 import 'todo_list_service.dart';
+import 'message.dart';
+import 'person.dart';
 
 @Component(
   selector: 'todo-list',
@@ -22,7 +24,7 @@ import 'todo_list_service.dart';
 class TodoListComponent implements OnInit {
   final TodoListService todoListService;
 
-  List<String> items = [];
+  List<Message> items = [];
   String newTodo = '';
 
   TodoListComponent(this.todoListService);
@@ -33,9 +35,9 @@ class TodoListComponent implements OnInit {
   }
 
   void add() {
-    items.add(newTodo);
+    items.add(Message(Person('me'), newTodo));
     newTodo = '';
   }
 
-  String remove(int index) => items.removeAt(index);
+  Message remove(int index) => items.removeAt(index);
 }
