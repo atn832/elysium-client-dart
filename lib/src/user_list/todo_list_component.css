@@ -5,9 +5,17 @@ ul {
 
 li {
 	display: inline-block;
-  line-height: 3em;
+  line-height: 2em;
 }
 
 li:hover {
   background-color: #EEEEEE;
+}
+
+.user {
+	height: auto;
+}
+
+.multiline {
+	white-space: pre-wrap;
 }

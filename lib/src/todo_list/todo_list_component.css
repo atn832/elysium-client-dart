@@ -23,3 +23,11 @@ li:hover {
 .message-input {
 	
 }
+
+.bubble {
+	height: auto;
+}
+
+.multiline {
+	white-space: pre-wrap;
+}

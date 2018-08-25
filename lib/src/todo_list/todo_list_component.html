@@ -1,7 +1,9 @@
 <div class="messages" *ngIf="items.isNotEmpty">
   <ul>
     <li *ngFor="let item of items; let i=index">
-      <material-chip [removable]="false">{{item}}</material-chip>
+      <material-chip class="bubble" [removable]="false">
+				<div class="multiline">{{item}}</div>
+			</material-chip>
     </li>
   </ul>
 </div>
