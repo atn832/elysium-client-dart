@@ -3,8 +3,8 @@
     <li *ngFor="let item of items; let i=index">
       <material-chip class="bubble" [removable]="false">
 				<div class="multiline">{{item.message}}</div>
-				said {{item.author.name}}
 			</material-chip>
+			said {{item.author.name}}
     </li>
   </ul>
 </div>
