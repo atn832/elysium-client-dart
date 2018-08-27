@@ -5,8 +5,8 @@ import 'package:angular_components/angular_components.dart';
 
 import 'todo_list_service.dart';
 import 'http_chat_service.dart';
-import 'message.dart';
-import 'person.dart';
+import '../message.dart';
+import '../person.dart';
 
 @Component(
   selector: 'todo-list',
