@@ -20,6 +20,9 @@ class HttpChatService extends TodoListService {
 	static final frun = Person("frun");
 	static final atn = Person("atn");
 	
+	String loginToken;
+	int userId;
+	
   List<Message> messageList = <Message>[
 		Message(frun, "second service."),
   ];
@@ -28,6 +31,10 @@ class HttpChatService extends TodoListService {
     try {
       final response = await _http.get(_heroesUrl);
       final data = _extractData(response) as Map<String, dynamic>;
+      loginToken = data["token"];
+      userId = data["user"]["ID"];
+      print("loginToken" + loginToken);
+      print("userId" + userId.toString());
       messageList.add(Message(frun, "Channel is " + (data["channel"]["name"] as String)));
       final response2 = await _http.get(_getmessagesUrl);
       final data2 = _extractData(response2) as Map<String, dynamic>;
