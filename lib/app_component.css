@@ -13,4 +13,6 @@
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
 }

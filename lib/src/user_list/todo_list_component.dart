@@ -4,7 +4,6 @@ import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 
 import '../todo_list/chat_service.dart';
-import '../todo_list/http_chat_service.dart';
 import '../person.dart';
 
 @Component(
@@ -17,7 +16,6 @@ import '../person.dart';
     NgFor,
     NgIf,
   ],
-  providers: [const ClassProvider(ChatService, useClass: HttpChatService)],
 )
 class UserListComponent implements OnInit {
   final ChatService chatService;
@@ -28,7 +26,6 @@ class UserListComponent implements OnInit {
 
   @override
   Future<Null> ngOnInit() async {
-    chatService.setUsername("atn");
     items = await chatService.getUserList();
   }
 }

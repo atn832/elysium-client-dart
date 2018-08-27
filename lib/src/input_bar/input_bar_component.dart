@@ -15,7 +15,6 @@ import '../todo_list/http_chat_service.dart';
     MaterialIconComponent,
     materialInputDirectives,
   ],
-  providers: [const ClassProvider(ChatService, useClass: HttpChatService)],
 )
 
 class InputBarComponent implements OnInit {

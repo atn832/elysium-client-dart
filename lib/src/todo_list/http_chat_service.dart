@@ -8,13 +8,20 @@ import 'chat_service.dart';
 import '../message.dart';
 import '../person.dart';
 
-/// Mock service emulating access to a to-do list stored on a server.
+/// Chat service that talks to the server over Http.
 @Injectable()
 class HttpChatService extends ChatService {
   final Client _http;
+  final host = "/Elysium";
   
-  HttpChatService(this._http);
-  
+  HttpChatService(this._http) {
+    signInCompleter = Completer();
+    signedIn = signInCompleter.future;
+  }
+
+  Completer signInCompleter;
+  Future signedIn;
+  bool startedSignin = false;
 	String username;
 	String loginToken;
 	int userId;
@@ -22,20 +29,26 @@ class HttpChatService extends ChatService {
 	List<Person> userList = <Person>[];
   List<Message> messageList = <Message>[];
   
-  setUsername(String username) {
-    this.username = username;
-  }
+  Future signIn(String username) async {
+    if (startedSignin) {
+      print("Skipping signin");
+      print(signedIn);
+      return signedIn;
+    }
+    print("signing in");
+    startedSignin = true;
 
-  Future<List<Message>> getTodoList() async {
+    this.username = username;
     try {
-      final host = "/Elysium";
+      print("login");
       final _loginUrl = "${host}/login.action?channel.name=Elysium&"
         "channel.password=&user.name=${username}";
       final response = await _http.get(_loginUrl);
       final data = _extractData(response) as Map<String, dynamic>;
       loginToken = data["token"];
       userId = data["user"]["ID"];
-      
+
+      print("getmessages");
       final _getmessagesUrl = "${host}/getmessages.action?token=${loginToken}&"
         "userID=${userId}&log=true&lastEventID=-1&numMessages=-1";
       final response2 = await _http.get(_getmessagesUrl);
@@ -46,19 +59,30 @@ class HttpChatService extends ChatService {
         .map((e) => Message(Person(e["source"]["entity"]["name"]), e["content"] as String))
         .forEach((m) => messageList.add(m));
       
-      userList = [];
       firstChanEvents["userList"]
         .map((u) => Person(u["name"]))
         .forEach((p) => userList.add(p));
+        
+      print("done signing in");
+      print(userList);
 
-      return messageList;
+      signInCompleter.complete(true);
     } catch (e) {
+      signInCompleter.complete();
       throw _handleError(e);
     }
+    return signedIn;
+  }
+
+  Future<List<Message>> getTodoList() async {
+    print("getTodoList");
+    await signedIn;
+    return messageList;
   }
   
   Future<List<Person>> getUserList() async {
-    await getTodoList();
+    print("getUserList");
+    await signedIn;
     return userList;
   }
 

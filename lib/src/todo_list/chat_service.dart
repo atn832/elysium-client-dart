@@ -25,7 +25,7 @@ class ChatService {
 
   Future<List<Message>> getTodoList() async => mockTodoList;
 
-  setUsername(String username) {}
+  Future signIn(String username) {}
   
   Future<List<Person>> getUserList() async => mockUserList;
   
