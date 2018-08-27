@@ -43,12 +43,10 @@ class HttpChatService extends TodoListService {
         .map((e) => Message(Person(e["source"]["entity"]["name"]), e["content"] as String))
         .forEach((m) => messageList.add(m));
       
+      userList = [];
       firstChanEvents["userList"]
         .map((u) => Person(u["name"]))
-        .forEach((u) {
-          print(u.name);
-          userList.add(u);
-        });
+        .forEach((p) => userList.add(p));
 
       return messageList;
     } catch (e) {
