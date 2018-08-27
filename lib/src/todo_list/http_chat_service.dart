@@ -28,14 +28,15 @@ class HttpChatService extends ChatService {
 
   Future<List<Message>> getTodoList() async {
     try {
-      final _loginUrl = "login.action?channel.name=Elysium&channel.password=&"
-        "user.name=${username}";
+      final host = "/Elysium";
+      final _loginUrl = "${host}/login.action?channel.name=Elysium&"
+        "channel.password=&user.name=${username}";
       final response = await _http.get(_loginUrl);
       final data = _extractData(response) as Map<String, dynamic>;
       loginToken = data["token"];
       userId = data["user"]["ID"];
       
-      final _getmessagesUrl = "getmessages.action?token=${loginToken}&"
+      final _getmessagesUrl = "${host}/getmessages.action?token=${loginToken}&"
         "userID=${userId}&log=true&lastEventID=-1&numMessages=-1";
       final response2 = await _http.get(_getmessagesUrl);
       final data2 = _extractData(response2) as Map<String, dynamic>;

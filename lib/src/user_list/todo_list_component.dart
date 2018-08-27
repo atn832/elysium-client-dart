@@ -28,6 +28,7 @@ class UserListComponent implements OnInit {
 
   @override
   Future<Null> ngOnInit() async {
+    chatService.setUsername("atn");
     items = await chatService.getUserList();
   }
 }
