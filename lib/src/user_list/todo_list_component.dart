@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 
+import '../todo_list/chat_service.dart';
 import '../todo_list/http_chat_service.dart';
-import '../todo_list/todo_list_service.dart';
 import '../person.dart';
 
 @Component(
@@ -17,10 +17,10 @@ import '../person.dart';
     NgFor,
     NgIf,
   ],
-  providers: [const ClassProvider(TodoListService, useClass: HttpChatService)],
+  providers: [const ClassProvider(ChatService, useClass: HttpChatService)],
 )
 class UserListComponent implements OnInit {
-  final TodoListService chatService;
+  final ChatService chatService;
 
   List<Person> items = [];
 

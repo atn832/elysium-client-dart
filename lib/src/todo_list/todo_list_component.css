@@ -7,10 +7,6 @@ li {
   line-height: 3em;
 }
 
-li:hover {
-  background-color: #EEEEEE;
-}
-
 .messages {
 	flex-grow: 1;
 }

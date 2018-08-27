@@ -4,13 +4,13 @@ import 'dart:convert';
 import 'package:angular/core.dart';
 import 'package:http/http.dart';
 
-import 'todo_list_service.dart';
+import 'chat_service.dart';
 import '../message.dart';
 import '../person.dart';
 
 /// Mock service emulating access to a to-do list stored on a server.
 @Injectable()
-class HttpChatService extends TodoListService {
+class HttpChatService extends ChatService {
   final Client _http;
   
   HttpChatService(this._http);
@@ -28,13 +28,15 @@ class HttpChatService extends TodoListService {
 
   Future<List<Message>> getTodoList() async {
     try {
-      final _loginUrl = "login.action?channel.name=Elysium&channel.password=&user.name=${username}";
+      final _loginUrl = "login.action?channel.name=Elysium&channel.password=&"
+        "user.name=${username}";
       final response = await _http.get(_loginUrl);
       final data = _extractData(response) as Map<String, dynamic>;
       loginToken = data["token"];
       userId = data["user"]["ID"];
       
-      final _getmessagesUrl = "getmessages.action?token=${loginToken}&userID=${userId}&log=true&lastEventID=-1&numMessages=-1";
+      final _getmessagesUrl = "getmessages.action?token=${loginToken}&"
+        "userID=${userId}&log=true&lastEventID=-1&numMessages=-1";
       final response2 = await _http.get(_getmessagesUrl);
       final data2 = _extractData(response2) as Map<String, dynamic>;
       final firstChanEvents = data2["chanUpdates"][0];

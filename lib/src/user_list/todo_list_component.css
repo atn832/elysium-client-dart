@@ -8,10 +8,6 @@ li {
   line-height: 2em;
 }
 
-li:hover {
-  background-color: #EEEEEE;
-}
-
 .user {
 	height: auto;
 }
