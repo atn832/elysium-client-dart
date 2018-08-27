@@ -4,6 +4,7 @@ import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 
 import 'todo_list_service.dart';
+import 'http_chat_service.dart';
 import 'message.dart';
 import 'person.dart';
 
@@ -19,7 +20,7 @@ import 'person.dart';
     NgFor,
     NgIf,
   ],
-  providers: [const ClassProvider(TodoListService)],
+  providers: [const ClassProvider(TodoListService, useClass: HttpChatService)],
 )
 class TodoListComponent implements OnInit {
   final TodoListService todoListService;
