@@ -22,5 +22,6 @@ class TodoListService {
 	}
 
   Future<List<Message>> getTodoList() async => mockTodoList;
-	
+
+  setUsername(String username) {}	
 }

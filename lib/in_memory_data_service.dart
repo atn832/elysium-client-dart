@@ -584,6 +584,7 @@ class InMemoryDataService extends MockClient {
     var data;
     switch (request.method) {
       case 'GET':
+        print(request.url);
         switch (request.url.pathSegments.last) {
           case 'login.action':
             data = loginActionResponse;

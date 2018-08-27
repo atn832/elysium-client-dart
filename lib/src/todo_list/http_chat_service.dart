@@ -11,37 +11,35 @@ import '../person.dart';
 /// Mock service emulating access to a to-do list stored on a server.
 @Injectable()
 class HttpChatService extends TodoListService {
-  static const _heroesUrl = "login.action?channel.name=Elysium&channel.password=&user.name=atn";
-  static const _getmessagesUrl = "getmessages.action?token=155567289&userID=4&timeZone=America%2FLos_Angeles&log=true&lastEventID=-1&numMessages=-1";
   final Client _http;
   
   HttpChatService(this._http);
   
-	static final frun = Person("frun");
-	static final atn = Person("atn");
-	
+	String username;
 	String loginToken;
 	int userId;
 	
-  List<Message> messageList = <Message>[
-		Message(frun, "second service."),
-  ];
+  List<Message> messageList = <Message>[];
+  
+  setUsername(String username) {
+    this.username = username;
+  }
 
   Future<List<Message>> getTodoList() async {
     try {
-      final response = await _http.get(_heroesUrl);
+      var _loginUrl = "login.action?channel.name=Elysium&channel.password=&user.name=${username}";
+      final response = await _http.get(_loginUrl);
       final data = _extractData(response) as Map<String, dynamic>;
       loginToken = data["token"];
       userId = data["user"]["ID"];
-      print("loginToken" + loginToken);
-      print("userId" + userId.toString());
-      messageList.add(Message(frun, "Channel is " + (data["channel"]["name"] as String)));
+      
+      var _getmessagesUrl = "getmessages.action?token=${loginToken}&userID=${userId}&log=true&lastEventID=-1&numMessages=-1";
       final response2 = await _http.get(_getmessagesUrl);
       final data2 = _extractData(response2) as Map<String, dynamic>;
       data2["chanUpdates"][0]["events"]
         .where((e) => e["eventType"]["type"] == "Message")
-        .map((e) => e["content"])
-        .forEach((s) => messageList.add(Message(atn, s as String)));
+        .map((e) => Message(Person(e["source"]["entity"]["name"]), e["content"] as String))
+        .forEach((m) => messageList.add(m));
       return messageList;
     } catch (e) {
       throw _handleError(e);

@@ -32,6 +32,7 @@ class TodoListComponent implements OnInit {
 
   @override
   Future<Null> ngOnInit() async {
+    todoListService.setUsername("atn");
     items = await todoListService.getTodoList();
   }
 
