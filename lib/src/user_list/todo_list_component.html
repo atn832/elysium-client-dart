@@ -2,7 +2,7 @@
   <ul>
     <li *ngFor="let item of items; let i=index">
       <material-chip class="user" [removable]="false">
-				<div class="multiline">{{item}}</div>
+				<div class="multiline">{{item.name}}</div>
 			</material-chip>
     </li>
   </ul>

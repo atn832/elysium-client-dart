@@ -19,6 +19,7 @@ class HttpChatService extends TodoListService {
 	String loginToken;
 	int userId;
 	
+	List<Person> userList = <Person>[];
   List<Message> messageList = <Message>[];
   
   setUsername(String username) {
@@ -27,25 +28,39 @@ class HttpChatService extends TodoListService {
 
   Future<List<Message>> getTodoList() async {
     try {
-      var _loginUrl = "login.action?channel.name=Elysium&channel.password=&user.name=${username}";
+      final _loginUrl = "login.action?channel.name=Elysium&channel.password=&user.name=${username}";
       final response = await _http.get(_loginUrl);
       final data = _extractData(response) as Map<String, dynamic>;
       loginToken = data["token"];
       userId = data["user"]["ID"];
       
-      var _getmessagesUrl = "getmessages.action?token=${loginToken}&userID=${userId}&log=true&lastEventID=-1&numMessages=-1";
+      final _getmessagesUrl = "getmessages.action?token=${loginToken}&userID=${userId}&log=true&lastEventID=-1&numMessages=-1";
       final response2 = await _http.get(_getmessagesUrl);
       final data2 = _extractData(response2) as Map<String, dynamic>;
-      data2["chanUpdates"][0]["events"]
+      final firstChanEvents = data2["chanUpdates"][0];
+      firstChanEvents["events"]
         .where((e) => e["eventType"]["type"] == "Message")
         .map((e) => Message(Person(e["source"]["entity"]["name"]), e["content"] as String))
         .forEach((m) => messageList.add(m));
+      
+      firstChanEvents["userList"]
+        .map((u) => Person(u["name"]))
+        .forEach((u) {
+          print(u.name);
+          userList.add(u);
+        });
+
       return messageList;
     } catch (e) {
       throw _handleError(e);
     }
   }
   
+  Future<List<Person>> getUserList() async {
+    await getTodoList();
+    return userList;
+  }
+
   dynamic _extractData(Response resp) => json.decode(resp.body);
   
   Exception _handleError(dynamic e) {

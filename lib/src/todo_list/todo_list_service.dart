@@ -7,9 +7,11 @@ import '../person.dart';
 /// Mock service emulating access to a to-do list stored on a server.
 @Injectable()
 class TodoListService {
-	static final frun = Person("frun");
-	static final atn = Person("atn");
-	
+  static final frun = Person("frun");
+  static final atn = Person("atn");
+
+  List<Person> mockUserList = <Person>[frun, atn];
+
   List<Message> mockTodoList = <Message>[
 		Message(frun, "hello!\ni just landed."),
 		Message(atn, "where are you?")
@@ -23,5 +25,7 @@ class TodoListService {
 
   Future<List<Message>> getTodoList() async => mockTodoList;
 
-  setUsername(String username) {}	
+  setUsername(String username) {}
+  
+  Future<List<Person>> getUserList() async => mockUserList;
 }
