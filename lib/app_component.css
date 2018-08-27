@@ -1,4 +1,12 @@
 :host {
-	height: 100%;
-    /* This is equivalent of the 'body' selector of a page. */
+  /* This is equivalent of the 'body' selector of a page. */
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollable {
+  flex-grow: 1;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
 }

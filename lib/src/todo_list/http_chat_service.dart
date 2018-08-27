@@ -62,6 +62,11 @@ class HttpChatService extends ChatService {
     return userList;
   }
 
+  sendMessage(String message) {
+    // TODO: run say.action
+    messageList.add(Message(Person(username), message));
+  }
+
   dynamic _extractData(Response resp) => json.decode(resp.body);
   
   Exception _handleError(dynamic e) {

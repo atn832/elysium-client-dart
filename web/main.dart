@@ -9,8 +9,8 @@ import 'package:http/http.dart';
 import 'main.template.dart' as self;
 
 @GenerateInjector([
-  // ClassProvider(Client, useClass: InMemoryDataService),
-  ClassProvider(Client, useClass: BrowserClient),
+  ClassProvider(Client, useClass: InMemoryDataService),
+  // ClassProvider(Client, useClass: BrowserClient),
   // Using a real back end? Change the above to:
   //   ClassProvider(Client, useClass: BrowserClient),
 ])

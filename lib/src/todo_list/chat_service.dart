@@ -28,4 +28,8 @@ class ChatService {
   setUsername(String username) {}
   
   Future<List<Person>> getUserList() async => mockUserList;
+  
+  sendMessage(String message) {
+    mockTodoList.add(Message(atn, message));
+  }
 }

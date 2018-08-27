@@ -14,9 +14,6 @@ import '../person.dart';
   templateUrl: 'todo_list_component.html',
   directives: [
     MaterialChipComponent,
-    MaterialFabComponent,
-    MaterialIconComponent,
-    materialInputDirectives,
     NgFor,
     NgIf,
   ],
@@ -26,7 +23,6 @@ class TodoListComponent implements OnInit {
   final ChatService chatService;
 
   List<Message> items = [];
-  String newTodo = '';
 
   TodoListComponent(this.chatService);
 
@@ -35,11 +31,4 @@ class TodoListComponent implements OnInit {
     chatService.setUsername("atn");
     items = await chatService.getTodoList();
   }
-
-  void add() {
-    items.add(Message(Person('me'), newTodo));
-    newTodo = '';
-  }
-
-  Message remove(int index) => items.removeAt(index);
 }
