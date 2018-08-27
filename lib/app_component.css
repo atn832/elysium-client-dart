@@ -4,6 +4,10 @@
   flex-direction: column;
 }
 
+:host > * {
+  margin: 0 16px;
+}
+
 .scrollable {
   flex-grow: 1;
   overflow-y: scroll;
