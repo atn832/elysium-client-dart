@@ -26,6 +26,6 @@ class MessageListComponent implements OnInit {
 
   @override
   Future<Null> ngOnInit() async {
-    items = await chatService.getTodoList();
+    items = await chatService.getMessageList();
   }
 }
