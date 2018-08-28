@@ -8,7 +8,7 @@ import 'chat_service.dart';
 import 'message.dart';
 import 'person.dart';
 
-/// Chat service that talks to the server over Http.
+/// Chat service that talks to the server over http.
 @Injectable()
 class HttpChatService extends ChatService {
   final Client _http;
@@ -74,14 +74,12 @@ class HttpChatService extends ChatService {
     return signedIn;
   }
 
-  Future<List<Message>> getTodoList() async {
-    print("getTodoList");
+  Future<List<Message>> getMessageList() async {
     await signedIn;
     return messageList;
   }
   
   Future<List<Person>> getUserList() async {
-    print("getUserList");
     await signedIn;
     return userList;
   }

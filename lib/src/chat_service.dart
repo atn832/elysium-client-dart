@@ -12,18 +12,18 @@ class ChatService {
 
   List<Person> mockUserList = <Person>[frun, atn];
 
-  List<Message> mockTodoList = <Message>[
+  List<Message> mockMessageList = <Message>[
 		Message(frun, "hello!\ni just landed."),
 		Message(atn, "where are you?")
 	];
 
   ChatService() {
-		Timer.periodic(Duration(seconds:2), (t) => mockTodoList.add(
+		Timer.periodic(Duration(seconds:2), (t) => mockMessageList.add(
 			Message(frun, "new message")
 		));
 	}
 
-  Future<List<Message>> getTodoList() async => mockTodoList;
+  Future<List<Message>> getMessageList() async => mockMessageList;
 
   Future signIn(String username) {}
   
