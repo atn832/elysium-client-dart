@@ -3,8 +3,9 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
-import 'src/message.dart';
-import 'src/person.dart';
+
+import 'message.dart';
+import 'person.dart';
 
 class InMemoryDataService extends MockClient {
   static const loginActionResponse = {

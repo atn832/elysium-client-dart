@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 
-import '../todo_list/chat_service.dart';
+import '../chat_service.dart';
 import '../person.dart';
 
 @Component(

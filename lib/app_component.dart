@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:angular/angular.dart';
 
-import 'src/todo_list/chat_service.dart';
-import 'src/todo_list/http_chat_service.dart';
+import 'src/chat_service.dart';
+import 'src/http_chat_service.dart';
 
 import 'src/input_bar/input_bar_component.dart';
 import 'src/todo_list/todo_list_component.dart';

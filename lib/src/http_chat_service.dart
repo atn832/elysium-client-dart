@@ -5,8 +5,8 @@ import 'package:angular/core.dart';
 import 'package:http/http.dart';
 
 import 'chat_service.dart';
-import '../message.dart';
-import '../person.dart';
+import 'message.dart';
+import 'person.dart';
 
 /// Chat service that talks to the server over Http.
 @Injectable()
