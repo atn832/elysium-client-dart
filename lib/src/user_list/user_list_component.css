@@ -4,14 +4,14 @@ ul {
 }
 
 li {
-	display: inline-block;
+  display: inline-block;
   line-height: 2em;
 }
 
 .user {
-	height: auto;
+  height: auto;
 }
 
 .multiline {
-	white-space: pre-wrap;
+  white-space: pre-wrap;
 }

@@ -8,21 +8,21 @@ import '../message.dart';
 import '../person.dart';
 
 @Component(
-  selector: 'todo-list',
-  styleUrls: ['todo_list_component.css'],
-  templateUrl: 'todo_list_component.html',
+  selector: 'message-list',
+  styleUrls: ['message_list_component.css'],
+  templateUrl: 'message_list_component.html',
   directives: [
     MaterialChipComponent,
     NgFor,
     NgIf,
   ],
 )
-class TodoListComponent implements OnInit {
+class MessageListComponent implements OnInit {
   final ChatService chatService;
 
   List<Message> items = [];
 
-  TodoListComponent(this.chatService);
+  MessageListComponent(this.chatService);
 
   @override
   Future<Null> ngOnInit() async {

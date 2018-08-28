@@ -8,8 +8,8 @@ import '../person.dart';
 
 @Component(
   selector: 'user-list',
-  styleUrls: ['todo_list_component.css'],
-  templateUrl: 'todo_list_component.html',
+  styleUrls: ['user_list_component.css'],
+  templateUrl: 'user_list_component.html',
   directives: [
     MaterialChipComponent,
     materialInputDirectives,
