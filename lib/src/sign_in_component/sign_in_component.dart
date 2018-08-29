@@ -12,6 +12,7 @@ import '../route_paths.dart';
   styleUrls: ['sign_in_component.css'],
   templateUrl: 'sign_in_component.html',
   directives: [
+    MaterialButtonComponent,
     materialInputDirectives,
     routerDirectives,
   ],

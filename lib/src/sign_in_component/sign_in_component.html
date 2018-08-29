@@ -6,4 +6,8 @@
                   [(ngModel)]="username"
                   (keyup.enter)="signin()">
   </material-input>
+
+  <material-button raised (trigger)="signin()">
+    Sign in
+  </material-button>
 </div>
