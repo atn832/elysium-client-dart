@@ -16,7 +16,7 @@ class Routes {
     // Redirect empty path to chat.
     RouteDefinition.redirect(
       path: '',
-      redirectTo: RoutePaths.chat.toUrl(),
+      redirectTo: RoutePaths.chat.toUrl(parameters: {usernameParam: 'atn'}),
     ),
   ];
 }
