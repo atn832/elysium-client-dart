@@ -1,5 +1,7 @@
 import 'package:angular/angular.dart';
 
+import 'package:angular_router/angular_router.dart';
+
 import 'package:quickstart/src/in_memory_data_service.dart';
 import 'package:quickstart/app_component.template.dart' as ng;
 
@@ -9,10 +11,10 @@ import 'package:http/http.dart';
 import 'main.template.dart' as self;
 
 @GenerateInjector([
+  routerProvidersHash, // You can use routerProviders in production
   ClassProvider(Client, useClass: InMemoryDataService),
+  // Using a real back end? Use BrowserClient.
   // ClassProvider(Client, useClass: BrowserClient),
-  // Using a real back end? Change the above to:
-  //   ClassProvider(Client, useClass: BrowserClient),
 ])
 
 final InjectorFactory injector = self.injector$Injector;

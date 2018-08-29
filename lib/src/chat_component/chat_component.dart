@@ -16,8 +16,7 @@ import '../user_list/user_list_component.dart';
 )
 class ChatComponent implements OnInit {
   final ChatService _chatService;
-  @Input()
-  String username;
+  String username = "atn";
 
   ChatComponent(this._chatService);
 
