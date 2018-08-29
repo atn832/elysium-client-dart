@@ -7,7 +7,7 @@
       (function () {
         var m = document.location.pathname.match(/^(\/[-\w]+)+\/web($|\/)/);
         var href = m ? m[0] : '/';
-        console.log(m, href);
+        console.log("base href", m, href);
         document.write('<base href="' + href + '" />');
       }());
     </script>
