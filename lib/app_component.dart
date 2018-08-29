@@ -8,10 +8,11 @@ import 'src/chat_component/chat_component.dart';
 @Component(
   selector: 'my-app',
   template: '''
-    <chat></chat>
+    <chat [username]="username"></chat>
   ''',
   directives: [ChatComponent],
   providers: [const ClassProvider(ChatService, useClass: HttpChatService)],
 )
 class AppComponent {
+  var username = "atn";
 }

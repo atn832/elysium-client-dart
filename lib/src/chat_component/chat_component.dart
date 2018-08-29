@@ -16,11 +16,13 @@ import '../user_list/user_list_component.dart';
 )
 class ChatComponent implements OnInit {
   final ChatService _chatService;
+  @Input()
+  String username;
 
   ChatComponent(this._chatService);
 
   @override
   Future<Null> ngOnInit() async {
-    _chatService.signIn("atn");
+    _chatService.signIn(username);
   }
 }

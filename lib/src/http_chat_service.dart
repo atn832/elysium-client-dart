@@ -35,7 +35,7 @@ class HttpChatService extends ChatService {
       print(signedIn);
       return signedIn;
     }
-    print("signing in");
+    print("signing in " + username);
     startedSignin = true;
 
     this.username = username;
