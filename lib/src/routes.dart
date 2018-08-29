@@ -13,5 +13,10 @@ class Routes {
 
   static final all = <RouteDefinition>[
     chat,
+    // Redirect empty path to chat.
+    RouteDefinition.redirect(
+      path: '',
+      redirectTo: RoutePaths.chat.toUrl(),
+    ),
   ];
 }
