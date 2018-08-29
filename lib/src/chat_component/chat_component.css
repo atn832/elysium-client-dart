@@ -1,5 +1,5 @@
 :host {
-  /* This is equivalent of the 'body' selector of a page. */
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
