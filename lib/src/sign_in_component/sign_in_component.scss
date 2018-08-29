@@ -1,0 +1,27 @@
+@import 'package:angular_components/css/material/material';
+@import 'package:angular_components/material_button/mixins';
+
+// form https://github.com/dart-lang/angular_components_example/blob/master/example/material_button_example/lib/material_button_example.scss
+@mixin colorize($selector, $color) {
+  $raised: $selector + '[raised]';
+  @include button-background-color($raised, $color);
+  @include button-color($raised, $mat-white);
+
+  $not-raised: $selector + ':not([raised])';
+  @include button-color($not-raised, $color);
+}
+
+:host {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  
+  @include colorize("material-button.green", $mat-green);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
