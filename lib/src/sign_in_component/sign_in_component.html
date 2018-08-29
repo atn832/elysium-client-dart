@@ -1,6 +1,9 @@
-<a [routerLink]="chatUrl('atn')">
-  atn
-</a>
-<a [routerLink]="chatUrl('frun')">
-  frun
-</a>
+<div class="form">
+  <h1>Elysium</h1>
+  
+  <material-input label="User name"
+                  autoFocus floatingLabel
+                  [(ngModel)]="username"
+                  (keyup.enter)="signin()">
+  </material-input>
+</div>
