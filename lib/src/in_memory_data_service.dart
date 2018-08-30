@@ -589,10 +589,17 @@ class InMemoryDataService extends MockClient {
         print(request.url);
         switch (request.url.pathSegments.last) {
           case 'login.action':
+            // Simulate delay to send the message.
+            await Future.delayed(Duration(seconds: 1));
             data = loginActionResponse;
             break;
           case 'getmessages.action':
+            await Future.delayed(Duration(seconds: 1));
             data = getMessagesResponse;
+            break;
+          case 'say.action':
+            await Future.delayed(Duration(seconds: 1));
+            data = {};
             break;
         }
         break;

@@ -40,7 +40,6 @@ class HttpChatService extends ChatService {
 
     this.username = username;
     try {
-      print("login");
       final _loginUrl = "${host}/login.action?channel.name=Elysium&"
         "channel.password=&user.name=${username}";
       final response = await _http.get(_loginUrl);
@@ -48,7 +47,6 @@ class HttpChatService extends ChatService {
       loginToken = data["token"];
       userId = data["user"]["ID"];
 
-      print("getmessages");
       final _getmessagesUrl = "${host}/getmessages.action?token=${loginToken}&"
         "userID=${userId}&log=true&lastEventID=-1&numMessages=-1";
       final response2 = await _http.get(_getmessagesUrl);
@@ -84,9 +82,20 @@ class HttpChatService extends ChatService {
     return userList;
   }
 
-  sendMessage(String message) {
+  Future sendMessage(String message) async {
     // TODO: run say.action
-    messageList.add(Message(Person(username), message));
+    try {
+      final _sayUrl = Uri.http("", "${host}/say.action", {
+        "token": loginToken,
+        "userID": userId.toString(),
+        "destinationID": 1.toString(),
+        "content": message
+      }).toString();
+      final response = await _http.get(_sayUrl);
+      messageList.add(Message(Person(username), message));
+    } catch (e) {
+      throw _handleError(e);
+    }
   }
 
   dynamic _extractData(Response resp) => json.decode(resp.body);
