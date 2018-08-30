@@ -1,7 +1,17 @@
-# quickstart
+# Elysium
+
+## Overview
+
+Elysium is a chat application for people who want to share more.
 
 A web app that uses [AngularDart](https://webdev.dartlang.org/angular) and
 [AngularDart Components](https://webdev.dartlang.org/components).
 
 Created from templates made available by Stagehand under a BSD-style
 [license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+
+## Set up
+
+Install Dart by following instructions at https://webdev.dartlang.org/guides/get-started#2-install-dart.
+
+Run the chat by running `webdev serve`.
