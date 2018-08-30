@@ -25,6 +25,8 @@ class HttpChatService extends ChatService {
 	String username;
 	String loginToken;
 	int userId;
+
+  int clientMessageId = 0;
 	
 	List<Person> userList = <Person>[];
   List<Message> messageList = <Message>[];
@@ -83,7 +85,6 @@ class HttpChatService extends ChatService {
   }
 
   Future sendMessage(String message) async {
-    // TODO: run say.action
     try {
       var base = Uri.base;
       final _sayUrl = Uri(
@@ -93,8 +94,10 @@ class HttpChatService extends ChatService {
         queryParameters: {
           "token": loginToken,
           "userID": userId.toString(),
+          // TODO: parse from login response.
           "destinationID": 1.toString(),
-          "content": message
+          "clientMessageID": clientMessageId,
+          "content": message,
         }
       ).toString();
       final response = await _http.get(_sayUrl);
