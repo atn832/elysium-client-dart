@@ -85,12 +85,18 @@ class HttpChatService extends ChatService {
   Future sendMessage(String message) async {
     // TODO: run say.action
     try {
-      final _sayUrl = Uri.http("", "${host}/say.action", {
-        "token": loginToken,
-        "userID": userId.toString(),
-        "destinationID": 1.toString(),
-        "content": message
-      }).toString();
+      var base = Uri.base;
+      final _sayUrl = Uri(
+        scheme: base.scheme,
+        host: base.host,
+        path: "${host}/say.action",
+        queryParameters: {
+          "token": loginToken,
+          "userID": userId.toString(),
+          "destinationID": 1.toString(),
+          "content": message
+        }
+      ).toString();
       final response = await _http.get(_sayUrl);
       messageList.add(Message(Person(username), message));
     } catch (e) {
