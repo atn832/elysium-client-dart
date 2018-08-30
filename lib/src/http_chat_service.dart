@@ -100,6 +100,7 @@ class HttpChatService extends ChatService {
           "content": message,
         }
       ).toString();
+      clientMessageId++;
       final response = await _http.get(_sayUrl);
       messageList.add(Message(Person(username), message));
     } catch (e) {
