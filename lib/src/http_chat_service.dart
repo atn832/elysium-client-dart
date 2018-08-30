@@ -96,7 +96,7 @@ class HttpChatService extends ChatService {
           "userID": userId.toString(),
           // TODO: parse from login response.
           "destinationID": 1.toString(),
-          "clientMessageID": clientMessageId,
+          "clientMessageID": clientMessageId.toString(),
           "content": message,
         }
       ).toString();
