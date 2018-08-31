@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:angular/core.dart';
 import 'package:http/http.dart';
@@ -28,6 +29,7 @@ class HttpChatService extends ChatService {
 	int userId;
 
   int clientMessageId = 0;
+  int lastEventId = -1;
 	
 	List<Person> userList = <Person>[];
   List<Message> messageList = <Message>[];
@@ -63,24 +65,43 @@ class HttpChatService extends ChatService {
   }
 
   startPolling() async {
-    final data = await getMessages(true, -1, -1);
-    final currentChanEvents = data["chanUpdates"].where((u) => u["chanId"] == channelId)[0];
-    currentChanEvents["events"]
+    final events = await getMessages(true, -1, -1);
+    updateMessageList(events);
+    updateUserList(events);
+
+    // TODO: Poll messages.
+    getMoreMessages();
+  }
+
+  updateMessageList(events) {
+    events["events"]
       .where((e) => e["eventType"]["type"] == "Message")
       .map((e) => Message(Person(e["source"]["entity"]["name"]), e["content"] as String))
       .forEach((m) => messageList.add(m));
+    events["events"].forEach((e) {
+      lastEventId = max(lastEventId, e["ID"]);
+    });
+  }
 
-    currentChanEvents["userList"]
+  updateUserList(events) {
+    events["userList"]
       .map((u) => Person(u["name"]))
       .forEach((p) => userList.add(p));
   }
 
-  Future<Map<String, dynamic>> getMessages(bool log, int lastEventId, int numMessages) async {
+  getMoreMessages() async {
+    print("Getting more messages");
+    getMessages(false, lastEventId, -1);
+    Timer(Duration(seconds:2), this.getMoreMessages);
+  }
+
+  dynamic getMessages(bool log, int lastEventId, int numMessages) async {
     final _getMessagesUrl = "${host}/getmessages.action?token=${loginToken}&"
       "userID=${userId}&log=${log}&lastEventID=${lastEventId}&numMessages=${numMessages}";
     final response = await _http.get(_getMessagesUrl);
     final data = _extractData(response) as Map<String, dynamic>;
-    return data;
+    final currentChanEvents = data["chanUpdates"].where((u) => u["chanID"] == channelId).first;
+    return currentChanEvents;
   }
 
   Future<List<Message>> getMessageList() async {
