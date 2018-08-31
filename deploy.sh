@@ -1,4 +1,10 @@
+mv web web_dev
+mv web_prod web
+
 webdev build
+
+mv web web_prod
+mv web_dev web
 
 HOST=m.wafrat.com
 DESTINATION=/var/www/html/E2
