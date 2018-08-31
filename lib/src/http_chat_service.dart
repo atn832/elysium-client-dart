@@ -63,10 +63,7 @@ class HttpChatService extends ChatService {
   }
 
   startPolling() async {
-    final _getMessagesUrl = "${host}/getmessages.action?token=${loginToken}&"
-      "userID=${userId}&log=true&lastEventID=-1&numMessages=-1";
-    final response = await _http.get(_getMessagesUrl);
-    final data = _extractData(response) as Map<String, dynamic>;
+    final data = await getMessages(true, -1, -1);
     final currentChanEvents = data["chanUpdates"].where((u) => u["chanId"] == channelId)[0];
     currentChanEvents["events"]
       .where((e) => e["eventType"]["type"] == "Message")
@@ -76,6 +73,14 @@ class HttpChatService extends ChatService {
     currentChanEvents["userList"]
       .map((u) => Person(u["name"]))
       .forEach((p) => userList.add(p));
+  }
+
+  Future<Map<String, dynamic>> getMessages(bool log, int lastEventId, int numMessages) async {
+    final _getMessagesUrl = "${host}/getmessages.action?token=${loginToken}&"
+      "userID=${userId}&log=${log}&lastEventID=${lastEventId}&numMessages=${numMessages}";
+    final response = await _http.get(_getMessagesUrl);
+    final data = _extractData(response) as Map<String, dynamic>;
+    return data;
   }
 
   Future<List<Message>> getMessageList() async {
