@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:angular/angular.dart';
 import 'package:angular_router/angular_router.dart';
 
@@ -18,11 +16,10 @@ import '../user_list/user_list_component.dart';
 )
 class ChatComponent implements OnActivate {
   final ChatService _chatService;
-  final Location _location;
 
   String username;
 
-  ChatComponent(this._chatService, this._location);
+  ChatComponent(this._chatService);
 
   @override
   void onActivate(_, RouterState current) async {

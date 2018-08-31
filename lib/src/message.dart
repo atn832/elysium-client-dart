@@ -1,4 +1,3 @@
-import 'package:angular/core.dart';
 import 'person.dart';
 
 class Message {
