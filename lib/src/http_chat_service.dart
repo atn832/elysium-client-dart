@@ -51,29 +51,33 @@ class HttpChatService extends ChatService {
       userId = data["user"]["ID"];
       channelId = data["channel"]["ID"];
 
-      final _getmessagesUrl = "${host}/getmessages.action?token=${loginToken}&"
-        "userID=${userId}&log=true&lastEventID=-1&numMessages=-1";
-      final response2 = await _http.get(_getmessagesUrl);
-      final data2 = _extractData(response2) as Map<String, dynamic>;
-      final firstChanEvents = data2["chanUpdates"][0];
-      firstChanEvents["events"]
-        .where((e) => e["eventType"]["type"] == "Message")
-        .map((e) => Message(Person(e["source"]["entity"]["name"]), e["content"] as String))
-        .forEach((m) => messageList.add(m));
-      
-      firstChanEvents["userList"]
-        .map((u) => Person(u["name"]))
-        .forEach((p) => userList.add(p));
-        
-      print("done signing in");
-      print(userList);
+      startPolling();
 
+      print("done signing in");
       signInCompleter.complete(true);
     } catch (e) {
       signInCompleter.complete();
       throw _handleError(e);
     }
     return signedIn;
+  }
+
+  startPolling() async {
+    final _getmessagesUrl = "${host}/getmessages.action?token=${loginToken}&"
+      "userID=${userId}&log=true&lastEventID=-1&numMessages=-1";
+    final response = await _http.get(_getmessagesUrl);
+    final data = _extractData(response) as Map<String, dynamic>;
+    final firstChanEvents = data["chanUpdates"][0];
+    firstChanEvents["events"]
+      .where((e) => e["eventType"]["type"] == "Message")
+      .map((e) => Message(Person(e["source"]["entity"]["name"]), e["content"] as String))
+      .forEach((m) => messageList.add(m));
+
+    firstChanEvents["userList"]
+      .map((u) => Person(u["name"]))
+      .forEach((p) => userList.add(p));
+
+    // TODO: Poll messages.
   }
 
   Future<List<Message>> getMessageList() async {
