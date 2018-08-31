@@ -63,21 +63,19 @@ class HttpChatService extends ChatService {
   }
 
   startPolling() async {
-    final _getmessagesUrl = "${host}/getmessages.action?token=${loginToken}&"
+    final _getMessagesUrl = "${host}/getmessages.action?token=${loginToken}&"
       "userID=${userId}&log=true&lastEventID=-1&numMessages=-1";
-    final response = await _http.get(_getmessagesUrl);
+    final response = await _http.get(_getMessagesUrl);
     final data = _extractData(response) as Map<String, dynamic>;
-    final firstChanEvents = data["chanUpdates"][0];
-    firstChanEvents["events"]
+    final currentChanEvents = data["chanUpdates"].where((u) => u["chanId"] == channelId)[0];
+    currentChanEvents["events"]
       .where((e) => e["eventType"]["type"] == "Message")
       .map((e) => Message(Person(e["source"]["entity"]["name"]), e["content"] as String))
       .forEach((m) => messageList.add(m));
 
-    firstChanEvents["userList"]
+    currentChanEvents["userList"]
       .map((u) => Person(u["name"]))
       .forEach((p) => userList.add(p));
-
-    // TODO: Poll messages.
   }
 
   Future<List<Message>> getMessageList() async {
