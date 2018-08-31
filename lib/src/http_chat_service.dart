@@ -74,6 +74,8 @@ class HttpChatService extends ChatService {
   }
 
   updateMessageList(events) {
+    if (events == null) return;
+
     // Add new messages to the list.
     events["events"]
       .where((e) => e["eventType"]["type"] == "Message")
@@ -87,6 +89,8 @@ class HttpChatService extends ChatService {
   }
 
   updateUserList(events) {
+    if (events == null) return;
+
     userList.removeRange(0, userList.length);
     events["userList"]
       .map((u) => Person(u["name"]))
@@ -94,12 +98,11 @@ class HttpChatService extends ChatService {
   }
 
   getMoreMessages() async {
-    print("Getting more messages");
     final events = await getMessages(false, lastEventId, -1);
     updateMessageList(events);
     updateUserList(events);
 
-    Timer(Duration(seconds:2), this.getMoreMessages);
+    Timer(Duration(seconds:1), getMoreMessages);
   }
 
   dynamic getMessages(bool log, int lastEventId, int numMessages) async {
@@ -107,6 +110,7 @@ class HttpChatService extends ChatService {
       "userID=${userId}&log=${log}&lastEventID=${lastEventId}&numMessages=${numMessages}";
     final response = await _http.get(_getMessagesUrl);
     final data = _extractData(response) as Map<String, dynamic>;
+    if (data["chanUpdates"] == null) return null;
     final currentChanEvents = data["chanUpdates"].where((u) => u["chanID"] == channelId).first;
     return currentChanEvents;
   }
