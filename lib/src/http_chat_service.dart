@@ -74,16 +74,20 @@ class HttpChatService extends ChatService {
   }
 
   updateMessageList(events) {
+    // Add new messages to the list.
     events["events"]
       .where((e) => e["eventType"]["type"] == "Message")
       .map((e) => Message(Person(e["source"]["entity"]["name"]), e["content"] as String))
       .forEach((m) => messageList.add(m));
+
+    // Update lastEventId.
     events["events"].forEach((e) {
       lastEventId = max(lastEventId, e["ID"]);
     });
   }
 
   updateUserList(events) {
+    userList.removeRange(0, userList.length);
     events["userList"]
       .map((u) => Person(u["name"]))
       .forEach((p) => userList.add(p));
@@ -91,7 +95,10 @@ class HttpChatService extends ChatService {
 
   getMoreMessages() async {
     print("Getting more messages");
-    getMessages(false, lastEventId, -1);
+    final events = await getMessages(false, lastEventId, -1);
+    updateMessageList(events);
+    updateUserList(events);
+
     Timer(Duration(seconds:2), this.getMoreMessages);
   }
 
