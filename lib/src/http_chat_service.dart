@@ -24,6 +24,7 @@ class HttpChatService extends ChatService {
   bool startedSignin = false;
 	String username;
 	String loginToken;
+  int channelId;
 	int userId;
 
   int clientMessageId = 0;
@@ -48,6 +49,7 @@ class HttpChatService extends ChatService {
       final data = _extractData(response) as Map<String, dynamic>;
       loginToken = data["token"];
       userId = data["user"]["ID"];
+      channelId = data["channel"]["ID"];
 
       final _getmessagesUrl = "${host}/getmessages.action?token=${loginToken}&"
         "userID=${userId}&log=true&lastEventID=-1&numMessages=-1";
@@ -94,8 +96,7 @@ class HttpChatService extends ChatService {
         queryParameters: {
           "token": loginToken,
           "userID": userId.toString(),
-          // TODO: parse from login response.
-          "destinationID": 1.toString(),
+          "destinationID": channelId.toString(),
           "clientMessageID": clientMessageId.toString(),
           "content": message,
         }
