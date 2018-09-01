@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:angular/angular.dart';
 import 'package:angular_router/angular_router.dart';
 
@@ -32,5 +34,10 @@ class ChatComponent implements OnActivate {
 
   String getUsername(Map<String, String> parameters) {
     return parameters[usernameParam];
+  }
+
+  scrollToBottom() {
+    final scrollable = querySelector('.scrollable');
+    scrollable.scrollTop = scrollable.scrollHeight;
   }
 }

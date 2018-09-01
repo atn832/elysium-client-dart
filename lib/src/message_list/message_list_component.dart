@@ -5,7 +5,6 @@ import 'package:angular_components/angular_components.dart';
 
 import '../chat_service.dart';
 import '../message.dart';
-import '../person.dart';
 
 @Component(
   selector: 'message-list',
