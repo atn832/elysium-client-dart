@@ -32,4 +32,7 @@ class ChatService {
   Future sendMessage(String message) {
     mockMessageList.add(Message(atn, message));
   }
+
+  Stream<Null> get newMessage => StreamController<Null>().stream;
+
 }

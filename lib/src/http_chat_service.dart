@@ -20,6 +20,8 @@ class HttpChatService extends ChatService {
     signedIn = signInCompleter.future;
   }
 
+  final _newMessage = StreamController<Null>();
+
   Completer signInCompleter;
   Future signedIn;
   bool startedSignin = false;
@@ -77,10 +79,14 @@ class HttpChatService extends ChatService {
     if (events == null) return;
 
     // Add new messages to the list.
-    events["events"]
+    final newMessages = events["events"]
       .where((e) => e["eventType"]["type"] == "Message")
-      .map((e) => Message(Person(e["source"]["entity"]["name"]), e["content"] as String))
-      .forEach((m) => messageList.add(m));
+      .map((e) => Message(Person(e["source"]["entity"]["name"]), e["content"] as String));
+    if (newMessages.isNotEmpty) {
+      newMessages.forEach((m) => messageList.add(m));
+      // Notify listeners.
+      _newMessage.add(null);
+    }
 
     // Update lastEventId.
     events["events"].forEach((e) {
@@ -147,6 +153,8 @@ class HttpChatService extends ChatService {
       throw _handleError(e);
     }
   }
+
+  Stream<Null> get newMessage => _newMessage.stream;
 
   dynamic _extractData(Response resp) => json.decode(resp.body);
   

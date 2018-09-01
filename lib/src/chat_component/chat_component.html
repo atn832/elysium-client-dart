@@ -1,5 +1,5 @@
 <user-list></user-list>
 <div class="scrollable">
-  <message-list></message-list>
+  <message-list (newMessage)="scrollToBottom"></message-list>
 </div>
 <input-bar (sendMessage)="scrollToBottom"></input-bar>

@@ -591,7 +591,7 @@ class InMemoryDataService extends MockClient {
             break;
           case 'getmessages.action':
             await Future.delayed(Duration(seconds: 1));
-            if (request.url.queryParameters["lastEventID"] == -1) {
+            if (request.url.queryParameters["lastEventID"] == (-1).toString()) {
               data = getMessagesResponse;
             } else {
               data = {};
