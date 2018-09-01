@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 
@@ -21,17 +19,9 @@ class InputBarComponent {
 
   String message = '';
 
-  final _sendMessage = StreamController<Null>();
-  @Output()
-  Stream<Null> get sendMessage => _sendMessage.stream;
-
   InputBarComponent(this.chatService);
 
   void add() {
     chatService.sendMessage(message);
     message = '';
-
-    // Notify listeners.
-    _sendMessage.add(null);
-  }
 }

@@ -149,6 +149,8 @@ class HttpChatService extends ChatService {
       clientMessageId++;
       final response = await _http.get(_sayUrl);
       messageList.add(Message(Person(username), message));
+      // Notify listeners.
+      _newMessage.add(null);
     } catch (e) {
       throw _handleError(e);
     }
