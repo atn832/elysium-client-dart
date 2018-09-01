@@ -16,19 +16,22 @@ import '../chat_service.dart';
   ],
 )
 
-class InputBarComponent implements OnInit {
+class InputBarComponent {
   final ChatService chatService;
 
-  String newTodo = '';
+  String message = '';
+
+  final _sendMessage = StreamController<Null>();
+  @Output()
+  Stream<Null> get sendMessage => _sendMessage.stream;
 
   InputBarComponent(this.chatService);
 
-  @override
-  Future<Null> ngOnInit() async {
-  }
-  
   void add() {
-    chatService.sendMessage(newTodo);
-    newTodo = '';
+    chatService.sendMessage(message);
+    message = '';
+
+    // Notify listeners.
+    _sendMessage.add(null);
   }
 }

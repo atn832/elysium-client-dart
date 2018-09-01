@@ -1,13 +1,13 @@
 <div class="message-input">
   <material-input label="Say something..."
                   autoFocus floatingLabel
-                  [(ngModel)]="newTodo"
+                  [(ngModel)]="message"
                   (keyup.enter)="add()">
   </material-input>
 
   <material-fab mini raised
                 (trigger)="add()"
-                [disabled]="newTodo.isEmpty">
+                [disabled]="message.isEmpty">
     <material-icon icon="add"></material-icon>
   </material-fab>
 </div>
