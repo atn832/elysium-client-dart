@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
+import 'package:time_machine/time_machine.dart';
+import 'package:time_machine/time_machine_text_patterns.dart';
 
 import '../chat_service.dart';
 import '../message.dart';
@@ -37,11 +39,17 @@ class MessageListComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked() {
-    print('AfterViewChecked');
     // Notify that new messages have been rendered.
     if (newMessageAdded) {
       _newMessage.add(null);
       newMessageAdded = false;
     }
+  }
+
+  String renderTime(DateTime time) {
+    var instant = Instant.dateTime(time);
+    instant = Instant.dateTime(instant.inLocalZone().toDateTimeLocal());
+    return InstantPattern.createWithInvariantCulture('HH:mm').format(instant);
+    // return now.inLocalZone().toString('HH:mm'); // does not work for some reason
   }
 }
