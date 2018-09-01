@@ -24,4 +24,5 @@ class InputBarComponent {
   void add() {
     chatService.sendMessage(message);
     message = '';
+  }
 }
