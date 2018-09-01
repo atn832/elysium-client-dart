@@ -13,13 +13,13 @@ class ChatService {
   List<Person> mockUserList = <Person>[frun, atn];
 
   List<Message> mockMessageList = <Message>[
-		Message(frun, "hello!\ni just landed."),
-		Message(atn, "where are you?")
+		Message(frun, "hello!\ni just landed.", DateTime(2018, 8, 30)),
+		Message(atn, "where are you?",  DateTime(2018, 8, 31))
 	];
 
   ChatService() {
 		Timer.periodic(Duration(seconds:2), (t) => mockMessageList.add(
-			Message(frun, "new message")
+			Message(frun, "new message",  DateTime.now())
 		));
 	}
 
@@ -30,7 +30,7 @@ class ChatService {
   Future<List<Person>> getUserList() async => mockUserList;
   
   Future sendMessage(String message) {
-    mockMessageList.add(Message(atn, message));
+    mockMessageList.add(Message(atn, message, DateTime.now()));
   }
 
   Stream<Null> get newMessage => StreamController<Null>().stream;

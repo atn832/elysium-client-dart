@@ -81,7 +81,11 @@ class HttpChatService extends ChatService {
     // Add new messages to the list.
     final newMessages = events["events"]
       .where((e) => e["eventType"]["type"] == "Message")
-      .map((e) => Message(Person(e["source"]["entity"]["name"]), e["content"] as String));
+      .map((e) => Message(Person(
+          e["source"]["entity"]["name"]),
+          e["content"] as String,
+          DateTime.parse(e["source"]["datetime"]),
+      ));
     if (newMessages.isNotEmpty) {
       newMessages.forEach((m) => messageList.add(m));
       // Notify listeners.
@@ -148,7 +152,7 @@ class HttpChatService extends ChatService {
       ).toString();
       clientMessageId++;
       final response = await _http.get(_sayUrl);
-      messageList.add(Message(Person(username), message));
+      messageList.add(Message(Person(username), message, DateTime.now()));
       // Notify listeners.
       _newMessage.add(null);
     } catch (e) {
