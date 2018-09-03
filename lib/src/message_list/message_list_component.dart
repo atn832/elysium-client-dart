@@ -59,4 +59,8 @@ class MessageListComponent implements OnInit, AfterViewChecked {
   String getColorClass(Person person) {
     return _colorService.getColor(person).toString().split('.')[1].replaceAll('_', '-');
   }
+
+  String getHeader(Person person) {
+    return person.name[0];
+  }
 }
