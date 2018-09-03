@@ -1,10 +1,7 @@
 <div class="messages" *ngIf="items.isNotEmpty">
   <ul>
     <li *ngFor="let item of items; let i=index">
-			{{item.author.name}} à {{renderTime(item.time)}}
-      <material-chip class="bubble" [removable]="false">
-				<div class="multiline">{{item.message}}</div>
-			</material-chip>
+			{{item.author.name}} à {{renderTime(item.time)}}: {{item.message}}
     </li>
   </ul>
 </div>

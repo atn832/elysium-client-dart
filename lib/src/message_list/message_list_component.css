@@ -4,7 +4,7 @@ ul {
 }
 
 li {
-  line-height: 3em;
+  line-height: normal;
 }
 
 .messages {
@@ -14,10 +14,6 @@ li {
 :host {
 	display: flex;
 	flex-direction: column;
-}
-
-.message-input {
-	
 }
 
 .bubble {
