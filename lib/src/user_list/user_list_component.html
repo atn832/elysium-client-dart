@@ -1,7 +1,7 @@
 <div *ngIf="items.isNotEmpty">
   <ul>
     <li *ngFor="let item of items; let i=index">
-      <material-chip class="user" [removable]="false">
+      <material-chip class="user {{getColorClass(item)}}" [removable]="false">
 				<div class="multiline">{{item.name}}</div>
 			</material-chip>
     </li>

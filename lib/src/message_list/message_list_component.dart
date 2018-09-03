@@ -5,8 +5,8 @@ import 'package:angular_components/angular_components.dart';
 import 'package:time_machine/time_machine.dart';
 import 'package:time_machine/time_machine_text_patterns.dart';
 
-import '../color_service.dart';
 import '../chat_service.dart';
+import '../color_service.dart';
 import '../message.dart';
 import '../person.dart';
 
@@ -57,7 +57,7 @@ class MessageListComponent implements OnInit, AfterViewChecked {
   }
 
   String getColorClass(Person person) {
-    return _colorService.getColor(person).toString().split('.')[1].replaceAll('_', '-');
+    return _colorService.getColorClass(person);
   }
 
   String getHeader(Person person) {

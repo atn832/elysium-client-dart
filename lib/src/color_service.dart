@@ -14,4 +14,9 @@ class ColorService {
         return Color.light_blue;
     }
   }
+
+  String getColorClass(Person person) {
+    return getColor(person).toString().split('.')[1].replaceAll('_', '-');
+  }
+
 }
