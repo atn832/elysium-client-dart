@@ -14,12 +14,18 @@
 	white-space: pre-wrap;
 }
 
+.line {
+	display: flex;
+}
+
 .header {
 	display: inline-block;
-	width: 36px;
 	height: 36px;
 	line-height: 36px;
-    text-align: center;
+	text-align: center;
+	flex-basis: 36px;
+    flex-shrink: 0;
+    margin-right: 8px;
 }
 
 .bubble.green {

@@ -1,5 +1,5 @@
 <div class="messages" *ngIf="items.isNotEmpty">
-  <div *ngFor="let item of items; let i=index">
+  <div class="line" *ngFor="let item of items; let i=index">
     <span class="header {{getColorClass(item.author)}}">{{getHeader(item.author)}}</span>
     <span class="bubble {{getColorClass(item.author)}}">{{item.message}} ({{renderTime(item.time)}})</span>
   </div>
