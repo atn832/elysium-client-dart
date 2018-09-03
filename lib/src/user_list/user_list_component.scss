@@ -1,6 +1,14 @@
+@import 'package:angular_components/css/material/shadow';
+
+:host {
+  @include shadow-elevation(3);
+  margin: 0!important;
+}
+
 ul {
   list-style: none;
   padding-left: 0;
+  margin: 8px;
 }
 
 li {
