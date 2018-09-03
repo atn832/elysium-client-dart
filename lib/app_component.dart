@@ -4,6 +4,7 @@ import 'package:angular_router/angular_router.dart';
 import 'src/routes.dart';
 import 'src/route_paths.dart';
 
+import 'src/color_service.dart';
 import 'src/chat_service.dart';
 import 'src/http_chat_service.dart';
 
@@ -13,7 +14,7 @@ import 'src/http_chat_service.dart';
     <router-outlet [routes]="Routes.all"></router-outlet>
   ''',
   directives: [routerDirectives],
-  providers: [const ClassProvider(ChatService, useClass: HttpChatService)],
+  providers: [const ClassProvider(ChatService, useClass: HttpChatService), const ClassProvider(ColorService)],
   exports: [RoutePaths, Routes],
 )
 class AppComponent {

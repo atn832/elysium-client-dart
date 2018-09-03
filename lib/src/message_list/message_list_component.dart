@@ -5,8 +5,10 @@ import 'package:angular_components/angular_components.dart';
 import 'package:time_machine/time_machine.dart';
 import 'package:time_machine/time_machine_text_patterns.dart';
 
+import '../color_service.dart';
 import '../chat_service.dart';
 import '../message.dart';
+import '../person.dart';
 
 @Component(
   selector: 'message-list',
@@ -20,6 +22,7 @@ import '../message.dart';
 )
 class MessageListComponent implements OnInit, AfterViewChecked {
   final ChatService chatService;
+  final ColorService _colorService;
 
   List<Message> items = [];
 
@@ -28,7 +31,7 @@ class MessageListComponent implements OnInit, AfterViewChecked {
   @Output()
   Stream<Null> get newMessage => _newMessage.stream;
 
-  MessageListComponent(this.chatService);
+  MessageListComponent(this.chatService, this._colorService);
 
   @override
   Future<Null> ngOnInit() async {
@@ -51,5 +54,9 @@ class MessageListComponent implements OnInit, AfterViewChecked {
     instant = Instant.dateTime(instant.inLocalZone().toDateTimeLocal());
     return InstantPattern.createWithInvariantCulture('HH:mm').format(instant);
     // return now.inLocalZone().toString('HH:mm'); // does not work for some reason
+  }
+
+  String getColorClass(Person person) {
+    return _colorService.getColor(person).toString().split('.')[1].replaceAll('_', '-');
   }
 }

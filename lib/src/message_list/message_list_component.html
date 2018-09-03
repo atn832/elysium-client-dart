@@ -1,7 +1,6 @@
 <div class="messages" *ngIf="items.isNotEmpty">
-  <ul>
-    <li *ngFor="let item of items; let i=index">
-			{{item.author.name}} à {{renderTime(item.time)}}: {{item.message}}
-    </li>
-  </ul>
+  <div *ngFor="let item of items; let i=index">
+    <span class="header {{getColorClass(item.author)}}">{{item.author.name}} à {{renderTime(item.time)}}</span>
+    <span class="bubble {{getColorClass(item.author)}}">{{item.message}}</span>
+  </div>
 </div>

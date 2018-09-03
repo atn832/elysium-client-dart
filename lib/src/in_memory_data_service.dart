@@ -253,7 +253,7 @@ class InMemoryDataService extends MockClient {
                   "name": "User",
                   "type": "User"
                 },
-                "name": "atn"
+                "name": "frun"
               },
               "location": null,
               "timeZone": {

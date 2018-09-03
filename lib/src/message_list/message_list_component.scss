@@ -1,0 +1,45 @@
+@import 'package:angular_components/css/material/material';
+
+.messages {
+	margin-top: 16px;
+	flex-grow: 1;
+}
+
+:host {
+	display: flex;
+	flex-direction: column;
+}
+
+.multiline {
+	white-space: pre-wrap;
+}
+
+.header {
+	display: inline-block;
+}
+
+.bubble.green {
+	background-color: $mat-green-50;
+	border: $mat-green-100;
+}
+
+.header.green {
+	background-color: $mat-green-500;
+	color: #fff;
+}
+
+.bubble {
+	display: inline-block;
+	padding: 4px;
+	border: 1px solid;
+}
+
+.bubble.light-blue {
+	background-color: $mat-light-blue-50;
+	border-color: $mat-light-blue-100;
+}
+
+.header.light-blue {
+	background-color: $mat-light-blue-500;
+	color: #fff;
+}
