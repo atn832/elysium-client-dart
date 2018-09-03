@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
 
@@ -32,6 +33,7 @@ class HttpChatService extends ChatService {
 
   int clientMessageId = 0;
   int lastEventId = -1;
+  HashSet<int> sentMessageEventIds = HashSet();
 	
 	List<Person> userList = <Person>[];
   List<Message> messageList = <Message>[];
@@ -80,7 +82,7 @@ class HttpChatService extends ChatService {
 
     // Add new messages to the list.
     final newMessages = events["events"]
-      .where((e) => e["eventType"]["type"] == "Message")
+      .where((e) => e["eventType"]["type"] == "Message" && !sentMessageEventIds.contains(e["ID"]))
       .map((e) => Message(Person(
           e["source"]["entity"]["name"]),
           e["content"] as String,
@@ -152,6 +154,9 @@ class HttpChatService extends ChatService {
       ).toString();
       clientMessageId++;
       final response = await _http.get(_sayUrl);
+      final data = _extractData(response) as Map<String, dynamic>;
+      final eventId = data["eventID"];
+      sentMessageEventIds.add(eventId);
       messageList.add(Message(Person(username), message, DateTime.now()));
       // Notify listeners.
       _newMessage.add(null);

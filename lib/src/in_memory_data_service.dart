@@ -599,7 +599,10 @@ class InMemoryDataService extends MockClient {
             break;
           case 'say.action':
             await Future.delayed(Duration(seconds: 1));
-            data = {};
+            data = {
+              "clientMessageID":request.url.queryParameters["clientMessageID"],
+              "eventID": 735465,
+            };
             break;
         }
         break;
