@@ -21,10 +21,6 @@ li {
   height: auto;
 }
 
-.multiline {
-  white-space: pre-wrap;
-}
-
 .green {
 	background-color: $mat-green-500;
 	color: #fff;
@@ -33,4 +29,16 @@ li {
 .light-blue {
 	background-color: $mat-light-blue-500;
 	color: #fff;
+}
+
+.timezone {
+  font-size: 13px;
+}
+
+.timezone.green {
+  color: $mat-green-50;
+}
+
+.timezone.light-blue {
+  color: $mat-light-blue-50;
 }

@@ -2,7 +2,8 @@
   <ul>
     <li *ngFor="let item of items; let i=index">
       <material-chip class="user {{getColorClass(item)}}" [removable]="false">
-				<div class="multiline">{{item.name}}</div>
+        <div>{{item.name}}</div>
+        <div class="timezone">{{item.timezone}}</div>
 			</material-chip>
     </li>
   </ul>

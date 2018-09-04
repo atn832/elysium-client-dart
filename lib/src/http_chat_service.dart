@@ -109,7 +109,16 @@ class HttpChatService extends ChatService {
 
     userList.removeRange(0, userList.length);
     events["userList"]
-      .map((u) => Person(u["name"]))
+      .map((u) {
+        print(u);
+        final p = Person(u["name"]);
+        try {
+          p.timezone = u["latestSource"]["timeZone"]["timeZone"];
+        } catch(e) {
+          // fail silently.
+        }
+        return p;
+      })
       .forEach((p) => userList.add(p));
   }
 
