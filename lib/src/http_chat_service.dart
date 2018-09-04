@@ -167,6 +167,7 @@ class HttpChatService extends ChatService {
           "destinationID": channelId.toString(),
           "clientMessageID": clientMessageId.toString(),
           "content": message,
+          "timeZone": DateTimeZone.local.toString(),
         }
       ).toString();
       clientMessageId++;
