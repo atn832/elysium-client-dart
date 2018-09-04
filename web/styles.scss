@@ -17,3 +17,12 @@ my-app {
 * {
   font-family: Roboto, Helvetica, Arial, sans-serif;
 }
+
+.dev {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 30px;
+  background: $mat-yellow-200;
+  border-bottom-left-radius: 10px;
+}
