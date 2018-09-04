@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:angular/core.dart';
 import 'package:http/http.dart';
+import 'package:time_machine/time_machine.dart';
 
 import 'chat_service.dart';
 import 'message.dart';
@@ -58,6 +59,9 @@ class HttpChatService extends ChatService {
       channelId = data["channel"]["ID"];
 
       startPolling();
+
+      // Initialize time zone info.
+      await TimeMachine.initialize();
 
       print("done signing in");
       signInCompleter.complete(true);
@@ -122,7 +126,8 @@ class HttpChatService extends ChatService {
 
   dynamic getMessages(bool log, int lastEventId, int numMessages) async {
     final _getMessagesUrl = "${host}/getmessages.action?token=${loginToken}&"
-      "userID=${userId}&log=${log}&lastEventID=${lastEventId}&numMessages=${numMessages}";
+      "userID=${userId}&log=${log}&lastEventID=${lastEventId}&numMessages=${numMessages}&" +
+      "timeZone=${DateTimeZone.local}";
     final response = await _http.get(_getMessagesUrl);
     final data = _extractData(response) as Map<String, dynamic>;
     if (data["chanUpdates"] == null) return null;

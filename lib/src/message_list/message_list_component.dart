@@ -50,14 +50,9 @@ class MessageListComponent implements OnInit, AfterViewChecked {
   }
 
   String renderTime(DateTime time) {
-    print("Original time");
-    print(time);
     var instant = Instant.dateTime(time);
-    print(instant);
     var dateTimeLocal = instant.inLocalZone().toDateTimeLocal();
-    print(dateTimeLocal);
     instant = Instant.dateTime(dateTimeLocal);
-    print(instant);
     return InstantPattern.createWithInvariantCulture('HH:mm').format(instant);
     // return now.inLocalZone().toString('HH:mm'); // does not work for some reason
   }
