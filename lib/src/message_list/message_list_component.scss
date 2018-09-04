@@ -16,6 +16,7 @@
 
 .line {
 	display: flex;
+	align-items: center;
 }
 
 .header {
@@ -30,7 +31,7 @@
 
 .bubble.green {
 	background-color: $mat-green-50;
-	border: $mat-green-100;
+	border-color: $mat-green-100;
 }
 
 .header.green {
@@ -40,8 +41,8 @@
 
 .bubble {
 	display: inline-block;
-	padding: 4px;
-	border: 1px solid;
+	padding: 8px;
+    padding-bottom: 9px;
 }
 
 .bubble.light-blue {
@@ -52,4 +53,11 @@
 .header.light-blue {
 	background-color: $mat-light-blue-500;
 	color: #fff;
+}
+
+.time {
+	margin-left: 8px;
+	flex-grow: 1;
+	text-align: right;
+	color: $mat-gray-600;
 }
