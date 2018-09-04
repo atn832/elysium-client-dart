@@ -561,10 +561,6 @@ class InMemoryDataService extends MockClient {
                 "longitude": 121.61500389999999,
                 "speed": null
               },
-              "timeZone": {
-                "ID": 10,
-                "timeZone": "Asia/Taipei"
-              }
             },
             "name": "frun",
             "on": false

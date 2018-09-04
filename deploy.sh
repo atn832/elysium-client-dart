@@ -14,5 +14,8 @@ scp build/main.dart.js root@$HOST:$DESTINATION
 scp build/styles.css root@$HOST:$DESTINATION
 scp build/favicon.png root@$HOST:$DESTINATION
 
-# Required only once.
-# scp build/packages/time_machine/data/tzdb/* root@$HOST:$DESTINATION/packages/time_machine/data/tzdb/*
+# Transfer timezone info.
+tar -zcvf timezone_info.tar.gz -C build/packages/time_machine/ .
+scp timezone_info.tar.gz root@$HOST:/root/
+ssh root@$HOST "tar -zxf /root/timezone_info.tar.gz -C $DESTINATION/packages/time_machine"
+rm timezone_info.tar.gz
