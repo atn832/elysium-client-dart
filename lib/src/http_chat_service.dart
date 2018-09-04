@@ -110,10 +110,13 @@ class HttpChatService extends ChatService {
   }
 
   getMoreMessages() async {
-    final events = await getMessages(false, lastEventId, -1);
-    updateMessageList(events);
-    updateUserList(events);
-
+    try {
+      final events = await getMessages(false, lastEventId, -1);
+      updateMessageList(events);
+      updateUserList(events);
+    } catch (e) {
+      print("get messages failed. keep retrying");
+    }
     Timer(Duration(seconds:1), getMoreMessages);
   }
 

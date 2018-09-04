@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
@@ -578,6 +579,9 @@ class InMemoryDataService extends MockClient {
     "userID": 4,
     "validResponse": true
   };
+
+  static Random random = Random();
+
   static Future<Response> _handler(Request request) async {
     var data;
     switch (request.method) {
@@ -594,6 +598,9 @@ class InMemoryDataService extends MockClient {
             if (request.url.queryParameters["lastEventID"] == (-1).toString()) {
               data = getMessagesResponse;
             } else {
+              if (random.nextDouble() < .5) {
+                throw 'Random network failure';
+              }
               data = {};
             }
             break;
