@@ -34,4 +34,8 @@ class UserListComponent implements OnInit {
   String getColorClass(Person person) {
     return _colorService.getColorClass(person);
   }
+
+  String getShortTimezone(String timezone) {
+    return timezone.split("/")[1];
+  }
 }
