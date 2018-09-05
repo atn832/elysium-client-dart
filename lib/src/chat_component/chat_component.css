@@ -4,8 +4,8 @@
   flex-direction: column;
 }
 
-:host > * {
-  margin: 0 16px;
+message-list {
+  margin: 16px;
 }
 
 .scrollable {
