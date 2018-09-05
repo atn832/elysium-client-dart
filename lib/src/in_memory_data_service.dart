@@ -577,6 +577,35 @@ class InMemoryDataService extends MockClient {
   };
 
   static Random random = Random();
+  static int lastMessageId = 735465; // from initial getMessagesResponse.
+  static Map<String, dynamic> messageResponseAfterSay = {
+    "chanList":[{"ID":1,"name":"Elysium"}],
+    "chanUpdates":[{
+      "chanID":1,
+      "events": [
+        {
+          "ID":737939,"content":"test","eventType":{"ID":3,"name":"Message","type":"Message"},
+          "source":{
+            "datetime":"2018-09-04T23:01:58",
+            "entity":{
+              "ID":4,
+              "entityType":{"ID":2,"name":"User","type":"User"},
+              "name":"atn"
+            },
+            "location":null,"timeZone":{"ID":21,"timeZone":"America/Los_Angeles"},
+            "userAgent":{"ID":525,"userAgent":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/68.0.3440.106 Safari\/537.36"}
+          }
+        }
+      ],
+      "userList": [
+        {"ID":4,"latestSource":{"datetime":"2018-09-04T23:01:57","location":null,"timeZone":{"ID":21,"timeZone":"America/Los_Angeles"}},"name":"atn","on":true},
+        {"ID":5,"latestSource":{"datetime":"2018-09-04T09:32:31","location":null,"timeZone":{"ID":10,"timeZone":"Asia\/Taipei"}},"name":"frun","on":false}
+      ],
+      "userListUpdated":true}
+    ],
+    "lastEventID":737938,"numMessages":-1,"token":"248024545","userID":4,"validResponse":true
+  };
+  static Map<String, dynamic> nextMessageResponse = null;
 
   static Future<Response> _handler(Request request) async {
     var data;
@@ -597,15 +626,28 @@ class InMemoryDataService extends MockClient {
               if (random.nextDouble() < .5) {
                 throw 'Random network failure';
               }
-              data = {};
+              if (nextMessageResponse == null) {
+                data = {};
+              } else {
+                data = nextMessageResponse;
+                nextMessageResponse = null;
+              }
             }
             break;
           case 'say.action':
             await Future.delayed(Duration(seconds: 1));
+            lastMessageId++;
             data = {
               "clientMessageID":request.url.queryParameters["clientMessageID"],
-              "eventID": 735465,
+              "eventID": lastMessageId,
             };
+            // Kinda not shallow copy, but not deep either.
+            nextMessageResponse = Map.from(messageResponseAfterSay);
+            final firstChanUpdates = nextMessageResponse["chanUpdates"][0];
+            final firstEvent = firstChanUpdates["events"][0];
+            firstEvent["ID"] = lastMessageId;
+            firstEvent["content"] = request.url.queryParameters["content"];
+            nextMessageResponse["lastEventID"] = lastMessageId;
             break;
         }
         break;

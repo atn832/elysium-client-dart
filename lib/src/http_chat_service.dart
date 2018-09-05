@@ -90,7 +90,8 @@ class HttpChatService extends ChatService {
       .map((e) => Message(Person(
           e["source"]["entity"]["name"]),
           e["content"] as String,
-          DateTime.parse(e["source"]["datetime"]),
+          // Append Z to force UTC.
+          DateTime.parse(e["source"]["datetime"] + " Z"),
       ));
     if (newMessages.isNotEmpty) {
       newMessages.forEach((m) => messageList.add(m));
@@ -175,7 +176,7 @@ class HttpChatService extends ChatService {
       final data = _extractData(response) as Map<String, dynamic>;
       final eventId = data["eventID"];
       sentMessageEventIds.add(eventId);
-      messageList.add(Message(Person(username), message, DateTime.now()));
+      messageList.add(Message(Person(username), message, DateTime.now().toUtc()));
       // Notify listeners.
       _newMessage.add(null);
     } catch (e) {
@@ -186,7 +187,7 @@ class HttpChatService extends ChatService {
   Stream<Null> get newMessage => _newMessage.stream;
 
   dynamic _extractData(Response resp) => json.decode(resp.body);
-  
+
   Exception _handleError(dynamic e) {
     print(e); // for demo purposes only
     return Exception('Server error; cause: $e');

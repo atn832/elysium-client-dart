@@ -51,10 +51,8 @@ class MessageListComponent implements OnInit, AfterViewChecked {
 
   String renderTime(DateTime time) {
     var instant = Instant.dateTime(time);
-    var dateTimeLocal = instant.inLocalZone().toDateTimeLocal();
-    instant = Instant.dateTime(dateTimeLocal);
-    return InstantPattern.createWithInvariantCulture('HH:mm').format(instant);
-    // return now.inLocalZone().toString('HH:mm'); // does not work for some reason
+    // Use DDC variant because of https://github.com/dart-lang/sdk/issues/33876.
+    return instant.inLocalZone().toStringDDC('HH:mm');
   }
 
   String getColorClass(Person person) {
