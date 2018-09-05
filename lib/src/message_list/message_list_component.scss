@@ -29,6 +29,10 @@
     margin-right: 8px;
 }
 
+.spread {
+	flex-grow: 1;
+}
+
 .bubble.green {
 	background-color: $mat-green-50;
 	border-color: $mat-green-100;
@@ -57,7 +61,6 @@
 
 .time {
 	margin-left: 8px;
-	flex-grow: 1;
 	text-align: right;
 	color: $mat-gray-600;
 }
