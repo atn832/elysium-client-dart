@@ -8,6 +8,8 @@ import 'package:angular/core.dart';
 import 'package:http/http.dart';
 import 'package:time_machine/time_machine.dart';
 
+import 'bubble.dart';
+import 'bubble_service.dart';
 import 'chat_service.dart';
 import 'message.dart';
 import 'person.dart';
@@ -16,11 +18,14 @@ import 'person.dart';
 @Injectable()
 class HttpChatService extends ChatService {
   final Client _http;
+  final bubbleService = BubbleService();
   final host = "/Elysium";
   
   HttpChatService(this._http) {
     signInCompleter = Completer();
     signedIn = signInCompleter.future;
+    bubbles = bubbleService.bubbles;
+    print("initialized bubbles");
   }
 
   final _newMessage = StreamController<Null>();
@@ -38,8 +43,9 @@ class HttpChatService extends ChatService {
   int lastEventId = -1;
   HashSet<int> sentMessageEventIds = HashSet();
 	
-	List<Person> userList = <Person>[];
-  List<Message> messageList = <Message>[];
+	List<Person> userList = [];
+  List<Bubble> bubbles;
+  List<Message> messageList = [];
   
   Future signIn(String username) async {
     if (startedSignin) {
@@ -76,8 +82,8 @@ class HttpChatService extends ChatService {
 
   startPolling() async {
     final events = await getMessages(true, -1, -1);
-    // updateMessageList(events);
-    // updateUserList(events);
+    updateMessageList(events);
+    updateUserList(events);
 
     // TODO: Poll messages.
     getMoreMessages();
@@ -96,7 +102,12 @@ class HttpChatService extends ChatService {
           DateTime.parse(e["source"]["datetime"] + " Z"),
       ));
     if (newMessages.isNotEmpty) {
-      newMessages.forEach((m) => messageList.add(m));
+      newMessages.forEach((m) {
+        final message = m as Message;
+        // Add to list of messages and to bubbles.
+        messageList.add(message);
+        bubbleService.addMessage(message);
+      });
       // Notify listeners.
       _newMessage.add(null);
     }
@@ -171,6 +182,11 @@ class HttpChatService extends ChatService {
     return messageList;
   }
   
+  Future<List<Bubble>> getBubbles() async {
+    await signedIn;
+    return bubbles;
+  }
+
   Future<List<Person>> getUserList() async {
     await signedIn;
     return userList;

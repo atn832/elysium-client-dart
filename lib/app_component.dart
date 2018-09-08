@@ -14,7 +14,11 @@ import 'src/http_chat_service.dart';
     <router-outlet [routes]="Routes.all"></router-outlet>
   ''',
   directives: [routerDirectives],
-  providers: [const ClassProvider(ChatService, useClass: HttpChatService), const ClassProvider(ColorService)],
+  providers: [
+    // const ClassProvider(ChatService),
+    const ClassProvider(ChatService, useClass: HttpChatService),
+    const ClassProvider(ColorService)
+  ],
   exports: [RoutePaths, Routes],
 )
 class AppComponent {

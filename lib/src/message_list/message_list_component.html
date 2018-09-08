@@ -1,7 +1,10 @@
-<div class="messages" *ngIf="items.isNotEmpty">
-  <div class="line" *ngFor="let item of items; let i=index">
-    <span class="header {{getColorClass(item.author)}}">{{getHeader(item.author)}}</span>
-    <span class="spread"><span class="bubble {{getColorClass(item.author)}}">{{item.message}}</span></span>
-    <span class="time">{{renderTime(item.time)}}</span>
+<div class="messages" *ngIf="bubbles.isNotEmpty">
+  <div class="line" *ngFor="let bubble of bubbles">
+    <span class="header {{getColorClass(bubble.author)}}">{{getHeader(bubble.author)}}</span>
+    <span class="spread">
+      <div *ngFor="let message of bubble.messages"
+          class="bubble {{getColorClass(bubble.author)}}">{{message}}</div>
+      <span class="time">{{renderTime(bubble.time)}}</span>
+    </span>
   </div>
 </div>

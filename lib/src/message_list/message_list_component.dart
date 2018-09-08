@@ -6,6 +6,7 @@ import 'package:time_machine/time_machine.dart';
 
 import '../chat_service.dart';
 import '../color_service.dart';
+import '../bubble.dart';
 import '../message.dart';
 import '../person.dart';
 
@@ -24,6 +25,7 @@ class MessageListComponent implements OnInit, AfterViewChecked {
   final ColorService _colorService;
 
   List<Message> items = [];
+  List<Bubble> bubbles = [];
 
   bool newMessageAdded = false;
   final _newMessage = StreamController<Null>();
@@ -38,6 +40,9 @@ class MessageListComponent implements OnInit, AfterViewChecked {
       newMessageAdded = true;
     });
     items = await chatService.getMessageList();
+    bubbles = await chatService.getBubbles();
+    print("got bubbles");
+    print(bubbles);
   }
 
   ngAfterViewChecked() {

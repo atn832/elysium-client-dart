@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:angular/core.dart';
+
+import 'bubble.dart';
 import 'message.dart';
 import 'person.dart';
 
@@ -16,6 +18,10 @@ class ChatService {
 		Message(frun, "hello!\ni just landed.", DateTime(2018, 8, 30)),
 		Message(atn, "where are you?",  DateTime(2018, 8, 31))
 	];
+  List<Bubble> mockBubbles = <Bubble>[
+		Bubble(frun, ["hello!", "i just landed."], DateTime(2018, 8, 30)),
+		Bubble(atn, ["where are you?"], DateTime(2018, 8, 31)),
+  ];
 
   ChatService() {
 		Timer.periodic(Duration(seconds:2), (t) => mockMessageList.add(
@@ -24,6 +30,7 @@ class ChatService {
 	}
 
   Future<List<Message>> getMessageList() async => mockMessageList;
+  Future<List<Bubble>> getBubbles() async => mockBubbles;
 
   Future signIn(String username) {}
   
