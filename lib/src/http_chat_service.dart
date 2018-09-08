@@ -144,13 +144,9 @@ class HttpChatService extends ChatService {
   bool areListsEqual(List<Person> l1, List<Person> l2) {
     if (l1.length != l2.length) return false;
     for (var i = 0; i < l1.length; i++) {
-      if (!arePersonsEqual(l1[i], l2[i])) return false;
+      if (l1[i] != l2[i]) return false;
     }
     return true;
-  }
-
-  bool arePersonsEqual(Person p1, Person p2) {
-    return p1.name == p2.name && p1.timezone == p2.timezone;
   }
 
   getMoreMessages() async {
