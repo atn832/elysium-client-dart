@@ -38,8 +38,6 @@ class MessageListComponent implements OnInit, AfterViewChecked {
       newMessageAdded = true;
     });
     bubbles = await chatService.getBubbles();
-    print("got bubbles");
-    print(bubbles);
   }
 
   ngAfterViewChecked() {
