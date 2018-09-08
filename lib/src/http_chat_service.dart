@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:core';
 import 'dart:math';
 
 import 'package:angular/core.dart';
@@ -74,8 +75,8 @@ class HttpChatService extends ChatService {
 
   startPolling() async {
     final events = await getMessages(true, -1, -1);
-    updateMessageList(events);
-    updateUserList(events);
+    // updateMessageList(events);
+    // updateUserList(events);
 
     // TODO: Poll messages.
     getMoreMessages();
@@ -108,7 +109,7 @@ class HttpChatService extends ChatService {
   updateUserList(events) {
     if (events == null) return;
 
-    userList.removeRange(0, userList.length);
+    List<Person> newUserList = List();
     events["userList"]
       .map((u) {
         // print(u);
@@ -120,7 +121,24 @@ class HttpChatService extends ChatService {
         }
         return p;
       })
-      .forEach((p) => userList.add(p));
+      .forEach((p) => newUserList.add(p));
+    if (!areListsEqual(userList, newUserList)) {
+      print("Updating user list");
+      userList.removeRange(0, userList.length);
+      userList.addAll(newUserList);
+    }
+  }
+
+  bool areListsEqual(List<Person> l1, List<Person> l2) {
+    if (l1.length != l2.length) return false;
+    for (var i = 0; i < l1.length; i++) {
+      if (!arePersonsEqual(l1[i], l2[i])) return false;
+    }
+    return true;
+  }
+
+  bool arePersonsEqual(Person p1, Person p2) {
+    return p1.name == p2.name && p1.timezone == p2.timezone;
   }
 
   getMoreMessages() async {
@@ -131,7 +149,7 @@ class HttpChatService extends ChatService {
     } catch (e) {
       print("get messages failed. keep retrying");
     }
-    Timer(Duration(seconds:1), getMoreMessages);
+    // Timer(Duration(seconds:1), getMoreMessages);
   }
 
   dynamic getMessages(bool log, int lastEventId, int numMessages) async {
