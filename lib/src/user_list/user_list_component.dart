@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
+import 'package:time_machine/time_machine.dart';
 
 import '../chat_service.dart';
 import '../color_service.dart';
@@ -23,12 +24,16 @@ class UserListComponent implements OnInit {
   final ColorService _colorService;
 
   List<Person> items = [];
+  Map<String, DateTimeZone> timezones = Map();
 
   UserListComponent(this.chatService, this._colorService);
 
   @override
   Future<Null> ngOnInit() async {
     items = await chatService.getUserList();
+    this.chatService.newUsers.listen((e) async {
+      collectMissingTimeZonesFromUsers();
+    });
   }
 
   String getColorClass(Person person) {
@@ -37,5 +42,26 @@ class UserListComponent implements OnInit {
 
   String getShortTimezone(String timezone) {
     return timezone.split("/")[1];
+  }
+
+  String getLocalTime(String timezone) {  
+    final now = Instant.now();
+    final tz = timezones[timezone];
+    if (tz == null) return "";
+
+    final localTime = now.inZone(tz);
+    return localTime.toStringDDC('ddd HH:mm');
+  }
+
+  void collectMissingTimeZonesFromUsers() async {
+    final users = await this.chatService.getUserList();
+    users.forEach((u) async {
+      final timezone = u.timezone;
+      if (timezone == null || timezones.containsKey(timezone)) return;
+
+      final tzdb = await DateTimeZoneProviders.tzdb;
+      var tz = await tzdb[timezone];
+      timezones[timezone] =  tz;
+    });
   }
 }

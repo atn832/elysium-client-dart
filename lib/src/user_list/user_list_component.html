@@ -4,7 +4,9 @@
       <material-chip class="user {{getColorClass(item)}}" [removable]="false">
         <div>
           {{item.name}}
-          <span class="timezone" *ngIf="item.timezone != null">{{getShortTimezone(item.timezone)}}</span>
+          <span class="timezone" *ngIf="item.timezone != null">
+            {{getShortTimezone(item.timezone)}}, {{getLocalTime(item.timezone)}}
+          </span>
         </div>
 			</material-chip>
     </li>

@@ -24,6 +24,7 @@ class HttpChatService extends ChatService {
   }
 
   final _newMessage = StreamController<Null>();
+  final _newUsers = StreamController<Null>();
 
   Completer signInCompleter;
   Future signedIn;
@@ -126,6 +127,8 @@ class HttpChatService extends ChatService {
       print("Updating user list");
       userList.removeRange(0, userList.length);
       userList.addAll(newUserList);
+      // Notify of a change.
+      _newUsers.add(null);
     }
   }
 
@@ -203,6 +206,7 @@ class HttpChatService extends ChatService {
   }
 
   Stream<Null> get newMessage => _newMessage.stream;
+  Stream<Null> get newUsers => _newUsers.stream;
 
   dynamic _extractData(Response resp) => json.decode(resp.body);
 
