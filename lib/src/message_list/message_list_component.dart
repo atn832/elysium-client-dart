@@ -7,7 +7,6 @@ import 'package:time_machine/time_machine.dart';
 import '../chat_service.dart';
 import '../color_service.dart';
 import '../bubble.dart';
-import '../message.dart';
 import '../person.dart';
 
 @Component(
@@ -24,7 +23,6 @@ class MessageListComponent implements OnInit, AfterViewChecked {
   final ChatService chatService;
   final ColorService _colorService;
 
-  List<Message> items = [];
   List<Bubble> bubbles = [];
 
   bool newMessageAdded = false;
@@ -39,7 +37,6 @@ class MessageListComponent implements OnInit, AfterViewChecked {
     chatService.newMessage.listen((t) {
       newMessageAdded = true;
     });
-    items = await chatService.getMessageList();
     bubbles = await chatService.getBubbles();
     print("got bubbles");
     print(bubbles);

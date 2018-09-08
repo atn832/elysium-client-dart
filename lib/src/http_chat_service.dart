@@ -45,7 +45,6 @@ class HttpChatService extends ChatService {
 	
 	List<Person> userList = [];
   List<Bubble> bubbles;
-  List<Message> messageList = [];
   
   Future signIn(String username) async {
     if (startedSignin) {
@@ -104,8 +103,7 @@ class HttpChatService extends ChatService {
     if (newMessages.isNotEmpty) {
       newMessages.forEach((m) {
         final message = m as Message;
-        // Add to list of messages and to bubbles.
-        messageList.add(message);
+        // Add to bubbles.
         bubbleService.addMessage(message);
       });
       // Notify listeners.
@@ -177,11 +175,6 @@ class HttpChatService extends ChatService {
     return currentChanEvents;
   }
 
-  Future<List<Message>> getMessageList() async {
-    await signedIn;
-    return messageList;
-  }
-  
   Future<List<Bubble>> getBubbles() async {
     await signedIn;
     return bubbles;
@@ -213,7 +206,7 @@ class HttpChatService extends ChatService {
       final data = _extractData(response) as Map<String, dynamic>;
       final eventId = data["eventID"];
       sentMessageEventIds.add(eventId);
-      messageList.add(Message(Person(username), message, DateTime.now().toUtc()));
+      bubbleService.addMessage(Message(Person(username), message, DateTime.now().toUtc()));
       // Notify listeners.
       _newMessage.add(null);
     } catch (e) {

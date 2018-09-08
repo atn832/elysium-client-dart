@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:angular/core.dart';
 
 import 'bubble.dart';
+import 'bubble_service.dart';
 import 'message.dart';
 import 'person.dart';
 
@@ -14,22 +15,19 @@ class ChatService {
 
   List<Person> mockUserList = <Person>[frun, atn];
 
-  List<Message> mockMessageList = <Message>[
-		Message(frun, "hello!\ni just landed.", DateTime(2018, 8, 30)),
-		Message(atn, "where are you?",  DateTime(2018, 8, 31))
-	];
-  List<Bubble> mockBubbles = <Bubble>[
-		Bubble(frun, ["hello!", "i just landed."], DateTime(2018, 8, 30)),
-		Bubble(atn, ["where are you?"], DateTime(2018, 8, 31)),
-  ];
+  List<Bubble> mockBubbles;
+
+  BubbleService bubbleService = BubbleService();
 
   ChatService() {
-		Timer.periodic(Duration(seconds:2), (t) => mockMessageList.add(
+    bubbleService.addMessage(Message(frun, "hello!", DateTime(2018, 8, 30)));
+    bubbleService.addMessage(Message(frun, "i just landed.", DateTime(2018, 8, 30)));
+		bubbleService.addMessage(Message(atn, "where are you?", DateTime(2018, 8, 31)));
+		Timer.periodic(Duration(seconds:2), (t) => bubbleService.addMessage(
 			Message(frun, "new message",  DateTime.now())
 		));
 	}
 
-  Future<List<Message>> getMessageList() async => mockMessageList;
   Future<List<Bubble>> getBubbles() async => mockBubbles;
 
   Future signIn(String username) {}
@@ -37,10 +35,9 @@ class ChatService {
   Future<List<Person>> getUserList() async => mockUserList;
   
   Future sendMessage(String message) {
-    mockMessageList.add(Message(atn, message, DateTime.now()));
+    bubbleService.addMessage(Message(atn, message, DateTime.now()));
   }
 
   Stream<Null> get newMessage => StreamController<Null>().stream;
   Stream<Null> get newUsers => StreamController<Null>().stream;
-
 }
