@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:collection';
-import 'dart:convert';
 import 'dart:core';
 import 'dart:math';
 
@@ -11,6 +10,8 @@ import 'package:time_machine/time_machine.dart';
 import 'bubble.dart';
 import 'bubble_service.dart';
 import 'chat_service.dart';
+import 'http_util.dart';
+import 'location.dart';
 import 'message.dart';
 import 'person.dart';
 
@@ -60,7 +61,7 @@ class HttpChatService extends ChatService {
       final _loginUrl = "${host}/login.action?channel.name=Elysium&"
         "channel.password=&user.name=${username}";
       final response = await _http.get(_loginUrl);
-      final data = _extractData(response) as Map<String, dynamic>;
+      final data = extractData(response) as Map<String, dynamic>;
       loginToken = data["token"];
       userId = data["user"]["ID"];
       channelId = data["channel"]["ID"];
@@ -94,13 +95,17 @@ class HttpChatService extends ChatService {
     // Add new messages to the list.
     final newMessages = events["events"]
       .where((e) => e["eventType"]["type"] == "Message" && !sentMessageEventIds.contains(e["ID"]))
-      .map((e) => Message(Person(
-          e["source"]["entity"]["name"]),
-          e["content"] as String,
-          // Append Z to force UTC.
-          DateTime.parse(e["source"]["datetime"] + " Z"),
-          null,
-      ));
+      .map((e) {
+        final location = e["source"]["location"];
+        final loc = location?? Location(location["longitude"], location["latitude"]);
+        return Message(
+            Person(e["source"]["entity"]["name"]),
+            e["content"] as String,
+            // Append Z to force UTC.
+            DateTime.parse(e["source"]["datetime"] + " Z"),
+            loc,
+        );
+      });
     if (newMessages.isNotEmpty) {
       newMessages.forEach((m) {
         final message = m as Message;
@@ -166,7 +171,7 @@ class HttpChatService extends ChatService {
       "userID=${userId}&log=${log}&lastEventID=${lastEventId}&numMessages=${numMessages}&" +
       "timeZone=${DateTimeZone.local}";
     final response = await _http.get(_getMessagesUrl);
-    final data = _extractData(response) as Map<String, dynamic>;
+    final data = extractData(response) as Map<String, dynamic>;
     if (data["chanUpdates"] == null) return null;
     final currentChanEvents = data["chanUpdates"].where((u) => u["chanID"] == channelId).first;
     return currentChanEvents;
@@ -200,7 +205,7 @@ class HttpChatService extends ChatService {
       ).toString();
       clientMessageId++;
       final response = await _http.get(_sayUrl);
-      final data = _extractData(response) as Map<String, dynamic>;
+      final data = extractData(response) as Map<String, dynamic>;
       final eventId = data["eventID"];
       sentMessageEventIds.add(eventId);
       bubbleService.addMessage(Message(Person(username), message, DateTime.now().toUtc(), null));
@@ -213,8 +218,6 @@ class HttpChatService extends ChatService {
 
   Stream<Null> get newMessage => _newMessage.stream;
   Stream<Null> get newUsers => _newUsers.stream;
-
-  dynamic _extractData(Response resp) => json.decode(resp.body);
 
   Exception _handleError(dynamic e) {
     print(e); // for demo purposes only

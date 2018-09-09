@@ -8,6 +8,7 @@ import 'chat_service.dart';
 import 'location.dart';
 import 'message.dart';
 import 'person.dart';
+import 'reverse_geocoding_service.dart';
 
 /// Mock service emulating access to a to-do list stored on a server.
 @Injectable()
@@ -16,13 +17,15 @@ class HardcodedChatService extends ChatService {
   static final atn = Person("atn");
 
   List<Person> mockUserList = <Person>[frun, atn];
-
   List<Bubble> mockBubbles;
 
   BubbleService mockBubbleService = BubbleService();
+  ReverseGeocodingService _reverseGeocodingService;
 
-  HardcodedChatService() {
+  HardcodedChatService(this. _reverseGeocodingService) {
     Location location = Location(0.0, 0.0);
+    _reverseGeocodingService.reverseGeocode(location.lat, location.lng)
+        .then((s) => location.name = s);
     location.name = "Narita Airport";
     atn.timezone = "America/Los_Angeles";
     mockBubbles = mockBubbleService.bubbles;

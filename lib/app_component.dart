@@ -8,6 +8,7 @@ import 'src/color_service.dart';
 import 'src/chat_service.dart';
 import 'src/http_chat_service.dart';
 import 'src/hardcoded_chat_service.dart';
+import 'src/reverse_geocoding_service.dart';
 
 @Component(
   selector: 'my-app',
@@ -18,7 +19,8 @@ import 'src/hardcoded_chat_service.dart';
   providers: [
     const ClassProvider(ChatService, useClass: HardcodedChatService),
     // const ClassProvider(ChatService, useClass: HttpChatService),
-    const ClassProvider(ColorService)
+    const ClassProvider(ColorService),
+    const ClassProvider(ReverseGeocodingService)
   ],
   exports: [RoutePaths, Routes],
 )
