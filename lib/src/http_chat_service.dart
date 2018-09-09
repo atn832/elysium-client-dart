@@ -99,7 +99,7 @@ class HttpChatService extends ChatService {
       .where((e) => e["eventType"]["type"] == "Message" && !sentMessageEventIds.contains(e["ID"]))
       .map((e) {
         final location = e["source"]["location"];
-        final loc = location != null ? Location(location["longitude"], location["latitude"]) : null;
+        final loc = location != null ? Location(location["latitude"], location["longitude"]) : null;
         if (loc != null) {
           _reverseGeocodingService.reverseGeocode(loc.lat, loc.lng)
               .then((s) => loc.name = s);
