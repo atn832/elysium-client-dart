@@ -11,4 +11,4 @@ build/
 doc/api/
 
 # Private key
-api_key.dart
+lib/src/api_key.dart
