@@ -157,7 +157,7 @@ class HttpChatService extends ChatService {
     } catch (e) {
       print("get messages failed. keep retrying");
     }
-    // Timer(Duration(seconds:1), getMoreMessages);
+    Timer(Duration(seconds:1), getMoreMessages);
   }
 
   dynamic getMessages(bool log, int lastEventId, int numMessages) async {

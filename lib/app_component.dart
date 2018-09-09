@@ -7,6 +7,7 @@ import 'src/route_paths.dart';
 import 'src/color_service.dart';
 import 'src/chat_service.dart';
 import 'src/http_chat_service.dart';
+import 'src/hardcoded_chat_service.dart';
 
 @Component(
   selector: 'my-app',
@@ -15,7 +16,7 @@ import 'src/http_chat_service.dart';
   ''',
   directives: [routerDirectives],
   providers: [
-    // const ClassProvider(ChatService),
+    // const ClassProvider(ChatService, useClass: HardcodedChatService),
     const ClassProvider(ChatService, useClass: HttpChatService),
     const ClassProvider(ColorService)
   ],

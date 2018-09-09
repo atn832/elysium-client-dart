@@ -1,45 +1,20 @@
 import 'dart:async';
 
-import 'package:angular/core.dart';
-
 import 'bubble.dart';
-import 'bubble_service.dart';
-import 'message.dart';
 import 'person.dart';
 
-/// Mock service emulating access to a to-do list stored on a server.
-@Injectable()
-class ChatService {
-  static final frun = Person("frun");
-  static final atn = Person("atn");
+/// Interface for a chat service.
+abstract class ChatService {
+  ChatService();
+ 
+  Future<List<Bubble>> getBubbles();
 
-  List<Person> mockUserList = <Person>[frun, atn];
-
-  List<Bubble> mockBubbles;
-
-  BubbleService mockBubbleService = BubbleService();
-
-  ChatService() {
-    mockBubbles = mockBubbleService.bubbles;
-    mockBubbleService.addMessage(Message(frun, "hello!", DateTime(2018, 8, 30)));
-    mockBubbleService.addMessage(Message(frun, "i just landed.", DateTime(2018, 8, 30)));
-		mockBubbleService.addMessage(Message(atn, "where are you?", DateTime(2018, 8, 31)));
-		Timer.periodic(Duration(seconds:5), (t) {
-      print("New artificial message");
-			mockBubbleService.addMessage(Message(frun, "new message",  DateTime.now()));
-    });
-	}
-
-  Future<List<Bubble>> getBubbles() async => mockBubbles;
-
-  Future signIn(String username) {}
+  Future signIn(String username);
   
-  Future<List<Person>> getUserList() async => mockUserList;
+  Future<List<Person>> getUserList();
   
-  Future sendMessage(String message) {
-    mockBubbleService.addMessage(Message(atn, message, DateTime.now()));
-  }
+  Future sendMessage(String message);
 
-  Stream<Null> get newMessage => StreamController<Null>().stream;
-  Stream<Null> get newUsers => StreamController<Null>().stream;
+  Stream<Null> get newMessage;
+  Stream<Null> get newUsers;
 }
