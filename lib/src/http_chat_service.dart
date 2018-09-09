@@ -14,15 +14,17 @@ import 'http_util.dart';
 import 'location.dart';
 import 'message.dart';
 import 'person.dart';
+import 'reverse_geocoding_service.dart';
 
 /// Chat service that talks to the server over http.
 @Injectable()
 class HttpChatService extends ChatService {
   final Client _http;
+  final ReverseGeocodingService _reverseGeocodingService;
   final bubbleService = BubbleService();
   final host = "/Elysium";
   
-  HttpChatService(this._http) {
+  HttpChatService(this._http, this._reverseGeocodingService) {
     signInCompleter = Completer();
     signedIn = signInCompleter.future;
     bubbles = bubbleService.bubbles;
@@ -97,7 +99,11 @@ class HttpChatService extends ChatService {
       .where((e) => e["eventType"]["type"] == "Message" && !sentMessageEventIds.contains(e["ID"]))
       .map((e) {
         final location = e["source"]["location"];
-        final loc = location?? Location(location["longitude"], location["latitude"]);
+        final loc = location != null ? Location(location["longitude"], location["latitude"]) : null;
+        if (loc != null) {
+          _reverseGeocodingService.reverseGeocode(loc.lat, loc.lng)
+              .then((s) => loc.name = s);
+        }
         return Message(
             Person(e["source"]["entity"]["name"]),
             e["content"] as String,

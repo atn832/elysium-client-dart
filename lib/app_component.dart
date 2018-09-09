@@ -17,8 +17,8 @@ import 'src/reverse_geocoding_service.dart';
   ''',
   directives: [routerDirectives],
   providers: [
-    const ClassProvider(ChatService, useClass: HardcodedChatService),
-    // const ClassProvider(ChatService, useClass: HttpChatService),
+    // const ClassProvider(ChatService, useClass: HardcodedChatService),
+    const ClassProvider(ChatService, useClass: HttpChatService),
     const ClassProvider(ColorService),
     const ClassProvider(ReverseGeocodingService)
   ],
