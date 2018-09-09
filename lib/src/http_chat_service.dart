@@ -99,6 +99,7 @@ class HttpChatService extends ChatService {
           e["content"] as String,
           // Append Z to force UTC.
           DateTime.parse(e["source"]["datetime"] + " Z"),
+          null,
       ));
     if (newMessages.isNotEmpty) {
       newMessages.forEach((m) {
@@ -202,7 +203,7 @@ class HttpChatService extends ChatService {
       final data = _extractData(response) as Map<String, dynamic>;
       final eventId = data["eventID"];
       sentMessageEventIds.add(eventId);
-      bubbleService.addMessage(Message(Person(username), message, DateTime.now().toUtc()));
+      bubbleService.addMessage(Message(Person(username), message, DateTime.now().toUtc(), null));
       // Notify listeners.
       _newMessage.add(null);
     } catch (e) {

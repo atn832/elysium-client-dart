@@ -21,11 +21,14 @@ class BubbleService {
       }
     }
     if (makeNewBubble) {
-      _bubbles.add(Bubble(message.author, [message.message], message.time));
+      final b = Bubble(message.author, [message.message], message.time);
+      b.location = message.location;
+      _bubbles.add(b);
     } else {
       final latestBubble = _bubbles[_bubbles.length - 1];
       latestBubble.messages.add(message.message);
       latestBubble.time = message.time;
+      latestBubble.location = message.location;
     }
   }
 

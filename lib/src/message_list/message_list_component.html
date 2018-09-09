@@ -3,7 +3,12 @@
     <span class="header {{getColorClass(bubble.author)}}">{{getHeader(bubble.author)}}</span>
     <span class="bubble {{getColorClass(bubble.author)}}">
       <div *ngFor="let message of bubble.messages">{{message}}</div>
-      <span class="time">{{renderTime(bubble.time)}}</span>
+      <span class="metadata">
+        <span *ngIf="bubble.location != null && bubble.location.name != null">
+          {{bubble.location.name}}, 
+        </span>
+        {{renderTime(bubble.time)}}
+      </span>
     </span>
   </div>
 </div>

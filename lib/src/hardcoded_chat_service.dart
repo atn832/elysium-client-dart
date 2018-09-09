@@ -5,6 +5,7 @@ import 'package:angular/core.dart';
 import 'bubble.dart';
 import 'bubble_service.dart';
 import 'chat_service.dart';
+import 'location.dart';
 import 'message.dart';
 import 'person.dart';
 
@@ -21,14 +22,16 @@ class HardcodedChatService extends ChatService {
   BubbleService mockBubbleService = BubbleService();
 
   HardcodedChatService() {
+    Location location = Location(0.0, 0.0);
+    location.name = "Narita Airport";
     atn.timezone = "America/Los_Angeles";
     mockBubbles = mockBubbleService.bubbles;
-    mockBubbleService.addMessage(Message(frun, "hello!", DateTime(2018, 8, 30)));
-    mockBubbleService.addMessage(Message(frun, "i just landed.", DateTime(2018, 8, 30)));
-		mockBubbleService.addMessage(Message(atn, "where are you?", DateTime(2018, 8, 31)));
+    mockBubbleService.addMessage(Message(frun, "hello!", DateTime(2018, 8, 30), location));
+    mockBubbleService.addMessage(Message(frun, "i just landed.", DateTime(2018, 8, 30), location));
+		mockBubbleService.addMessage(Message(atn, "where are you?", DateTime(2018, 8, 31), null));
 		Timer.periodic(Duration(seconds:5), (t) {
       print("New artificial message");
-			mockBubbleService.addMessage(Message(frun, "new message",  DateTime.now()));
+			mockBubbleService.addMessage(Message(frun, "new message",  DateTime.now(), location));
     });
 	}
 
@@ -39,7 +42,7 @@ class HardcodedChatService extends ChatService {
   Future<List<Person>> getUserList() async => mockUserList;
   
   Future sendMessage(String message) {
-    mockBubbleService.addMessage(Message(atn, message, DateTime.now()));
+    mockBubbleService.addMessage(Message(atn, message, DateTime.now(), null));
   }
 
   Stream<Null> get newMessage => StreamController<Null>().stream;

@@ -16,8 +16,8 @@ import 'src/hardcoded_chat_service.dart';
   ''',
   directives: [routerDirectives],
   providers: [
-    // const ClassProvider(ChatService, useClass: HardcodedChatService),
-    const ClassProvider(ChatService, useClass: HttpChatService),
+    const ClassProvider(ChatService, useClass: HardcodedChatService),
+    // const ClassProvider(ChatService, useClass: HttpChatService),
     const ClassProvider(ColorService)
   ],
   exports: [RoutePaths, Routes],
