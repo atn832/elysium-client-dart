@@ -15,7 +15,8 @@
 
 .line {
 	display: flex;
-	align-items: center;
+	align-items: flex-end;
+	margin-bottom: 16px;
 }
 
 .header {
@@ -26,10 +27,6 @@
 	flex-basis: 36px;
     flex-shrink: 0;
     margin-right: 8px;
-}
-
-.spread {
-	flex-grow: 1;
 }
 
 .bubble.green {
@@ -58,6 +55,7 @@
 }
 
 .time {
+	margin-left: 60px;
 	float:right;
-	color: $mat-gray-600;
+	color: $mat-gray-500;
 }
