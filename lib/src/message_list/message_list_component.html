@@ -1,4 +1,4 @@
-<div class="messages" *ngIf="bubbles.isNotEmpty">
+<div class="messages" *ngIf="bubbles != null && bubbles.isNotEmpty">
   <div class="line" *ngFor="let bubble of bubbles">
     <span class="header {{getColorClass(bubble.author)}}">{{getHeader(bubble.author)}}</span>
     <span class="spread">

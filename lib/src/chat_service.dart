@@ -17,13 +17,14 @@ class ChatService {
 
   List<Bubble> mockBubbles;
 
-  BubbleService bubbleService = BubbleService();
+  BubbleService mockBubbleService = BubbleService();
 
   ChatService() {
-    bubbleService.addMessage(Message(frun, "hello!", DateTime(2018, 8, 30)));
-    bubbleService.addMessage(Message(frun, "i just landed.", DateTime(2018, 8, 30)));
-		bubbleService.addMessage(Message(atn, "where are you?", DateTime(2018, 8, 31)));
-		Timer.periodic(Duration(seconds:2), (t) => bubbleService.addMessage(
+    mockBubbles = mockBubbleService.bubbles;
+    mockBubbleService.addMessage(Message(frun, "hello!", DateTime(2018, 8, 30)));
+    mockBubbleService.addMessage(Message(frun, "i just landed.", DateTime(2018, 8, 30)));
+		mockBubbleService.addMessage(Message(atn, "where are you?", DateTime(2018, 8, 31)));
+		Timer.periodic(Duration(seconds:2), (t) => mockBubbleService.addMessage(
 			Message(frun, "new message",  DateTime.now())
 		));
 	}
@@ -35,7 +36,7 @@ class ChatService {
   Future<List<Person>> getUserList() async => mockUserList;
   
   Future sendMessage(String message) {
-    bubbleService.addMessage(Message(atn, message, DateTime.now()));
+    mockBubbleService.addMessage(Message(atn, message, DateTime.now()));
   }
 
   Stream<Null> get newMessage => StreamController<Null>().stream;
