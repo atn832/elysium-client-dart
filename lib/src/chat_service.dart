@@ -24,9 +24,10 @@ class ChatService {
     mockBubbleService.addMessage(Message(frun, "hello!", DateTime(2018, 8, 30)));
     mockBubbleService.addMessage(Message(frun, "i just landed.", DateTime(2018, 8, 30)));
 		mockBubbleService.addMessage(Message(atn, "where are you?", DateTime(2018, 8, 31)));
-		Timer.periodic(Duration(seconds:2), (t) => mockBubbleService.addMessage(
-			Message(frun, "new message",  DateTime.now())
-		));
+		Timer.periodic(Duration(seconds:5), (t) {
+      print("New artificial message");
+			mockBubbleService.addMessage(Message(frun, "new message",  DateTime.now()));
+    });
 	}
 
   Future<List<Bubble>> getBubbles() async => mockBubbles;
