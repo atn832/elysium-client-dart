@@ -1,14 +1,3 @@
 <div class="messages" *ngIf="bubbles != null && bubbles.isNotEmpty">
-  <div class="line" *ngFor="let bubble of bubbles">
-    <span class="header {{getColorClass(bubble.author)}}">{{getHeader(bubble.author)}}</span>
-    <span class="bubble {{getColorClass(bubble.author)}}">
-      <div *ngFor="let message of bubble.messages">{{message}}</div>
-      <span class="metadata">
-        <span *ngIf="bubble.location != null && bubble.location.name != null">
-          {{bubble.location.name}}, 
-        </span>
-        {{renderTime(bubble.time)}}
-      </span>
-    </span>
-  </div>
+  <bubble [bubble]="bubble" *ngFor="let bubble of bubbles"></bubble>
 </div>
