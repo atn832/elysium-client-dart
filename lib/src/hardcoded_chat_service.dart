@@ -18,6 +18,7 @@ class HardcodedChatService extends ChatService {
 
   List<Person> mockUserList = <Person>[frun, atn];
   List<Bubble> mockBubbles;
+  Bubble mockUnsentBubble;
 
   BubbleService mockBubbleService = BubbleService();
   ReverseGeocodingService _reverseGeocodingService;
@@ -32,13 +33,15 @@ class HardcodedChatService extends ChatService {
     mockBubbleService.addMessage(Message(frun, "hello!", DateTime(2018, 8, 30), location));
     mockBubbleService.addMessage(Message(frun, "i just landed.", DateTime(2018, 8, 30), location));
 		mockBubbleService.addMessage(Message(atn, "where are you?", DateTime(2018, 8, 31), null));
+
+    mockUnsentBubble = Bubble(atn, ["looks like I lost connectivity"], DateTime.now());
 		Timer.periodic(Duration(seconds:5), (t) {
-      print("New artificial message");
 			mockBubbleService.addMessage(Message(frun, "new message",  DateTime.now(), location));
     });
 	}
 
   Future<List<Bubble>> getBubbles() async => mockBubbles;
+  Bubble getUnsentBubble() => mockUnsentBubble;
 
   Future signIn(String username) {}
   

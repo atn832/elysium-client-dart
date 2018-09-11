@@ -48,6 +48,7 @@ class HttpChatService extends ChatService {
 	
 	List<Person> userList = [];
   List<Bubble> bubbles;
+  Bubble unsentBubble;
   
   Future signIn(String username) async {
     if (startedSignin) {
@@ -69,6 +70,9 @@ class HttpChatService extends ChatService {
       channelId = data["channel"]["ID"];
 
       startPolling();
+
+      // Initialize message queue.
+      unsentBubble = Bubble(Person(username), [], DateTime.now());
 
       // Initialize time zone info.
       await TimeMachine.initialize();
@@ -221,6 +225,8 @@ class HttpChatService extends ChatService {
       throw _handleError(e);
     }
   }
+
+  Bubble getUnsentBubble() => unsentBubble;
 
   Stream<Null> get newMessage => _newMessage.stream;
   Stream<Null> get newUsers => _newUsers.stream;

@@ -22,6 +22,9 @@ class BubbleComponent {
   @Input()
   Bubble bubble;
 
+  @Input()
+  bool sending;
+
   BubbleComponent(this._colorService);
 
   String renderTime(DateTime time) {

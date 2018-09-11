@@ -8,6 +8,7 @@ abstract class ChatService {
   ChatService();
  
   Future<List<Bubble>> getBubbles();
+  Bubble getUnsentBubble();
 
   Future signIn(String username);
   

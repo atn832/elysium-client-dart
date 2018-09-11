@@ -20,6 +20,7 @@ class MessageListComponent implements OnInit, AfterViewChecked {
   final ChatService chatService;
 
   List<Bubble> bubbles = [];
+  Bubble unsentBubble;
 
   bool newMessageAdded = false;
   final _newMessage = StreamController<Null>();
@@ -34,6 +35,7 @@ class MessageListComponent implements OnInit, AfterViewChecked {
       newMessageAdded = true;
     });
     bubbles = await chatService.getBubbles();
+    unsentBubble = chatService.getUnsentBubble();
   }
 
   ngAfterViewChecked() {
