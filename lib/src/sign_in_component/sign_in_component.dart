@@ -5,6 +5,7 @@ import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_router/angular_router.dart';
 import 'package:firebase/firebase.dart' as fb;
+import 'package:firebase/firestore.dart' as fs;
 
 import '../route_paths.dart';
 
@@ -62,6 +63,7 @@ class SignInComponent implements OnInit {
       if (user == null) return;
 
       _showProfile(user);
+      _connectToFirestore();
     });
   }
 
@@ -70,5 +72,17 @@ class SignInComponent implements OnInit {
       print(user.photoURL);
     }
     print(user.displayName + " / " + user.email);
+  }
+
+  _connectToFirestore() {
+    fs.Firestore firestore = fb.firestore();
+    fs.CollectionReference ref = firestore.collection("messages");
+
+    ref.onSnapshot.listen((querySnapshot) {
+      querySnapshot.docChanges().forEach((change) {
+        final docSnapshot = change.doc;
+        print(docSnapshot.data());
+      });
+    });
   }
 }
