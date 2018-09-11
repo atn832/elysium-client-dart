@@ -19,7 +19,26 @@ class ReverseGeocodingService {
         "&key=${ApiKey}";
       final response = await _http.get(_url);
       final data = extractData(response) as Map<String, dynamic>;
-      final address = data["results"][0]["formatted_address"];
+      final firstResult = data["results"][0];
+      final components = firstResult["address_components"];
+      final List<String> usefulComponents = [];
+      maybeAddLevel(components, 3, usefulComponents);
+      maybeAddLevel(components, 2, usefulComponents);
+      maybeAddLevel(components, 1, usefulComponents);
+      final address = usefulComponents.isNotEmpty ? usefulComponents.join(", ") : firstResult["formatted_address"];;
       return address;
+  }
+
+  maybeAddLevel(List<dynamic> components, int level, List<String> usefulComponents) {
+    try {
+      final component = components
+          .firstWhere((c) => c["types"].contains("administrative_area_level_${level}"));
+      final value = component["long_name"] as String;
+      if (value == null) return;
+      usefulComponents.add(value);
+    } catch (e) {
+      // Silently ignore.
+      // print(e);
+    }
   }
 }
