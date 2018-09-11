@@ -44,7 +44,7 @@ class HttpChatService extends ChatService {
 
   int clientMessageId = 0;
   int lastEventId = -1;
-  HashSet<int> sentMessageEventIds = HashSet();
+  HashMap<int, String> sentMessages = HashMap();
 	
 	List<Person> userList = [];
   List<Bubble> bubbles;
@@ -100,17 +100,24 @@ class HttpChatService extends ChatService {
 
     // Add new messages to the list.
     final newMessages = events["events"]
-      .where((e) => e["eventType"]["type"] == "Message" && !sentMessageEventIds.contains(e["ID"]))
+      .where((e) => e["eventType"]["type"] == "Message")
       .map((e) {
+        // Remove from unsent bubble.
+        String content = e["content"] as String;
+        if (sentMessages.containsKey(e["ID"])) {
+          unsentBubble.messages.remove(content);
+        }
+        // Reverse geocode.
         final location = e["source"]["location"];
         final loc = location != null ? Location(location["latitude"], location["longitude"]) : null;
         if (loc != null) {
           _reverseGeocodingService.reverseGeocode(loc.lat, loc.lng)
               .then((s) => loc.name = s);
         }
+        // Parse the rest of the message.
         return Message(
             Person(e["source"]["entity"]["name"]),
-            e["content"] as String,
+            content,
             // Append Z to force UTC.
             DateTime.parse(e["source"]["datetime"] + " Z"),
             loc,
@@ -198,6 +205,11 @@ class HttpChatService extends ChatService {
   }
 
   Future sendMessage(String message) async {
+    unsentBubble.messages.add(message);
+    unsentBubble.time = DateTime.now().toUtc();
+    // Notify listeners.
+    _newMessage.add(null);
+
     try {
       var base = Uri.base;
       final _sayUrl = Uri(
@@ -217,11 +229,10 @@ class HttpChatService extends ChatService {
       final response = await _http.get(_sayUrl);
       final data = extractData(response) as Map<String, dynamic>;
       final eventId = data["eventID"];
-      sentMessageEventIds.add(eventId);
-      bubbleService.addMessage(Message(Person(username), message, DateTime.now().toUtc(), null));
-      // Notify listeners.
-      _newMessage.add(null);
+      sentMessages[eventId] = message;
     } catch (e) {
+      // Display the error message.
+      bubbleService.addMessage(Message(Person(username), e.toString(), DateTime.now().toUtc(), null));
       throw _handleError(e);
     }
   }
