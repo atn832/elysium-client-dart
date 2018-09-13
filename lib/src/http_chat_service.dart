@@ -10,6 +10,7 @@ import 'package:time_machine/time_machine.dart';
 import 'bubble.dart';
 import 'bubble_service.dart';
 import 'chat_service.dart';
+import 'geolocation_dartdevc_polyfill.dart';
 import 'http_util.dart';
 import 'location.dart';
 import 'message.dart';
@@ -21,14 +22,17 @@ import 'reverse_geocoding_service.dart';
 class HttpChatService extends ChatService {
   final Client _http;
   final ReverseGeocodingService _reverseGeocodingService;
+  final Geolocation _geolocation;
   final bubbleService = BubbleService();
   final host = "/Elysium";
+
+  Coordinates currentLocation;
   
-  HttpChatService(this._http, this._reverseGeocodingService) {
+  HttpChatService(this._http, this._reverseGeocodingService) :
+      _geolocation = Geolocation() {
     signInCompleter = Completer();
     signedIn = signInCompleter.future;
     bubbles = bubbleService.bubbles;
-    print("initialized bubbles");
   }
 
   final _newMessage = StreamController<Null>();
@@ -76,6 +80,11 @@ class HttpChatService extends ChatService {
 
       // Initialize time zone info.
       await TimeMachine.initialize();
+
+      // Track position.
+      _geolocation.watchPosition(enableHighAccuracy: true, timeout: Duration(seconds: 1)).listen((p) {
+        currentLocation = p.coordinates;
+      });
 
       print("done signing in");
       signInCompleter.complete(true);
@@ -223,6 +232,8 @@ class HttpChatService extends ChatService {
           "clientMessageID": clientMessageId.toString(),
           "content": message,
           "timeZone": DateTimeZone.local.toString(),
+          "location.latitude": currentLocation?.latitude.toString(),
+          "location.longitude": currentLocation?.longitude.toString(),
         }
       ).toString();
       clientMessageId++;
