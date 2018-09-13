@@ -29,8 +29,8 @@ class HttpChatService extends ChatService {
   Coordinates currentLocation;
   
   HttpChatService(this._http, this._reverseGeocodingService) :
-      _geolocation = Geolocation() {
-    signInCompleter = Completer();
+      _geolocation = Geolocation(),
+      signInCompleter = Completer() {
     signedIn = signInCompleter.future;
     bubbles = bubbleService.bubbles;
   }
@@ -38,7 +38,7 @@ class HttpChatService extends ChatService {
   final _newMessage = StreamController<Null>();
   final _newUsers = StreamController<Null>();
 
-  Completer signInCompleter;
+  final Completer signInCompleter;
   Future signedIn;
   bool startedSignin = false;
 	String username;
@@ -50,7 +50,7 @@ class HttpChatService extends ChatService {
   int lastEventId = -1;
   HashMap<int, String> sentMessages = HashMap();
 	
-	List<Person> userList = [];
+	final List<Person> userList = [];
   List<Bubble> bubbles;
   Bubble unsentBubble;
   

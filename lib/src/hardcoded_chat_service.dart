@@ -16,7 +16,7 @@ class HardcodedChatService extends ChatService {
   static final frun = Person("frun");
   static final atn = Person("atn");
 
-  List<Person> mockUserList = <Person>[frun, atn];
+  final List<Person> mockUserList = <Person>[frun, atn];
   List<Bubble> mockBubbles;
   Bubble mockUnsentBubble;
 
