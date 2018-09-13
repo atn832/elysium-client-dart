@@ -193,10 +193,21 @@ class HttpChatService extends ChatService {
   }
 
   dynamic getMessages(bool log, int lastEventId, int numMessages) async {
-    final _getMessagesUrl = "${host}/getmessages.action?token=${loginToken}&"
-      "userID=${userId}&log=${log}&lastEventID=${lastEventId}&numMessages=${numMessages}&" +
-      "timeZone=${DateTimeZone.local}";
-    final response = await _http.get(_getMessagesUrl);
+    final base = Uri.base;
+    final getMessagesUrl = Uri(
+      scheme: base.scheme,
+      host: base.host,
+      path: "${host}/getmessages.action",
+      queryParameters: {
+        "token": loginToken,
+        "userID": userId.toString(),
+        "log": log.toString(),
+        "lastEventID": lastEventId.toString(),
+        "numMessages": numMessages.toString(),
+        "timeZone": DateTimeZone.local.toString(),
+      }
+    ).toString();
+    final response = await _http.get(getMessagesUrl);
     final data = extractData(response) as Map<String, dynamic>;
     if (data["chanUpdates"] == null) return null;
     final currentChanEvents = data["chanUpdates"].where((u) => u["chanID"] == channelId).first;
@@ -220,7 +231,7 @@ class HttpChatService extends ChatService {
     _newMessage.add(null);
 
     try {
-      var base = Uri.base;
+      final base = Uri.base;
       final _sayUrl = Uri(
         scheme: base.scheme,
         host: base.host,
