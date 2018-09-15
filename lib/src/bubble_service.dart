@@ -16,7 +16,6 @@ class BubbleService {
         makeNewBubble = true;
       } else {
         final timeDifference = message.time.difference(latestBubble.time);
-        print(timeDifference);
         makeNewBubble = timeDifference > MinTimeBetweenBubbles;
       }
     }
