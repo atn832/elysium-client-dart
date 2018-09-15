@@ -15,3 +15,9 @@ Created from templates made available by Stagehand under a BSD-style
 Install Dart by following instructions at https://webdev.dartlang.org/guides/get-started#2-install-dart.
 
 Run the chat by running `webdev serve`.
+
+# Run tests
+
+```
+pub run build_runner test --fail-on-severe -- -p chrome
+```
