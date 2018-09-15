@@ -232,20 +232,23 @@ class HttpChatService extends ChatService {
 
     try {
       final base = Uri.base;
+      final queryParameters = {
+        "token": loginToken,
+        "userID": userId.toString(),
+        "destinationID": channelId.toString(),
+        "clientMessageID": clientMessageId.toString(),
+        "content": message,
+        "timeZone": DateTimeZone.local.toString()
+      };
+      if (currentLocation!= null && currentLocation.latitude != null && currentLocation.longitude != null) {
+        queryParameters["location.latitude"] = currentLocation.latitude.toString();
+        queryParameters["location.longitude"] = currentLocation.longitude.toString();
+      }
       final _sayUrl = Uri(
         scheme: base.scheme,
         host: base.host,
         path: "${host}/say.action",
-        queryParameters: {
-          "token": loginToken,
-          "userID": userId.toString(),
-          "destinationID": channelId.toString(),
-          "clientMessageID": clientMessageId.toString(),
-          "content": message,
-          "timeZone": DateTimeZone.local.toString(),
-          "location.latitude": currentLocation?.latitude.toString(),
-          "location.longitude": currentLocation?.longitude.toString(),
-        }
+        queryParameters: queryParameters
       ).toString();
       clientMessageId++;
       final response = await _http.get(_sayUrl);
