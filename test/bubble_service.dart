@@ -30,7 +30,7 @@ void main() {
     expect(bubble.dateRange.endTime, time);
   });
 
-  test('first messages, one bubble', () {
+  test('two messages, one bubble', () {
     final List<Bubble> bubbles = bubbleService.bubbles;
     const location = null;
     bubbleService.addMessage(Message(Person('atn'), 'hello', DateTime.now(), location));
@@ -134,4 +134,45 @@ void main() {
     expect(bubbleService.getInsertionIndex(afterBubbles), 2);
   });
 
+  test('new bubble if receiving very old message', () {
+    final List<Bubble> bubbles = bubbleService.bubbles;
+    const location = null;
+    final firstMessageTime = DateTime.now();
+    bubbleService.addMessage(Message(Person('atn'), 'hello', firstMessageTime, location));
+    expect(bubbles.length, 1);
+    expect(bubbles[0].messages.length, 1);
+
+    // Add a second message long after the first one.
+    final oldMessageTime = firstMessageTime.subtract(Duration(minutes: 30));
+    bubbleService.addMessage(Message(Person('atn'), 'i am here', oldMessageTime, location));
+    // It should have prepended a new bubble.
+    expect(bubbles.length, 2);
+    expect(bubbles[0].messages.length, 1);
+    expect(bubbles[0].dateRange.startTime, oldMessageTime);
+    expect(bubbles[0].messages[0], 'i am here');
+
+    expect(bubbles[1].messages.length, 1);
+    expect(bubbles[1].messages[0], 'hello');
+    expect(bubbles[1].dateRange.endTime, firstMessageTime);
+  });
+
+  test('merge to previous bubble if old message from 3 minutes after', () {
+    final List<Bubble> bubbles = bubbleService.bubbles;
+    const location = null;
+    final firstMessageTime = DateTime.now();
+    bubbleService.addMessage(Message(Person('atn'), 'hello', firstMessageTime, location));
+    expect(bubbles.length, 1);
+    expect(bubbles[0].messages.length, 1);
+
+    // Add a second message long after the first one.
+    final oldMessageTime = firstMessageTime.subtract(Duration(minutes: 3));
+    bubbleService.addMessage(Message(Person('atn'), 'i am here', oldMessageTime, location));
+    // It should have prepended the message to the only bubble.
+    expect(bubbles.length, 1);
+    expect(bubbles[0].messages.length, 2);
+    expect(bubbles[0].dateRange.startTime, oldMessageTime);
+    expect(bubbles[0].messages[0], 'i am here');
+    expect(bubbles[0].messages[1], 'hello');
+    expect(bubbles[0].dateRange.endTime, firstMessageTime);
+  });
 }
