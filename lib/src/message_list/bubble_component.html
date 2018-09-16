@@ -6,7 +6,7 @@
             <span *ngIf="bubble.location != null && bubble.location.name != null">
                 {{bubble.location.name}}, 
             </span>
-                {{renderTime(bubble.time)}}
+                {{renderTime(bubble.dateRange.endTime)}}
         </span>
     </span>
 </div>
