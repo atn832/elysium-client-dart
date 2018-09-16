@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 import 'bubble.dart';
 import 'message.dart';
 
@@ -22,12 +24,35 @@ class BubbleService {
     if (makeNewBubble) {
       final b = Bubble(message.author, [message.message], message.time);
       b.location = message.location;
-      _bubbles.add(b);
+      _bubbles.insert(getInsertionIndex(message.time), b);
     } else {
       final latestBubble = _bubbles[_bubbles.length - 1];
       latestBubble.messages.add(message.message);
-      latestBubble.dateRange.endTime = message.time;
+      latestBubble.dateRange.expand(message.time);
       latestBubble.location = message.location;
+    }
+  }
+
+  /**
+   * Computes the index at which to insert the message. Later we have to decide
+   * whether to create a new bubble or not.
+   * 0 means beginning,
+   * length means at the end.
+   */
+  @visibleForTesting
+  int getInsertionIndex(DateTime time) {
+    return _getInsertionIndex(0, _bubbles.length, time);
+  }
+
+  int _getInsertionIndex(int start, int end, DateTime time) {
+    if (start >= end) {
+      return start;
+    }
+    final midIndex = (start + end) ~/ 2;
+    if (_bubbles[midIndex].dateRange.isAfter(time)) {
+      return _getInsertionIndex(start, midIndex, time);
+    } else {
+      return _getInsertionIndex(midIndex + 1, end, time);
     }
   }
 

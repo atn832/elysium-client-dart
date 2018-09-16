@@ -30,7 +30,7 @@ void main() {
     expect(bubble.dateRange.endTime, time);
   });
 
-  test('first message, first bubble', () {
+  test('first messages, one bubble', () {
     final List<Bubble> bubbles = bubbleService.bubbles;
     const location = null;
     bubbleService.addMessage(Message(Person('atn'), 'hello', DateTime.now(), location));
@@ -92,6 +92,46 @@ void main() {
     expect(bubbles[1].messages[0], 'hello back');
     expect(bubbles[1].dateRange.endTime, secondMessageTime);
     expect(bubbles[1].author.name, 'frun');
+  });
+
+  test('getInsertionIndex with no bubble', () {
+    final now = DateTime.now();
+    expect(bubbleService.getInsertionIndex(now), 0);
+  });
+
+  test('getInsertionIndex after the first bubble', () {
+    final now = DateTime.now();
+    const location = null;
+    final firstMessageTime = DateTime.now();
+    bubbleService.addMessage(Message(Person('atn'), 'hello', firstMessageTime, location));
+  
+    final after = now.add(Duration(minutes: 1));
+    expect(bubbleService.getInsertionIndex(after), 1);
+  });
+
+  test('getInsertionIndex before the first bubble', () {
+    final now = DateTime.now();
+    const location = null;
+    final firstMessageTime = DateTime.now();
+    bubbleService.addMessage(Message(Person('atn'), 'hello', firstMessageTime, location));
+  
+    final before = now.subtract(Duration(minutes: 1));
+    expect(bubbleService.getInsertionIndex(before), 0);
+  });
+
+  test('getInsertionIndex between two bubbles', () {
+    final now = DateTime.now();
+    const location = null;
+    final firstMessageTime = DateTime.now();
+    bubbleService.addMessage(Message(Person('atn'), 'hello', firstMessageTime, location));
+    final secondBubbleTime = firstMessageTime.add(Duration(minutes: 20));
+    bubbleService.addMessage(Message(Person('atn'), 'hello again', secondBubbleTime, location));
+  
+    final betweenBubbles = now.add(Duration(minutes: 10));
+    expect(bubbleService.getInsertionIndex(betweenBubbles), 1);
+
+    final afterBubbles = secondBubbleTime.add(Duration(minutes: 10));
+    expect(bubbleService.getInsertionIndex(afterBubbles), 2);
   });
 
 }
