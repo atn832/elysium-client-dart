@@ -157,7 +157,6 @@ class HttpChatService extends ChatService {
     List<Person> newUserList = List();
     events["userList"]
       .map((u) {
-        // print(u);
         final p = Person(u["name"]);
         try {
           p.timezone = u["latestSource"]["timeZone"]["timeZone"];
