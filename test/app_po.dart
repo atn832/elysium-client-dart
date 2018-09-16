@@ -12,11 +12,13 @@ abstract class AppPO {
   @ByTagName('h1')
   PageLoaderElement get _h1;
 
-  @ByTagName('material-input')
+  @ByCss('material-input input')
   PageLoaderElement get _input;
 
   @ByTagName('material-button')
   PageLoaderElement get _button;
+
+  Future<void> clear() => _input.clear();
 
   Future<void> type(String s) => _input.type(s);
 

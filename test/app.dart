@@ -53,6 +53,7 @@ void main() {
   });
 
   test('choose username and sign in + navHistory', () async {
+    await po.clear();
     await po.type('atn');
     await po.signIn();
     await fixture.update();
