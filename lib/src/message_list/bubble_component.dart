@@ -28,9 +28,14 @@ class BubbleComponent {
   BubbleComponent(this._colorService);
 
   String renderTime(DateTime time) {
-    var instant = Instant.dateTime(time);
+    final instant = Instant.dateTime(time);
+    final localTimeDate = instant.inLocalZone();
     // Use DDC variant because of https://github.com/dart-lang/sdk/issues/33876.
-    return instant.inLocalZone().toStringDDC('HH:mm');
+    final todayInLocalTime = Instant.now().inLocalZone();
+    if (todayInLocalTime.date.equals(localTimeDate.date)) {
+      return localTimeDate.toStringDDC('HH:mm');
+    }
+    return localTimeDate.toStringDDC('ddd dd MMM, HH:mm');
   }
 
   String getColorClass(Person person) {

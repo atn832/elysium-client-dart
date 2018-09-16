@@ -14,8 +14,13 @@ void main() {
 
   tearDown(disposeAnyRunningTest);
 
-  test('empty initial state', () {
+  test('show just the time for today', () {
     final time = DateTime.now();
     expect(component.renderTime(time).length, 5);
+  });
+
+  test('show the time and date if more than a day old', () {
+    final time = DateTime.now().subtract(Duration(days: 1));
+    expect(component.renderTime(time).length > 5, true);
   });
 }
