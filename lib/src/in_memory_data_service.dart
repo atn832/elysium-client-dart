@@ -644,6 +644,78 @@ class InMemoryDataService extends MockClient {
     ]
   };
 
+  static const GetOlderMessagesResponse = {
+    "chanList": [
+      {
+        "ID": 1,
+        "name": "Elysium"
+      }
+    ],
+    "chanUpdates": [
+      {
+        "chanID": 1,
+        "events": [
+          {
+            "ID": 739222,
+            "content": "heya",
+            "eventType": {
+              "ID": 3,
+              "name": "Message",
+              "type": "Message"
+            },
+            "source": {
+              "datetime": "2018-07-10T01:54:05",
+              "entity": {
+                "ID": 5,
+                "entityType": {
+                  "ID": 2,
+                  "name": "User",
+                  "type": "User"
+                },
+                "name": "frun"
+              },
+              "timeZone": {
+                "ID": 10,
+                "timeZone": "Asia/Taipei"
+              },
+            }
+          },
+          {
+            "ID": 739223,
+            "content": "old message",
+            "eventType": {
+              "ID": 3,
+              "name": "Message",
+              "type": "Message"
+            },
+            "source": {
+              "datetime": "2018-07-10T01:54:17",
+              "entity": {
+                "ID": 5,
+                "entityType": {
+                  "ID": 2,
+                  "name": "User",
+                  "type": "User"
+                },
+                "name": "frun"
+              },
+              "timeZone": {
+                "ID": 10,
+                "timeZone": "Asia/Taipei"
+              },
+            }
+          }
+        ],
+        "userListUpdated": false
+      }
+    ],
+    "lastEventID": 740208,
+    "numMessages": 1000,
+    "token": "978163405",
+    "userID": 4,
+    "validResponse": true
+  };
+
   static Random random = Random();
   static int lastMessageId = 735465; // from initial getMessagesResponse.
   static Map<String, dynamic> messageResponseAfterSay = {
@@ -688,8 +760,12 @@ class InMemoryDataService extends MockClient {
             break;
           case 'getmessages.action':
             await Future.delayed(Duration(seconds: 1));
-            if (request.url.queryParameters["lastEventID"] == (-1).toString()) {
-              data = getMessagesResponse;
+            if (request.url.queryParameters["log"] == "true") {
+              if (request.url.queryParameters["lastEventID"] == (-1).toString()) {
+                data = getMessagesResponse;
+              } else {
+                data = GetOlderMessagesResponse;
+              }
             } else {
               if (random.nextDouble() < .5) {
                 throw 'Random network failure';

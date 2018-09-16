@@ -47,6 +47,7 @@ class HttpChatService extends ChatService {
 	int userId;
 
   int clientMessageId = 0;
+  int earliestEventId = pow(2, 32);
   int lastEventId = -1;
   HashMap<int, String> sentMessages = HashMap();
 	
@@ -144,7 +145,9 @@ class HttpChatService extends ChatService {
 
     // Update lastEventId.
     events["events"].forEach((e) {
-      lastEventId = max(lastEventId, e["ID"]);
+      int id = e["ID"];
+      lastEventId = max(lastEventId, id);
+      earliestEventId = min(earliestEventId, id);
     });
   }
 
@@ -263,7 +266,9 @@ class HttpChatService extends ChatService {
   }
 
   Future<void> getOlderMessages() async {
-    throw "Not implemented";
+    const numMessages = 300;
+    final events = await getMessages(true, earliestEventId, numMessages);
+    updateMessageList(events);
   }
 
   Bubble getUnsentBubble() => unsentBubble;

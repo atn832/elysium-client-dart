@@ -41,7 +41,6 @@ class UserListComponent implements OnInit {
   }
 
   String getShortTimezone(String timezone) {
-    print("getShortTimeZone");
     return timezone.split("/")[1].replaceAll("_", " ");
   }
 
