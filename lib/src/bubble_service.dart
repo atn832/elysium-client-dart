@@ -15,7 +15,7 @@ class BubbleService {
       if (latestBubble.author != message.author) {
         makeNewBubble = true;
       } else {
-        final timeDifference = message.time.difference(latestBubble.time);
+        final timeDifference = message.time.difference(latestBubble.endTime);
         makeNewBubble = timeDifference > MinTimeBetweenBubbles;
       }
     }
@@ -26,7 +26,7 @@ class BubbleService {
     } else {
       final latestBubble = _bubbles[_bubbles.length - 1];
       latestBubble.messages.add(message.message);
-      latestBubble.time = message.time;
+      latestBubble.endTime = message.time;
       latestBubble.location = message.location;
     }
   }

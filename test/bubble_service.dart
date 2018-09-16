@@ -38,7 +38,7 @@ void main() {
     expect(bubbles.length, 1);
     expect(firstAndOnlyBubble.messages.length, 2);
     expect(firstAndOnlyBubble.messages[1], 'i am here');
-    expect(firstAndOnlyBubble.time, secondMessageTime);
+    expect(firstAndOnlyBubble.endTime, secondMessageTime);
   });
 
   test('two bubbles if messaging again after 10 minutes', () {
@@ -56,10 +56,10 @@ void main() {
     // It should have created a second bubble.
     expect(bubbles.length, 2);
     expect(bubbles[0].messages.length, 1);
-    expect(bubbles[0].time, firstMessageTime);
+    expect(bubbles[0].endTime, firstMessageTime);
     expect(bubbles[1].messages.length, 1);
     expect(bubbles[1].messages[0], 'i am here');
-    expect(bubbles[1].time, secondMessageTime);
+    expect(bubbles[1].endTime, secondMessageTime);
   });
 
   test('two bubbles from different authors', () {
@@ -77,12 +77,12 @@ void main() {
     // It should have created a second bubble.
     expect(bubbles.length, 2);
     expect(bubbles[0].messages.length, 1);
-    expect(bubbles[0].time, firstMessageTime);
+    expect(bubbles[0].endTime, firstMessageTime);
     expect(bubbles[0].author.name, 'atn');
     
     expect(bubbles[1].messages.length, 1);
     expect(bubbles[1].messages[0], 'hello back');
-    expect(bubbles[1].time, secondMessageTime);
+    expect(bubbles[1].endTime, secondMessageTime);
     expect(bubbles[1].author.name, 'frun');
   });
 

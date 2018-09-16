@@ -4,8 +4,8 @@ import 'person.dart';
 class Bubble {
   final Person author;
   final List<String> messages;
-  DateTime time;
+  DateTime endTime;
   Location location;
 
-  Bubble(this.author, this.messages, this.time);
+  Bubble(this.author, this.messages, this.endTime);
 }

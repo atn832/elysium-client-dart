@@ -226,7 +226,7 @@ class HttpChatService extends ChatService {
 
   Future sendMessage(String message) async {
     unsentBubble.messages.add(message);
-    unsentBubble.time = DateTime.now().toUtc();
+    unsentBubble.endTime = DateTime.now().toUtc();
     // Notify listeners.
     _newMessage.add(null);
 
