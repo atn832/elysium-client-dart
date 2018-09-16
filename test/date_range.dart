@@ -51,4 +51,28 @@ void main() {
     expect(dateRange.isAfter(wayAfter), false);
   });
 
+  test('expand', () {
+    final start = DateTime.now();
+    final end = start.add(Duration(minutes: 1));
+    final dateRange = DateRange(start, end);
+
+    // Expanding by a time in the middle does not modify the range.
+    final middle = start.add(Duration(seconds: 30));
+    dateRange.expand(middle);
+    expect(dateRange.startTime, start);
+    expect(dateRange.endTime, end);
+
+    // Expanding by a time before the range changes startTime.
+    final wayBefore = start.subtract(Duration(minutes: 1));
+    dateRange.expand(wayBefore);
+    expect(dateRange.startTime, wayBefore);
+    expect(dateRange.endTime, end);
+
+    // Expanding by a time after the range changes endTime.
+    final wayAfter = end.add(Duration(minutes: 1));
+    dateRange.expand(wayAfter);
+    expect(dateRange.startTime, wayBefore);
+    expect(dateRange.endTime, wayAfter);
+  });
+
 }

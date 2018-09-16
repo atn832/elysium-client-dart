@@ -13,4 +13,12 @@ class DateRange {
   bool isAfter(DateTime time) {
     return startTime.isAfter(time) || startTime == time;
   }
+
+  void expand(DateTime time) {
+    if (time.isBefore(startTime)) {
+      startTime = time;
+    } else if (time.isAfter(endTime)) {
+      endTime = time;
+    }
+  }
 }
