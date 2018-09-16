@@ -16,4 +16,11 @@ void main() {
     expect(dateRange.endTime, end);
   });
 
+  test('date range constructor with inverted times', () {
+    final start = DateTime.now();
+    final end = start.add(Duration(minutes: 1));
+    // Make sure the assertion fails if start and end times are mixed up.
+    expect(() => DateRange(end, start), throws);
+  });
+
 }
