@@ -9,12 +9,13 @@ import '../route_paths.dart';
 import '../input_bar/input_bar_component.dart';
 import '../message_list/message_list_component.dart';
 import '../user_list/user_list_component.dart';
+import '../get_older_messages_component.dart';
 
 @Component(
   selector: 'chat',
   styleUrls: ['chat_component.css'],
   templateUrl: 'chat_component.html',
-  directives: [InputBarComponent, MessageListComponent, UserListComponent],
+  directives: [InputBarComponent, GetOlderMessagesComponent, MessageListComponent, UserListComponent],
 )
 class ChatComponent implements OnActivate {
   final ChatService _chatService;

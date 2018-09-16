@@ -262,6 +262,10 @@ class HttpChatService extends ChatService {
     }
   }
 
+  Future<void> getOlderMessages() async {
+    throw "Not implemented";
+  }
+
   Bubble getUnsentBubble() => unsentBubble;
 
   Stream<Null> get newMessage => _newMessage.stream;

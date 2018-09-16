@@ -35,9 +35,6 @@ class HardcodedChatService extends ChatService {
 		mockBubbleService.addMessage(Message(atn, "where are you?", DateTime(2018, 8, 31), null));
 
     mockUnsentBubble = Bubble(atn, ["looks like I lost connectivity"], DateTime.now());
-		Timer.periodic(Duration(seconds:5), (t) {
-			mockBubbleService.addMessage(Message(frun, "new message",  DateTime.now(), location));
-    });
 	}
 
   Future<List<Bubble>> getBubbles() async => mockBubbles;
@@ -50,6 +47,17 @@ class HardcodedChatService extends ChatService {
   Future sendMessage(String message) {
     mockBubbleService.addMessage(Message(atn, message, DateTime.now(), null));
   }
+
+  Future<void> getOlderMessages() async {
+    await Future.delayed(Duration(seconds: 5));
+
+    final oldestTime = mockBubbles[0].dateRange.startTime;
+    final wayOlder = oldestTime.subtract(Duration(hours: 1));
+    for (var i = 0; i < 10; i++) {
+      mockBubbleService.addMessage(Message(Person('atn'), 'message ' + i.toString(), wayOlder, null));
+    }
+  }
+
 
   Stream<Null> get newMessage => StreamController<Null>().stream;
   Stream<Null> get newUsers => StreamController<Null>().stream;
