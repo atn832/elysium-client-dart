@@ -21,3 +21,5 @@ Run the chat by running `webdev serve`.
 ```
 pub run build_runner test --fail-on-severe -- -p chrome
 ```
+
+Or run `webdev serve` and open http://localhost:8081 in your browser.
