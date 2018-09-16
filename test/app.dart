@@ -7,13 +7,12 @@ import 'package:http/http.dart';
 import 'package:pageloader/html.dart';
 import 'package:test/test.dart';
 
-import 'app_test.template.dart' as self;
-
 import 'package:elysium_client/app_component.dart';
 import 'package:elysium_client/app_component.template.dart' as ng;
 import 'package:elysium_client/src/in_memory_data_service.dart';
 
 import 'app_po.dart';
+import 'app.template.dart' as self;
 import 'utils.dart';
 
 NgTestFixture<AppComponent> fixture;
