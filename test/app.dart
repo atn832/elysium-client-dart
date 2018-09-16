@@ -49,7 +49,7 @@ void main() {
   tearDown(disposeAnyRunningTest);
 
   test('heading', () {
-    expect(fixture.text, contains('Sign in'));
+    expect(fixture.text, contains('Suivant'));
   });
 
   test('choose username and sign in + navHistory', () async {
