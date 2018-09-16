@@ -30,7 +30,7 @@ class SignInComponent implements OnInit {
 
   @override
   Future<Null> ngOnInit() async {
-    username = localStorage['username'];
+    username = localStorage['username']?? '';
   }
 
   void signin() {
