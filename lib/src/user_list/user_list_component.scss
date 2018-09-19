@@ -21,6 +21,10 @@ li {
   height: auto;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 .green {
 	background-color: $mat-green-500;
 	color: #fff;
