@@ -4,7 +4,12 @@
   flex-direction: column;
 }
 
-get-older-messages,
+get-older-messages {
+  margin-bottom: 0;
+  margin-left: 12px;
+  margin-top: 16px;
+}
+
 message-list {
   margin: 16px;
 }
