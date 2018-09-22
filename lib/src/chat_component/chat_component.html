@@ -1,3 +1,10 @@
+<div class="signin" *ngIf="signingIn">
+  <span>
+      Chargement...
+      <material-spinner></material-spinner>
+  </span>
+  <span class="overlay"></span>
+</div>
 <user-list></user-list>
 <div class="scrollable">
   <get-older-messages></get-older-messages>
