@@ -123,7 +123,9 @@ class FirebaseChatService implements ChatService {
     // Listen to message changes.
     fs.CollectionReference ref = firestore.collection("messages");
     ref.where("timestamp", ">", threshold).onSnapshot.listen((querySnapshot) {
-      final allData = querySnapshot.docChanges().map((change) => change.doc.data());
+      final allData = querySnapshot.docChanges()
+        .where((change) => change.type == "added")
+        .map((change) => change.doc.data());
       updateMessageList(allData);
     });
   }
