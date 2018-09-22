@@ -54,29 +54,42 @@ class FirebaseChatService implements ChatService {
   loginWithGoogle() async {
     var provider = new fb.GoogleAuthProvider();
     try {
-      await auth.signInWithPopup(provider);
+      if (auth.currentUser == null) {
+        final credentials = await auth.signInWithPopup(provider);
+      }
+
+      // Initialize time zone info.
+      await TimeMachine.initialize();
+
+      // Track position.
+      _geolocation.watchPosition(enableHighAccuracy: true, timeout: Duration(seconds: 1)).listen((p) {
+        currentLocation = p.coordinates;
+      });
+
+      // Start listening to events
+      _connectToFirestore();
     } catch (e) {
       print("Error in sign in with google: $e");
     }
   }
 
-  // Sets the auth event listener.
-  _setAuthListener() {
-    // When the state of auth changes (user logs in/logs out).
-    auth.onAuthStateChanged.listen((user) {
-      if (user == null) return;
+  // // Sets the auth event listener.
+  // _setAuthListener() {
+  //   // When the state of auth changes (user logs in/logs out).
+  //   auth.onAuthStateChanged.listen((user) {
+  //     if (user == null) return;
 
-      _showProfile(user);
-      _connectToFirestore();
-    });
-  }
+  //     _showProfile(user);
+  //     _connectToFirestore();
+  //   });
+  // }
 
-  _showProfile(fb.User user) {
-    if (user.photoURL != null) {
-      print(user.photoURL);
-    }
-    print(user.displayName + " / " + user.email);
-  }
+  // _showProfile(fb.User user) {
+  //   if (user.photoURL != null) {
+  //     print(user.photoURL);
+  //   }
+  //   print(user.displayName + " / " + user.email);
+  // }
 
   _connectToFirestore() {
     fs.Firestore firestore = fb.firestore();
@@ -95,7 +108,20 @@ class FirebaseChatService implements ChatService {
   }
   
   Future sendMessage(String message) {
+    fs.Firestore firestore = fb.firestore();
+    fs.CollectionReference ref = firestore.collection("messages");
 
+    final Map<String, dynamic> messageData = {
+      "user": auth.currentUser.uid,
+      "content": message,
+      "timeZone": DateTimeZone.local.toString(),
+      "time": DateTime.now().toUtc()
+    };
+    if (currentLocation!= null && currentLocation.latitude != null && currentLocation.longitude != null) {
+      messageData["location"] = fs.GeoPoint(currentLocation.latitude, currentLocation.longitude);
+    }
+
+    ref.add(messageData);
   }
 
   Future<void> getOlderMessages() {
