@@ -31,6 +31,11 @@ class FirebaseChatService implements ChatService {
   Bubble unsentBubble;
   String username;
 
+  // Used to get past messages on sign-in.
+  // And as the threshold when getting older messages.
+  DateTime threshold = DateTime.now().toUtc().subtract(Duration(days: 1));
+  Duration getMoreDuration = Duration(days: 1);
+
   FirebaseChatService(this._reverseGeocodingService) :
       _geolocation = Geolocation(),
       auth = fb.auth() {
@@ -101,7 +106,7 @@ class FirebaseChatService implements ChatService {
 
     // Listen to message changes.
     fs.CollectionReference ref = firestore.collection("messages");
-    ref.onSnapshot.listen((querySnapshot) {
+    ref.where("timestamp", ">", threshold).onSnapshot.listen((querySnapshot) {
       final allData = querySnapshot.docChanges().map((change) => change.doc.data());
       updateMessageList(allData);
     });
@@ -191,8 +196,22 @@ class FirebaseChatService implements ChatService {
     await ref.add(messageData);
   }
 
-  Future<void> getOlderMessages() {
+  Future<void> getOlderMessages() async {
+    fs.Firestore firestore = fb.firestore();
+    fs.CollectionReference ref = firestore.collection("messages");
+    final newThreshold = threshold.subtract(getMoreDuration);
+    print("Getting messages from " + newThreshold.toString() + " to " + threshold.toString());
+    var querySnapshot = await ref
+      .where("timestamp", ">", newThreshold)
+      .where("timestamp", "<", threshold)
+      .get();
+    final allData = querySnapshot.docChanges().map((change) => change.doc.data());
+    updateMessageList(allData);
 
+    // Update threshold.
+    threshold = newThreshold;
+    // Double duration.
+    getMoreDuration = getMoreDuration * 2;
   }
 
   Stream<Null> get newMessage => _newMessage.stream;
