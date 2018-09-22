@@ -1,7 +1,9 @@
 <div class="line" *ngIf="bubble != null && bubble.messages != null && bubble.messages.isNotEmpty">
     <span class="header {{getColorClass(bubble.author)}}">{{getHeader(bubble.author)}}</span>
     <span class="bubble {{getColorClass(bubble.author)}}">
-        <div [class.sending]="sending === true" *ngFor="let message of bubble.messages">{{message}}</div>
+        <div [class.sending]="sending === true" *ngFor="let message of bubble.messages">
+            <text-fragment text="{{message}}"></text-fragment>
+        </div>
         <span class="metadata">
             <span *ngIf="bubble.location != null && bubble.location.name != null">
                 {{bubble.location.name}}, 

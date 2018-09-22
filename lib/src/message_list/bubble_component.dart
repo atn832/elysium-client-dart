@@ -5,6 +5,7 @@ import 'package:time_machine/time_machine.dart';
 import '../color_service.dart';
 import '../bubble.dart';
 import '../person.dart';
+import 'text_fragment_component.dart';
 
 @Component(
   selector: 'bubble',
@@ -14,6 +15,7 @@ import '../person.dart';
     MaterialChipComponent,
     NgFor,
     NgIf,
+    TextFragmentComponent,
   ],
 )
 class BubbleComponent {
