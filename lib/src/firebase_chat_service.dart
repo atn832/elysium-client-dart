@@ -8,6 +8,7 @@ import 'package:time_machine/time_machine.dart';
 import 'bubble.dart';
 import 'bubble_service.dart';
 import 'chat_service.dart';
+import 'firebase_info.dart';
 import 'geolocation_dartdevc_polyfill.dart';
 import 'list_util.dart';
 import 'location.dart';
@@ -17,7 +18,7 @@ import 'reverse_geocoding_service.dart';
 
 /// Interface for a chat service.
 class FirebaseChatService implements ChatService {
-  final fb.Auth auth;
+  fb.Auth auth;
   final ReverseGeocodingService _reverseGeocodingService;
   final Geolocation _geolocation;
   final bubbleService = BubbleService();
@@ -37,9 +38,18 @@ class FirebaseChatService implements ChatService {
   Duration getMoreDuration = Duration(days: 1);
 
   FirebaseChatService(this._reverseGeocodingService) :
-      _geolocation = Geolocation(),
-      auth = fb.auth() {
+      _geolocation = Geolocation() {
     bubbles = bubbleService.bubbles;
+    fb.initializeApp(
+      apiKey: apiKey,
+      authDomain: authDomain,
+      databaseURL: databaseURL,
+      projectId: projectId,
+      storageBucket: storageBucket,
+      messagingSenderId: messagingSenderId
+    );
+    auth = fb.auth();
+    _setAuthListener();
   }
 
   Future<List<Bubble>> getBubbles() {
@@ -55,8 +65,8 @@ class FirebaseChatService implements ChatService {
 
   // Logins with the Google auth provider.
   loginWithGoogle() async {
-    var provider = new fb.GoogleAuthProvider();
     try {
+      final provider = new fb.GoogleAuthProvider();
       final credentials = await auth.signInWithPopup(provider);
 
       // Initialize time zone info.
@@ -84,23 +94,22 @@ class FirebaseChatService implements ChatService {
     }
   }
 
-  // // Sets the auth event listener.
-  // _setAuthListener() {
-  //   // When the state of auth changes (user logs in/logs out).
-  //   auth.onAuthStateChanged.listen((user) {
-  //     if (user == null) return;
-
-  //     _showProfile(user);
-  //     _connectToFirestore();
-  //   });
-  // }
+  // Sets the auth event listener.
+  _setAuthListener() {
+    // When the state of auth changes (user logs in/logs out).
+    auth.onAuthStateChanged.listen((user) {
+      print("auth event");
+      print(user);
+      if (user == null) return;
+    });
+  }
 
   _connectToFirestore() {
     fs.Firestore firestore = fb.firestore();
 
     // Listen to user changes.
     firestore.collection("users").onSnapshot.listen((querySnapshot) {
-      final allDocs = querySnapshot.docChanges().map((change) => change.doc);
+      final allDocs = querySnapshot.docs;
       updateUserList(allDocs);
     });
 
