@@ -9,7 +9,10 @@ import 'package:test/test.dart';
 
 import 'package:elysium_client/app_component.dart';
 import 'package:elysium_client/app_component.template.dart' as ng;
+import 'package:elysium_client/src/chat_service.dart';
+import 'package:elysium_client/src/hardcoded_chat_service.dart';
 import 'package:elysium_client/src/in_memory_data_service.dart';
+import 'package:elysium_client/src/reverse_geocoding_service.dart';
 
 import 'app_po.dart';
 import 'app.template.dart' as self;
@@ -21,7 +24,9 @@ Router router;
 
 @GenerateInjector([
   routerProvidersForTesting,
-  ClassProvider(Client, useClass: InMemoryDataService),
+  const ClassProvider(ChatService, useClass: HardcodedChatService),
+  const ClassProvider(Client, useClass: InMemoryDataService),
+  const ClassProvider(ReverseGeocodingService),
 ])
 final InjectorFactory rootInjector = self.rootInjector$Injector;
 
