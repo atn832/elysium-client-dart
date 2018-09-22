@@ -76,7 +76,7 @@ class HttpChatService extends ChatService {
       userId = data["user"]["ID"];
       channelId = data["channel"]["ID"];
 
-      startPolling();
+      await startPolling();
 
       // Initialize message queue.
       unsentBubble = Bubble(Person(username), [], DateTime.now());
