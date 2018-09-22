@@ -1,13 +1,24 @@
+if [ "$1" == "firebase" ]; then
+    SOURCE=web_firebase
+    DESTINATION=/var/www/html/E3
+else
+    SOURCE=web_prod
+    DESTINATION=/var/www/html/E2
+fi
+
+echo Deploying from $SOURCE...
+
 mv web web_dev
-mv web_prod web
+mv $SOURCE web
 
 webdev build
 
-mv web web_prod
+mv web $SOURCE
 mv web_dev web
 
 HOST=m.wafrat.com
-DESTINATION=/var/www/html/E2
+
+ssh root@$HOST "mkdir -p $DESTINATION/packages/time_machine"
 
 scp build/index.html root@$HOST:$DESTINATION
 scp build/main.dart.js root@$HOST:$DESTINATION
