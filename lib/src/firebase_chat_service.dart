@@ -37,8 +37,13 @@ class FirebaseChatService implements ChatService {
   DateTime threshold = DateTime.now().toUtc().subtract(Duration(days: 1));
   Duration getMoreDuration = Duration(days: 1);
 
+  final Completer authStateChangedCompleter;
+  Future authStateChanged;
+
   FirebaseChatService(this._reverseGeocodingService) :
-      _geolocation = Geolocation() {
+      _geolocation = Geolocation(),
+      authStateChangedCompleter = Completer() {
+    authStateChanged = authStateChangedCompleter.future;
     bubbles = bubbleService.bubbles;
     fb.initializeApp(
       apiKey: apiKey,
@@ -58,8 +63,12 @@ class FirebaseChatService implements ChatService {
 
   Bubble getUnsentBubble() => unsentBubble;
 
-  Future signIn(String username) async{
+  Future signIn(String username) async {
+    print("signing in as " + username);
     this.username = username;
+
+    // Wait to fetch current sign-in info. If it times out, sign in.
+    await Future.any([authStateChanged, Future.delayed(Duration(seconds: 1))]);
     await loginWithGoogle();
   }
 
@@ -67,7 +76,7 @@ class FirebaseChatService implements ChatService {
   loginWithGoogle() async {
     try {
       final provider = new fb.GoogleAuthProvider();
-      final credentials = await auth.signInWithPopup(provider);
+      final user = auth.currentUser ?? (await auth.signInWithPopup(provider)).user;
 
       // Initialize time zone info.
       await TimeMachine.initialize();
@@ -80,7 +89,6 @@ class FirebaseChatService implements ChatService {
       // Update user list
       fs.Firestore firestore = fb.firestore();
       fs.CollectionReference ref = firestore.collection("users");
-      final user = credentials.user;
       ref.doc(user.uid).set({
         "name": username,
         "timezone": DateTimeZone.local.toString(),
@@ -98,9 +106,8 @@ class FirebaseChatService implements ChatService {
   _setAuthListener() {
     // When the state of auth changes (user logs in/logs out).
     auth.onAuthStateChanged.listen((user) {
-      print("auth event");
-      print(user);
       if (user == null) return;
+      authStateChangedCompleter.complete();
     });
   }
 
