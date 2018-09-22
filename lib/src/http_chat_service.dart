@@ -54,6 +54,8 @@ class HttpChatService extends ChatService {
 	final List<Person> userList = [];
   List<Bubble> bubbles;
   Bubble unsentBubble;
+
+  bool gettingMore = false;
   
   Future signIn(String username) async {
     if (startedSignin) {
@@ -102,7 +104,7 @@ class HttpChatService extends ChatService {
     updateUserList(events);
 
     // TODO: Poll messages.
-    getMoreMessages();
+    Timer.periodic(Duration(seconds:1), (t) => getMoreMessages());
   }
 
   updateMessageList(events) {
@@ -184,6 +186,11 @@ class HttpChatService extends ChatService {
   }
 
   getMoreMessages() async {
+    if (gettingMore) {
+      print("Still getting messages. Skipping.");
+      return;
+    }
+    gettingMore = true;
     try {
       final events = await getMessages(false, lastEventId, -1);
       updateMessageList(events);
@@ -191,7 +198,7 @@ class HttpChatService extends ChatService {
     } catch (e) {
       print("get messages failed. keep retrying");
     }
-    Timer(Duration(seconds:1), getMoreMessages);
+    gettingMore = false;
   }
 
   dynamic getMessages(bool log, int lastEventId, int numMessages) async {
