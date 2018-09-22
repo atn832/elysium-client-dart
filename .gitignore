@@ -12,5 +12,7 @@ doc/api/
 
 # Private key
 lib/src/api_key.dart
-
 firebase_info.dart
+
+# Auto-generated test files
+*.g.dart

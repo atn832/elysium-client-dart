@@ -1,0 +1,50 @@
+@import 'package:angular_components/css/material/material';
+
+:host {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.signin,
+.overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.signin {
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay {
+  background-color: black;
+  opacity: .16;
+}
+
+material-spinner {
+  margin-left: 16px;
+}
+
+get-older-messages {
+  margin-bottom: 0;
+  margin-left: 12px;
+  margin-top: 16px;
+}
+
+message-list {
+  margin: 16px;
+}
+
+.scrollable {
+  flex-grow: 1;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid lightgray;
+}

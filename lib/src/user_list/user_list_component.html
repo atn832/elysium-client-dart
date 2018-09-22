@@ -1,5 +1,10 @@
-<div *ngIf="items.isNotEmpty">
+<div>
   <ul>
+    <li *ngIf="items.isEmpty">
+      <material-chip class="user hidden" [removable]="false">
+        &nbsp;
+      </material-chip>
+    </li>
     <li *ngFor="let item of items; let i=index">
       <material-chip class="user {{getColorClass(item)}}" [removable]="false">
         <div>

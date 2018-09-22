@@ -1,5 +1,4 @@
 import 'package:angular/angular.dart';
-
 import 'package:angular_router/angular_router.dart';
 import 'package:firebase/firebase.dart' as fb;
 import 'package:http/http.dart';
@@ -14,7 +13,6 @@ import 'firebase_info.dart';
   routerProvidersHash, // You can use routerProviders in production
   ClassProvider(Client, useClass: InMemoryDataService),
 ])
-
 final InjectorFactory injector = self.injector$Injector;
 
 void main() {

@@ -1,11 +1,12 @@
+import 'date_range.dart';
 import 'location.dart';
 import 'person.dart';
 
 class Bubble {
   final Person author;
   final List<String> messages;
-  DateTime time;
+  DateRange dateRange;
   Location location;
 
-  Bubble(this.author, this.messages, this.time);
+  Bubble(this.author, this.messages, DateTime time) : dateRange = DateRange(time, time);
 }

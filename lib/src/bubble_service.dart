@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 import 'bubble.dart';
 import 'message.dart';
 
@@ -7,28 +9,74 @@ class BubbleService {
   List<Bubble> _bubbles = [];
 
   void addMessage(Message message) {
-    bool makeNewBubble = false;
-    if (_bubbles.length == 0) {
-      makeNewBubble = true;
-    } else {
-      final latestBubble = _bubbles[_bubbles.length - 1];
-      if (latestBubble.author != message.author) {
-        makeNewBubble = true;
-      } else {
-        final timeDifference = message.time.difference(latestBubble.time);
-        print(timeDifference);
-        makeNewBubble = timeDifference > MinTimeBetweenBubbles;
-      }
+    final insertionIndex = getInsertionIndex(message.time);
+    var mergedMessage =
+        _maybePrependToNextBubble(insertionIndex, message) ||
+        _maybeAppendToPreviousBubble(insertionIndex, message);
+    if (mergedMessage) return;
+
+    // Make a new bubble.
+    final b = Bubble(message.author, [message.message], message.time);
+    b.location = message.location;
+    _bubbles.insert(insertionIndex, b);
+  }
+
+  bool _maybePrependToNextBubble(int insertionIndex, Message message) {
+    // Check if we can prepend with the next one.
+    final nextBubble = insertionIndex < _bubbles.length ? _bubbles[insertionIndex] : null;
+    if (nextBubble != null && nextBubble.author == message.author) {
+      // Check if the time difference is alright.
+      final timeDifference = nextBubble.dateRange.startTime.difference(message.time);
+      print(timeDifference);
+      if (timeDifference < MinTimeBetweenBubbles) {
+        // Prepend.
+        nextBubble.messages.insert(0, message.message);
+        nextBubble.dateRange.expand(message.time);
+        // Do not update location since we store the latest location.
+        return true;
+      } 
     }
-    if (makeNewBubble) {
-      final b = Bubble(message.author, [message.message], message.time);
-      b.location = message.location;
-      _bubbles.add(b);
+    return false;
+  }
+
+  bool _maybeAppendToPreviousBubble(int insertionIndex, Message message) {
+    // Check if we can append to the previous one.
+    final prevBubble = insertionIndex - 1 >= 0 ? _bubbles[insertionIndex - 1] : null;
+    if (prevBubble != null && prevBubble.author == message.author) {
+      // Check if the time difference is alright.
+      final timeDifference = message.time.difference(prevBubble.dateRange.endTime);
+      print(timeDifference);
+      if (timeDifference < MinTimeBetweenBubbles) {
+        // Append.
+        prevBubble.messages.add(message.message);
+        prevBubble.dateRange.expand(message.time);
+        prevBubble.location = message.location;        
+        return true;
+      } 
+    }
+    return false;
+  }
+
+  /**
+   * Computes the index at which to insert the message. Later we have to decide
+   * whether to create a new bubble or not.
+   * 0 means beginning,
+   * length means at the end.
+   */
+  @visibleForTesting
+  int getInsertionIndex(DateTime time) {
+    return _getInsertionIndex(0, _bubbles.length, time);
+  }
+
+  int _getInsertionIndex(int start, int end, DateTime time) {
+    if (start >= end) {
+      return start;
+    }
+    final midIndex = (start + end) ~/ 2;
+    if (_bubbles[midIndex].dateRange.isAfter(time)) {
+      return _getInsertionIndex(start, midIndex, time);
     } else {
-      final latestBubble = _bubbles[_bubbles.length - 1];
-      latestBubble.messages.add(message.message);
-      latestBubble.time = message.time;
-      latestBubble.location = message.location;
+      return _getInsertionIndex(midIndex + 1, end, time);
     }
   }
 

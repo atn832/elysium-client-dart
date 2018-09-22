@@ -1,18 +1,5 @@
 @import 'package:angular_components/css/material/material';
 
-.messages {
-	flex-grow: 1;
-}
-
-:host {
-	display: flex;
-	flex-direction: column;
-}
-
-.multiline {
-	white-space: pre-wrap;
-}
-
 .line {
 	display: flex;
 	align-items: flex-end;
@@ -41,7 +28,8 @@
 
 .bubble {
 	padding: 8px;
-    padding-bottom: 9px;
+	padding-bottom: 9px;
+	word-break: break-word;
 }
 
 .bubble.light-blue {
@@ -55,7 +43,12 @@
 }
 
 .metadata {
+	margin-top: 4px;
 	margin-left: 60px;
 	float:right;
 	color: $mat-gray-500;
+}
+
+.sending {
+    color: $mat-gray-400;
 }

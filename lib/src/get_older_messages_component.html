@@ -1,0 +1,4 @@
+<material-button raised (trigger)="getOlderMessages()" [disabled]="gettingMore">
+    Voir les messages précédents
+</material-button>
+<material-spinner *ngIf="gettingMore"></material-spinner>

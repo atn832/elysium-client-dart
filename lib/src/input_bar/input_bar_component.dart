@@ -22,7 +22,8 @@ class InputBarComponent {
   InputBarComponent(this.chatService);
 
   void add() {
-    chatService.sendMessage(message);
+    final m = message;
     message = '';
+    chatService.sendMessage(m);
   }
 }

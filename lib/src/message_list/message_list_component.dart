@@ -1,36 +1,33 @@
 import 'dart:async';
 
 import 'package:angular/angular.dart';
-import 'package:angular_components/angular_components.dart';
-import 'package:time_machine/time_machine.dart';
 
+import 'bubble_component.dart';
 import '../chat_service.dart';
-import '../color_service.dart';
 import '../bubble.dart';
-import '../person.dart';
 
 @Component(
   selector: 'message-list',
   styleUrls: ['message_list_component.css'],
   templateUrl: 'message_list_component.html',
   directives: [
-    MaterialChipComponent,
     NgFor,
     NgIf,
+    BubbleComponent,
   ],
 )
 class MessageListComponent implements OnInit, AfterViewChecked {
   final ChatService chatService;
-  final ColorService _colorService;
 
   List<Bubble> bubbles = [];
+  Bubble unsentBubble;
 
   bool newMessageAdded = false;
   final _newMessage = StreamController<Null>();
   @Output()
   Stream<Null> get newMessage => _newMessage.stream;
 
-  MessageListComponent(this.chatService, this._colorService);
+  MessageListComponent(this.chatService);
 
   @override
   Future<Null> ngOnInit() async {
@@ -38,6 +35,7 @@ class MessageListComponent implements OnInit, AfterViewChecked {
       newMessageAdded = true;
     });
     bubbles = await chatService.getBubbles();
+    unsentBubble = chatService.getUnsentBubble();
   }
 
   ngAfterViewChecked() {
@@ -46,19 +44,5 @@ class MessageListComponent implements OnInit, AfterViewChecked {
       _newMessage.add(null);
       newMessageAdded = false;
     }
-  }
-
-  String renderTime(DateTime time) {
-    var instant = Instant.dateTime(time);
-    // Use DDC variant because of https://github.com/dart-lang/sdk/issues/33876.
-    return instant.inLocalZone().toStringDDC('HH:mm');
-  }
-
-  String getColorClass(Person person) {
-    return _colorService.getColorClass(person);
-  }
-
-  String getHeader(Person person) {
-    return person.name[0];
   }
 }

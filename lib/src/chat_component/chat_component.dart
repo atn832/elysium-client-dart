@@ -1,6 +1,7 @@
 import 'dart:html';
 
 import 'package:angular/angular.dart';
+import 'package:angular_components/angular_components.dart';
 import 'package:angular_router/angular_router.dart';
 
 import '../chat_service.dart';
@@ -9,17 +10,26 @@ import '../route_paths.dart';
 import '../input_bar/input_bar_component.dart';
 import '../message_list/message_list_component.dart';
 import '../user_list/user_list_component.dart';
+import '../get_older_messages_component.dart';
 
 @Component(
   selector: 'chat',
   styleUrls: ['chat_component.css'],
   templateUrl: 'chat_component.html',
-  directives: [InputBarComponent, MessageListComponent, UserListComponent],
+  directives: [
+    NgIf,
+    InputBarComponent,
+    GetOlderMessagesComponent,
+    MessageListComponent,
+    UserListComponent,
+    MaterialSpinnerComponent,
+  ],
 )
 class ChatComponent implements OnActivate {
   final ChatService _chatService;
 
   String username;
+  bool signingIn;
 
   ChatComponent(this._chatService);
 
@@ -29,7 +39,9 @@ class ChatComponent implements OnActivate {
     if (username == null) {
       return;
     }
-    _chatService.signIn(username);
+    signingIn = true;
+    await _chatService.signIn(username);
+    signingIn = false;
   }
 
   String getUsername(Map<String, String> parameters) {

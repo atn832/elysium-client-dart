@@ -10,6 +10,7 @@ import 'package:time_machine/time_machine.dart';
 import 'bubble.dart';
 import 'bubble_service.dart';
 import 'chat_service.dart';
+import 'geolocation_dartdevc_polyfill.dart';
 import 'http_util.dart';
 import 'location.dart';
 import 'message.dart';
@@ -21,20 +22,23 @@ import 'reverse_geocoding_service.dart';
 class HttpChatService extends ChatService {
   final Client _http;
   final ReverseGeocodingService _reverseGeocodingService;
+  final Geolocation _geolocation;
   final bubbleService = BubbleService();
   final host = "/Elysium";
+
+  Coordinates currentLocation;
   
-  HttpChatService(this._http, this._reverseGeocodingService) {
-    signInCompleter = Completer();
+  HttpChatService(this._http, this._reverseGeocodingService) :
+      _geolocation = Geolocation(),
+      signInCompleter = Completer() {
     signedIn = signInCompleter.future;
     bubbles = bubbleService.bubbles;
-    print("initialized bubbles");
   }
 
   final _newMessage = StreamController<Null>();
   final _newUsers = StreamController<Null>();
 
-  Completer signInCompleter;
+  final Completer signInCompleter;
   Future signedIn;
   bool startedSignin = false;
 	String username;
@@ -43,11 +47,15 @@ class HttpChatService extends ChatService {
 	int userId;
 
   int clientMessageId = 0;
+  int earliestEventId = pow(2, 32);
   int lastEventId = -1;
-  HashSet<int> sentMessageEventIds = HashSet();
+  HashMap<int, String> sentMessages = HashMap();
 	
-	List<Person> userList = [];
+	final List<Person> userList = [];
   List<Bubble> bubbles;
+  Bubble unsentBubble;
+
+  bool gettingMore = false;
   
   Future signIn(String username) async {
     if (startedSignin) {
@@ -68,10 +76,18 @@ class HttpChatService extends ChatService {
       userId = data["user"]["ID"];
       channelId = data["channel"]["ID"];
 
-      startPolling();
+      await startPolling();
+
+      // Initialize message queue.
+      unsentBubble = Bubble(Person(username), [], DateTime.now());
 
       // Initialize time zone info.
       await TimeMachine.initialize();
+
+      // Track position.
+      _geolocation.watchPosition(enableHighAccuracy: true, timeout: Duration(seconds: 1)).listen((p) {
+        currentLocation = p.coordinates;
+      });
 
       print("done signing in");
       signInCompleter.complete(true);
@@ -88,7 +104,7 @@ class HttpChatService extends ChatService {
     updateUserList(events);
 
     // TODO: Poll messages.
-    getMoreMessages();
+    Timer.periodic(Duration(seconds:1), (t) => getMoreMessages());
   }
 
   updateMessageList(events) {
@@ -96,17 +112,24 @@ class HttpChatService extends ChatService {
 
     // Add new messages to the list.
     final newMessages = events["events"]
-      .where((e) => e["eventType"]["type"] == "Message" && !sentMessageEventIds.contains(e["ID"]))
+      .where((e) => e["eventType"]["type"] == "Message")
       .map((e) {
+        // Remove from unsent bubble.
+        String content = e["content"] as String;
+        if (sentMessages.containsKey(e["ID"])) {
+          unsentBubble.messages.remove(content);
+        }
+        // Reverse geocode.
         final location = e["source"]["location"];
         final loc = location != null ? Location(location["latitude"], location["longitude"]) : null;
         if (loc != null) {
           _reverseGeocodingService.reverseGeocode(loc.lat, loc.lng)
               .then((s) => loc.name = s);
         }
+        // Parse the rest of the message.
         return Message(
             Person(e["source"]["entity"]["name"]),
-            e["content"] as String,
+            content,
             // Append Z to force UTC.
             DateTime.parse(e["source"]["datetime"] + " Z"),
             loc,
@@ -124,7 +147,9 @@ class HttpChatService extends ChatService {
 
     // Update lastEventId.
     events["events"].forEach((e) {
-      lastEventId = max(lastEventId, e["ID"]);
+      int id = e["ID"];
+      lastEventId = max(lastEventId, id);
+      earliestEventId = min(earliestEventId, id);
     });
   }
 
@@ -134,7 +159,6 @@ class HttpChatService extends ChatService {
     List<Person> newUserList = List();
     events["userList"]
       .map((u) {
-        // print(u);
         final p = Person(u["name"]);
         try {
           p.timezone = u["latestSource"]["timeZone"]["timeZone"];
@@ -162,6 +186,11 @@ class HttpChatService extends ChatService {
   }
 
   getMoreMessages() async {
+    if (gettingMore) {
+      print("Still getting messages. Skipping.");
+      return;
+    }
+    gettingMore = true;
     try {
       final events = await getMessages(false, lastEventId, -1);
       updateMessageList(events);
@@ -169,14 +198,25 @@ class HttpChatService extends ChatService {
     } catch (e) {
       print("get messages failed. keep retrying");
     }
-    Timer(Duration(seconds:1), getMoreMessages);
+    gettingMore = false;
   }
 
   dynamic getMessages(bool log, int lastEventId, int numMessages) async {
-    final _getMessagesUrl = "${host}/getmessages.action?token=${loginToken}&"
-      "userID=${userId}&log=${log}&lastEventID=${lastEventId}&numMessages=${numMessages}&" +
-      "timeZone=${DateTimeZone.local}";
-    final response = await _http.get(_getMessagesUrl);
+    final base = Uri.base;
+    final getMessagesUrl = Uri(
+      scheme: base.scheme,
+      host: base.host,
+      path: "${host}/getmessages.action",
+      queryParameters: {
+        "token": loginToken,
+        "userID": userId.toString(),
+        "log": log.toString(),
+        "lastEventID": lastEventId.toString(),
+        "numMessages": numMessages.toString(),
+        "timeZone": DateTimeZone.local.toString(),
+      }
+    ).toString();
+    final response = await _http.get(getMessagesUrl);
     final data = extractData(response) as Map<String, dynamic>;
     if (data["chanUpdates"] == null) return null;
     final currentChanEvents = data["chanUpdates"].where((u) => u["chanID"] == channelId).first;
@@ -194,33 +234,50 @@ class HttpChatService extends ChatService {
   }
 
   Future sendMessage(String message) async {
+    unsentBubble.messages.add(message);
+    unsentBubble.dateRange.endTime = DateTime.now().toUtc();
+    // Notify listeners.
+    _newMessage.add(null);
+
     try {
-      var base = Uri.base;
+      final base = Uri.base;
+      final queryParameters = {
+        "token": loginToken,
+        "userID": userId.toString(),
+        "destinationID": channelId.toString(),
+        "clientMessageID": clientMessageId.toString(),
+        "content": message,
+        "timeZone": DateTimeZone.local.toString()
+      };
+      if (currentLocation!= null && currentLocation.latitude != null && currentLocation.longitude != null) {
+        queryParameters["location.latitude"] = currentLocation.latitude.toString();
+        queryParameters["location.longitude"] = currentLocation.longitude.toString();
+      }
       final _sayUrl = Uri(
         scheme: base.scheme,
         host: base.host,
         path: "${host}/say.action",
-        queryParameters: {
-          "token": loginToken,
-          "userID": userId.toString(),
-          "destinationID": channelId.toString(),
-          "clientMessageID": clientMessageId.toString(),
-          "content": message,
-          "timeZone": DateTimeZone.local.toString(),
-        }
+        queryParameters: queryParameters
       ).toString();
       clientMessageId++;
       final response = await _http.get(_sayUrl);
       final data = extractData(response) as Map<String, dynamic>;
       final eventId = data["eventID"];
-      sentMessageEventIds.add(eventId);
-      bubbleService.addMessage(Message(Person(username), message, DateTime.now().toUtc(), null));
-      // Notify listeners.
-      _newMessage.add(null);
+      sentMessages[eventId] = message;
     } catch (e) {
+      // Display the error message.
+      bubbleService.addMessage(Message(Person(username), e.toString(), DateTime.now().toUtc(), null));
       throw _handleError(e);
     }
   }
+
+  Future<void> getOlderMessages() async {
+    const numMessages = 300;
+    final events = await getMessages(true, earliestEventId, numMessages);
+    updateMessageList(events);
+  }
+
+  Bubble getUnsentBubble() => unsentBubble;
 
   Stream<Null> get newMessage => _newMessage.stream;
   Stream<Null> get newUsers => _newUsers.stream;

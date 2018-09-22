@@ -7,3 +7,7 @@
 material-input {
   flex-grow: 1;
 }
+
+material-fab {
+  margin-right: 0;
+}
