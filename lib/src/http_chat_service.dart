@@ -12,6 +12,7 @@ import 'bubble_service.dart';
 import 'chat_service.dart';
 import 'geolocation_dartdevc_polyfill.dart';
 import 'http_util.dart';
+import 'list_util.dart';
 import 'location.dart';
 import 'message.dart';
 import 'person.dart';
@@ -175,14 +176,6 @@ class HttpChatService extends ChatService {
       // Notify of a change.
       _newUsers.add(null);
     }
-  }
-
-  bool areListsEqual(List<Person> l1, List<Person> l2) {
-    if (l1.length != l2.length) return false;
-    for (var i = 0; i < l1.length; i++) {
-      if (l1[i] != l2[i]) return false;
-    }
-    return true;
   }
 
   getMoreMessages() async {

@@ -1,20 +1,15 @@
 import 'dart:async';
-
-import 'dart:async';
-import 'dart:collection';
 import 'dart:core';
-import 'dart:math';
 
-import 'package:angular/core.dart';
 import 'package:firebase/firebase.dart' as fb;
 import 'package:firebase/firestore.dart' as fs;
-import 'package:http/http.dart';
 import 'package:time_machine/time_machine.dart';
 
 import 'bubble.dart';
 import 'bubble_service.dart';
 import 'chat_service.dart';
 import 'geolocation_dartdevc_polyfill.dart';
+import 'list_util.dart';
 import 'location.dart';
 import 'message.dart';
 import 'person.dart';
@@ -30,6 +25,7 @@ class FirebaseChatService implements ChatService {
   final _newMessage = StreamController<Null>();
   final _newUsers = StreamController<Null>();
 
+  Map<String, String> uidToName = Map();
  	final List<Person> userList = [];
   List<Bubble> bubbles;
   Bubble unsentBubble;
@@ -94,15 +90,16 @@ class FirebaseChatService implements ChatService {
   //   });
   // }
 
-  // _showProfile(fb.User user) {
-  //   if (user.photoURL != null) {
-  //     print(user.photoURL);
-  //   }
-  //   print(user.displayName + " / " + user.email);
-  // }
-
   _connectToFirestore() {
     fs.Firestore firestore = fb.firestore();
+
+    // Listen to user changes.
+    firestore.collection("users").onSnapshot.listen((querySnapshot) {
+      final allDocs = querySnapshot.docChanges().map((change) => change.doc);
+      updateUserList(allDocs);
+    });
+
+    // Listen to message changes.
     fs.CollectionReference ref = firestore.collection("messages");
     ref.onSnapshot.listen((querySnapshot) {
       final allData = querySnapshot.docChanges().map((change) => change.doc.data());
@@ -126,8 +123,9 @@ class FirebaseChatService implements ChatService {
               .then((s) => loc.name = s);
         }
         // Parse the rest of the message.
+        final name = uidToName[e["uid"]];
         return Message(
-            Person(e["uid"]),
+            Person(name),
             content,
             e["timestamp"],
             loc,
@@ -141,6 +139,34 @@ class FirebaseChatService implements ChatService {
       });
       // Notify listeners.
       _newMessage.add(null);
+    }
+  }
+
+  updateUserList(docs) {
+    List<Person> newUserList = List();
+    docs
+      .map((doc) {
+        // Update map of id to username
+        final u = doc.data();
+        final name = u["name"];
+        uidToName[doc.id] = name;
+
+        // Instantiate user.
+        final p = Person(name);
+        try {
+          p.timezone = u["timezone"];
+        } catch(e) {
+          // fail silently.
+        }
+        return p;
+      })
+      .forEach((p) => newUserList.add(p));
+    if (!areListsEqual(userList, newUserList)) {
+      print("Updating user list");
+      userList.removeRange(0, userList.length);
+      userList.addAll(newUserList);
+      // Notify of a change.
+      _newUsers.add(null);
     }
   }
 
