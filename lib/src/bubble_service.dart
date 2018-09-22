@@ -27,7 +27,6 @@ class BubbleService {
     if (nextBubble != null && nextBubble.author == message.author) {
       // Check if the time difference is alright.
       final timeDifference = nextBubble.dateRange.startTime.difference(message.time);
-      print(timeDifference);
       if (timeDifference < MinTimeBetweenBubbles) {
         // Prepend.
         nextBubble.messages.insert(0, message.message);
@@ -45,7 +44,6 @@ class BubbleService {
     if (prevBubble != null && prevBubble.author == message.author) {
       // Check if the time difference is alright.
       final timeDifference = message.time.difference(prevBubble.dateRange.endTime);
-      print(timeDifference);
       if (timeDifference < MinTimeBetweenBubbles) {
         // Append.
         prevBubble.messages.add(message.message);
