@@ -33,6 +33,7 @@ class FirebaseChatService implements ChatService {
  	final List<Person> userList = [];
   List<Bubble> bubbles;
   Bubble unsentBubble;
+  String username;
 
   FirebaseChatService(this._reverseGeocodingService) :
       _geolocation = Geolocation(),
@@ -47,6 +48,7 @@ class FirebaseChatService implements ChatService {
   Bubble getUnsentBubble() => unsentBubble;
 
   Future signIn(String username) async{
+    this.username = username;
     await loginWithGoogle();
   }
 
@@ -54,9 +56,7 @@ class FirebaseChatService implements ChatService {
   loginWithGoogle() async {
     var provider = new fb.GoogleAuthProvider();
     try {
-      if (auth.currentUser == null) {
-        final credentials = await auth.signInWithPopup(provider);
-      }
+      final credentials = await auth.signInWithPopup(provider);
 
       // Initialize time zone info.
       await TimeMachine.initialize();
@@ -64,6 +64,16 @@ class FirebaseChatService implements ChatService {
       // Track position.
       _geolocation.watchPosition(enableHighAccuracy: true, timeout: Duration(seconds: 1)).listen((p) {
         currentLocation = p.coordinates;
+      });
+
+      // Update user list
+      fs.Firestore firestore = fb.firestore();
+      fs.CollectionReference ref = firestore.collection("users");
+      final user = credentials.user;
+      ref.doc(user.uid).set({
+        "name": username,
+        "timezone": DateTimeZone.local.toString(),
+        "lastSeen": DateTime.now().toUtc(),
       });
 
       // Start listening to events
@@ -94,34 +104,65 @@ class FirebaseChatService implements ChatService {
   _connectToFirestore() {
     fs.Firestore firestore = fb.firestore();
     fs.CollectionReference ref = firestore.collection("messages");
-
     ref.onSnapshot.listen((querySnapshot) {
-      querySnapshot.docChanges().forEach((change) {
-        final docSnapshot = change.doc;
-        print(docSnapshot.data());
-      });
+      final allData = querySnapshot.docChanges().map((change) => change.doc.data());
+      updateMessageList(allData);
     });
+  }
+
+  updateMessageList(changes) {
+    if (changes == null) return;
+
+    // Add new messages to the list.
+    final newMessages = changes
+      .map((e) {
+        // Remove from unsent bubble.
+        String content = e["content"] as String;
+        // Reverse geocode.
+        final fs.GeoPoint location = e["location"];
+        final loc = location != null ? Location(location.latitude, location.longitude) : null;
+        if (loc != null) {
+          _reverseGeocodingService.reverseGeocode(loc.lat, loc.lng)
+              .then((s) => loc.name = s);
+        }
+        // Parse the rest of the message.
+        return Message(
+            Person(e["uid"]),
+            content,
+            e["timestamp"],
+            loc,
+        );
+      });
+    if (newMessages.isNotEmpty) {
+      newMessages.forEach((m) {
+        final message = m as Message;
+        // Add to bubbles.
+        bubbleService.addMessage(message);
+      });
+      // Notify listeners.
+      _newMessage.add(null);
+    }
   }
 
   Future<List<Person>> getUserList() {
     return Future.value(userList);
   }
   
-  Future sendMessage(String message) {
+  Future sendMessage(String message) async {
     fs.Firestore firestore = fb.firestore();
     fs.CollectionReference ref = firestore.collection("messages");
 
     final Map<String, dynamic> messageData = {
-      "user": auth.currentUser.uid,
+      "uid": auth.currentUser.uid,
       "content": message,
-      "timeZone": DateTimeZone.local.toString(),
-      "time": DateTime.now().toUtc()
+      "timezone": DateTimeZone.local.toString(),
+      "timestamp": DateTime.now().toUtc()
     };
     if (currentLocation!= null && currentLocation.latitude != null && currentLocation.longitude != null) {
       messageData["location"] = fs.GeoPoint(currentLocation.latitude, currentLocation.longitude);
     }
 
-    ref.add(messageData);
+    await ref.add(messageData);
   }
 
   Future<void> getOlderMessages() {
