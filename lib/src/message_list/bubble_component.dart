@@ -5,6 +5,8 @@ import 'package:time_machine/time_machine.dart';
 import '../color_service.dart';
 import '../bubble.dart';
 import '../person.dart';
+import 'fragment.dart';
+import 'fragment_service.dart';
 import 'text_fragment_component.dart';
 
 @Component(
@@ -20,6 +22,7 @@ import 'text_fragment_component.dart';
 )
 class BubbleComponent {
   final ColorService _colorService;
+  final FragmentService _fragmentService;
 
   @Input()
   Bubble bubble;
@@ -27,7 +30,7 @@ class BubbleComponent {
   @Input()
   bool sending;
 
-  BubbleComponent(this._colorService);
+  BubbleComponent(this._colorService) : _fragmentService = FragmentService();
 
   String renderTime(DateTime time) {
     final instant = Instant.dateTime(time);
@@ -46,5 +49,9 @@ class BubbleComponent {
 
   String getHeader(Person person) {
     return person.name[0];
+  }
+
+  List<Fragment> parse(String message) {
+    return _fragmentService.parse(message);
   }
 }

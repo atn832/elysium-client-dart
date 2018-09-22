@@ -1,5 +1,7 @@
 import 'package:angular/angular.dart';
 
+import 'text_fragment.dart';
+
 @Component(
   selector: 'text-fragment',
   styleUrls: ['text_fragment_component.css'],
@@ -8,7 +10,7 @@ import 'package:angular/angular.dart';
 
 class TextFragmentComponent {
   @Input()
-  String text;
+  TextFragment fragment;
 
   TextFragmentComponent();
 }
