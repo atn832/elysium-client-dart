@@ -228,7 +228,7 @@ class InMemoryDataService extends MockClient {
           },
           {
             "ID": 735458,
-            "content": "bon",
+            "content": "regarde ça: http://somelink",
             "eventType": {
               "ID": 3,
               "name": "Message",
