@@ -1,1 +1,4 @@
-<a href="{{fragment.url}}">{{fragment.url}}</a>
+<span [ngSwitch]="getProtocol(fragment.url)">
+    <a *ngSwitchCase="'gs'" href="{{fragment.url}}">storage: {{fragment.url}}</a>
+    <a *ngSwitchDefault href="{{fragment.url}}">{{fragment.url}}</a>
+</span>
