@@ -279,4 +279,6 @@ class HttpChatService extends ChatService {
     print(e); // for demo purposes only
     return Exception('Server error; cause: $e');
   }
+
+  get supportsUpload => false;
 }

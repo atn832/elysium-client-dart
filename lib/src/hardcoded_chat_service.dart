@@ -58,7 +58,8 @@ class HardcodedChatService extends ChatService {
     }
   }
 
-
   Stream<Null> get newMessage => StreamController<Null>().stream;
   Stream<Null> get newUsers => StreamController<Null>().stream;
+
+  get supportsUpload => true;
 }

@@ -20,4 +20,6 @@ abstract class ChatService {
 
   Stream<Null> get newMessage;
   Stream<Null> get newUsers;
+
+  bool get supportsUpload;
 }

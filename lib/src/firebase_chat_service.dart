@@ -68,7 +68,7 @@ class FirebaseChatService implements ChatService {
     this.username = username;
 
     // Wait to fetch current sign-in info. If it times out, sign in.
-    await Future.any([authStateChanged, Future.delayed(Duration(seconds: 1))]);
+    await Future.any([authStateChanged, Future.delayed(Duration(seconds: 2))]);
     await loginWithGoogle();
   }
 
@@ -239,4 +239,6 @@ class FirebaseChatService implements ChatService {
 
   Stream<Null> get newMessage => _newMessage.stream;
   Stream<Null> get newUsers => _newUsers.stream;
+
+  get supportsUpload => true;
 }

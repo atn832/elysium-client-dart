@@ -5,9 +5,12 @@
                   (keyup.enter)="add()">
   </material-input>
 
-  <material-fab mini raised
-                (trigger)="add()"
-                [disabled]="message.isEmpty">
+  <material-fab *ngIf="chatService.supportsUpload" mini raised>
+    <input type="file" accept="image/png, image/jpeg" (change)="filesChanged" />
+    <material-icon icon="photo"></material-icon>
+  </material-fab>
+
+  <material-fab mini raised (trigger)="add()" [disabled]="message.isEmpty">
     <material-icon icon="add"></material-icon>
   </material-fab>
 </div>

@@ -1,3 +1,5 @@
+import "dart:html";
+
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 
@@ -10,6 +12,7 @@ import '../chat_service.dart';
   directives: [
     MaterialFabComponent,
     MaterialIconComponent,
+    NgIf,
     materialInputDirectives,
   ],
 )
@@ -25,5 +28,10 @@ class InputBarComponent {
     final m = message;
     message = '';
     chatService.sendMessage(m);
+  }
+
+  void filesChanged(event) {
+    print("files changed");
+    print(event.target.files);
   }
 }
