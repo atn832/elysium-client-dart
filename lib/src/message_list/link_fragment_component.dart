@@ -1,5 +1,7 @@
 import 'package:angular/angular.dart';
 
+import 'link_fragment.dart';
+
 @Component(
   selector: 'link-fragment',
   styleUrls: ['link_fragment_component.css'],
@@ -8,7 +10,7 @@ import 'package:angular/angular.dart';
 
 class LinkFragmentComponent {
   @Input()
-  String url;
+  LinkFragment fragment;
 
   LinkFragmentComponent();
 }

@@ -2,9 +2,10 @@
     <span class="header {{getColorClass(bubble.author)}}">{{getHeader(bubble.author)}}</span>
     <span class="bubble {{getColorClass(bubble.author)}}">
         <div [class.sending]="sending === true" *ngFor="let message of bubble.messages">
-            <div *ngFor="let fragment of parse(message)">
-                <text-fragment [fragment]="fragment"></text-fragment>
-            </div>
+            <span *ngFor="let fragment of parse(message)" [ngSwitch]="fragment.type">
+                <text-fragment *ngSwitchCase="'text'" [fragment]="fragment"></text-fragment>
+                <link-fragment *ngSwitchCase="'link'" [fragment]="fragment"></link-fragment>
+            </span>
         </div>
         <span class="metadata">
             <span *ngIf="bubble.location != null && bubble.location.name != null">

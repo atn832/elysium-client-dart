@@ -7,6 +7,7 @@ import '../bubble.dart';
 import '../person.dart';
 import 'fragment.dart';
 import 'fragment_service.dart';
+import 'link_fragment_component.dart';
 import 'text_fragment_component.dart';
 
 @Component(
@@ -17,6 +18,9 @@ import 'text_fragment_component.dart';
     MaterialChipComponent,
     NgFor,
     NgIf,
+    NgSwitch,
+    NgSwitchWhen,
+    LinkFragmentComponent,
     TextFragmentComponent,
   ],
 )
