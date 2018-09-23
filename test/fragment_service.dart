@@ -59,4 +59,10 @@ void main() {
     expect(link2.url, "http://www.gmail.com");
   });
 
+  test('parse Google Storage links', () {
+    final fragments = fragmentService.parse("gs://elysium-216115.appspot.com/logo.png");
+    expect(fragments.length, 1);
+    expect(fragments[0].type, "link");
+    expect((fragments[0] as LinkFragment).url, "gs://elysium-216115.appspot.com/logo.png");
+  });
 }

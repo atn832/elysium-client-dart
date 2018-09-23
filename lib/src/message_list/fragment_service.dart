@@ -4,7 +4,7 @@ import 'fragment.dart';
 import 'link_fragment.dart';
 import 'text_fragment.dart';
 
-final linkRegex = RegExp(r"(https?:\/\/[^ ,)]*)");
+final linkRegex = RegExp(r"((?:gs|https?):\/\/[^ ,)]*)");
 
 class FragmentService {
   List<Fragment> parse(String text) {
