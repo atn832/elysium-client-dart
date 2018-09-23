@@ -7,7 +7,12 @@ import 'text_fragment.dart';
 final linkRegex = RegExp(r"((?:gs|https?):\/\/[^ ,)]*)");
 
 class FragmentService {
+  Map<String, List<Fragment>> cache_ = Map();
+
   List<Fragment> parse(String text) {
+    if (cache_.containsKey(text)) {
+      return cache_[text];
+    }
     final linkMatches = linkRegex.allMatches(text);
     if (linkMatches.isEmpty) {
       return [TextFragment(text)];
@@ -28,6 +33,7 @@ class FragmentService {
     if (latestMatchEndIndex != text.length) {
       fragments.add(TextFragment(text.substring(latestMatchEndIndex, text.length)));
     }
+    cache_[text] = fragments;
     return fragments;
   }
 }
