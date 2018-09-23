@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:core';
+import 'dart:html';
 
 import 'package:firebase/firebase.dart' as fb;
 import 'package:firebase/firestore.dart' as fs;
@@ -241,4 +242,22 @@ class FirebaseChatService implements ChatService {
   Stream<Null> get newUsers => _newUsers.stream;
 
   get supportsUpload => true;
+
+  Future sendFiles(List<File> files) async {
+    // Create a root reference
+    var ref = fb.storage().ref("/");
+    files.forEach((f) async {
+      final task = ref.child(f.name).put(f);
+      final snapshot = await task.future;
+      print(snapshot.ref.bucket);
+      print(snapshot.ref.fullPath);
+
+      await sendMessage(getStorageUrl(snapshot.ref));
+    });
+    print("done uploading files");
+  }
+
+  String getStorageUrl(fb.StorageReference ref) {
+    return "gs://${ref.bucket}/${ref.fullPath}";
+  }
 }

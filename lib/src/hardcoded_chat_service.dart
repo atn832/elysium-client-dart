@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 
 import 'package:angular/core.dart';
 
@@ -62,4 +63,7 @@ class HardcodedChatService extends ChatService {
   Stream<Null> get newUsers => StreamController<Null>().stream;
 
   get supportsUpload => true;
+  Future sendFiles(List<File> files) {
+    
+  }
 }

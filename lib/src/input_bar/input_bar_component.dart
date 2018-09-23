@@ -32,6 +32,7 @@ class InputBarComponent {
 
   void filesChanged(event) {
     print("files changed");
-    print(event.target.files);
+    final files = event.target.files;
+    chatService.sendFiles(files);
   }
 }

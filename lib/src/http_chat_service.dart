@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:core';
+import 'dart:html';
 import 'dart:math';
 
 import 'package:angular/core.dart';
@@ -281,4 +282,7 @@ class HttpChatService extends ChatService {
   }
 
   get supportsUpload => false;
+  Future sendFiles(List<File> files) {
+    throw "Not implemented";
+  }
 }
