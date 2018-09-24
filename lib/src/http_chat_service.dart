@@ -87,9 +87,14 @@ class HttpChatService extends ChatService {
       await TimeMachine.initialize();
 
       // Track position.
-      _geolocation.watchPosition(enableHighAccuracy: true, timeout: Duration(seconds: 1)).listen((p) {
-        currentLocation = p.coordinates;
-      });
+      final watch = _geolocation.watchPosition(enableHighAccuracy: true, timeout: Duration(seconds: 1));
+      if (watch != null) {
+        watch.listen((p) {
+          currentLocation = p.coordinates;
+        });
+      } else {
+        print("Cannot get geolocation.");
+      }
 
       print("done signing in");
       signInCompleter.complete(true);
