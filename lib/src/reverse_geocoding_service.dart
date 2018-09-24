@@ -11,13 +11,18 @@ import 'http_util.dart';
 class ReverseGeocodingService {
   final Client _http;
 
+  final Map<String, Future<Response>> _httpCache = Map();
+
   ReverseGeocodingService(this._http);
 
   Future<String> reverseGeocode(double lat, double lng) async {
       final _url = "https://maps.googleapis.com/maps/api/geocode/json?" +
         "latlng=${lat.toString()},${lng.toString()}" + 
         "&key=${ApiKey}";
-      final response = await _http.get(_url);
+      if (!_httpCache.containsKey(_url)) {
+        _httpCache[_url] = _http.get(_url);
+      }
+      final response = await _httpCache[_url];
       final data = extractData(response) as Map<String, dynamic>;
       final firstResult = data["results"][0];
       final components = firstResult["address_components"];
