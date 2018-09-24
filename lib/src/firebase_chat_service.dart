@@ -260,4 +260,22 @@ class FirebaseChatService implements ChatService {
   String getStorageUrl(fb.StorageReference ref) {
     return "gs://${ref.bucket}/${ref.fullPath}";
   }
+
+  Map<String, Future<Uri>> downloadUrlPromises = Map();
+
+  Future<Uri> getDownloadUrl(String gsUrl) {
+    if (downloadUrlPromises.containsKey(gsUrl)) {
+      return downloadUrlPromises[gsUrl];
+    }
+    downloadUrlPromises[gsUrl] = Future<Uri>(() async {
+      try {
+        final ref = fb.storage().refFromURL(gsUrl);
+        final uri = await ref.getDownloadURL();
+        return uri;
+      } catch(e) {
+        return null;
+      }
+    });
+    return downloadUrlPromises[gsUrl];
+  }
 }
