@@ -1,6 +1,7 @@
 import 'package:angular/angular.dart';
 
 import 'link_fragment.dart';
+import 'regular_link_component.dart';
 import '../chat_service.dart';
 import '../firebase_chat_service.dart';
 
@@ -13,6 +14,7 @@ import '../firebase_chat_service.dart';
     NgSwitch,
     NgSwitchWhen,
     NgSwitchDefault,
+    RegularLinkComponent,
   ]
 )
 

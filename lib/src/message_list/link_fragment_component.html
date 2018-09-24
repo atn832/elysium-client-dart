@@ -1,4 +1,4 @@
 <span [ngSwitch]="getProtocol(fragment.url)">
     <gs-link-fragment *ngSwitchCase="'gs'" [fragment]="fragment"></gs-link-fragment>
-    <a *ngSwitchDefault href="{{fragment.url}}">{{fragment.url}}</a>
+    <regular-link *ngSwitchDefault [uri]="getUri(fragment.url)" [displayName]="fragment.url"></regular-link>
 </span>
