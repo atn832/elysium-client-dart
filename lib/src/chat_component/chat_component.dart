@@ -40,7 +40,11 @@ class ChatComponent implements OnActivate {
       return;
     }
     signingIn = true;
-    await _chatService.signIn(username);
+    try {
+      await _chatService.signIn(username);
+    } catch(e) {
+      window.alert(e);
+    }
     signingIn = false;
   }
 

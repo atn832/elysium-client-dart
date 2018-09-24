@@ -104,7 +104,7 @@ class FirebaseChatService implements ChatService {
       // Start listening to events
       _connectToFirestore();
     } catch (e) {
-      print("Error in sign in with google: $e");
+      throw "Error in sign in with google: $e";
     }
   }
 
