@@ -1,9 +1,6 @@
-<span [ngSwitch]="getProtocol(fragment.url)">
-    <gs-link-fragment *ngSwitchCase="'gs'" [fragment]="fragment"></gs-link-fragment>
-    <span *ngSwitchDefault [ngSwitch]="getMediaType(fragment.url)">
-        <image-link *ngSwitchCase="'image'"
-            [uri]="getUri(fragment.url)" [displayName]="fragment.url"></image-link>
-        <regular-link *ngSwitchDefault
-            [uri]="getUri(fragment.url)" [displayName]="fragment.url"></regular-link>
-    </span>
+<span [ngSwitch]="getMediaType(fragment.url)">
+    <image-link *ngSwitchCase="'image'"
+        [uri]="resolvedUri" [displayName]="fragment.url"></image-link>
+    <regular-link *ngSwitchDefault
+        [uri]="resolvedUri" [displayName]="fragment.url"></regular-link>
 </span>

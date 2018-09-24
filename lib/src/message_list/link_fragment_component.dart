@@ -1,16 +1,16 @@
 import 'package:angular/angular.dart';
 
-import 'gs_link_fragment_component.dart';
 import 'image_link_component.dart';
+import '../chat_service.dart';
 import 'link_fragment.dart';
 import 'regular_link_component.dart';
+import 'url_resolver.dart';
 
 @Component(
   selector: 'link-fragment',
   styleUrls: ['link_fragment_component.css'],
   templateUrl: 'link_fragment_component.html',
   directives: [
-    GsLinkFragmentComponent,
     ImageLinkComponent,
     NgSwitch,
     NgSwitchWhen,
@@ -19,15 +19,16 @@ import 'regular_link_component.dart';
   ]
 )
 
-class LinkFragmentComponent {
+class LinkFragmentComponent implements OnChanges {
+  ChatService _chatService;
+  UrlResolver urlResolver;
+
   @Input()
   LinkFragment fragment;
 
-  LinkFragmentComponent();
+  Uri resolvedUri;
 
-  String getProtocol(String url) {
-    return url.split(":")[0];
-  }
+  LinkFragmentComponent(this._chatService) : urlResolver = new UrlResolver(_chatService);
 
   bool isImage(String url) {
     return url.endsWith(".png") || url.endsWith(".jpg") || url.endsWith(".jpeg");
@@ -38,7 +39,12 @@ class LinkFragmentComponent {
     return "unknown";
   }
 
-  Uri getUri(String url) {
-    return Uri.parse(url);
+  ngOnChanges(Map<String, SimpleChange> changes) {
+    changes.forEach((prop, changes) {
+      if (prop != "fragment") return;
+      
+      LinkFragment linkFragment = changes.currentValue;
+      urlResolver.resolve(linkFragment.url).then((uri) => resolvedUri = uri);
+    });
   }
 }
