@@ -12,6 +12,7 @@ import '../chat_service.dart';
   directives: [
     MaterialFabComponent,
     MaterialIconComponent,
+    MaterialSpinnerComponent,
     NgIf,
     materialInputDirectives,
   ],
@@ -21,6 +22,7 @@ class InputBarComponent {
   final ChatService chatService;
 
   String message = '';
+  bool sending = false;
 
   InputBarComponent(this.chatService);
 
@@ -30,9 +32,10 @@ class InputBarComponent {
     chatService.sendMessage(m);
   }
 
-  void filesChanged(event) {
-    print("files changed");
+  void filesChanged(event) async {
+    sending = true;
     final files = event.target.files;
-    chatService.sendFiles(files);
+    await chatService.sendFiles(files);
+    sending = false;
   }
 }

@@ -64,6 +64,6 @@ class HardcodedChatService extends ChatService {
 
   get supportsUpload => true;
   Future sendFiles(List<File> files) {
-    
+    return Future.delayed(Duration(seconds: 5));
   }
 }

@@ -12,6 +12,11 @@ material-fab {
   margin-right: 0;
 }
 
+material-spinner {
+  position: absolute;
+  z-index: 1;
+}
+
 input {
   position: absolute;
   width: 100%;

@@ -5,8 +5,9 @@
                   (keyup.enter)="add()">
   </material-input>
 
-  <material-fab *ngIf="chatService.supportsUpload" mini raised>
-    <input type="file" accept="image/png, image/jpeg" (change)="filesChanged" />
+  <material-fab *ngIf="chatService.supportsUpload" mini raised [disabled]="sending">
+    <material-spinner *ngIf="sending"></material-spinner>
+    <input *ngIf="!sending" type="file" accept="image/png, image/jpeg" (change)="filesChanged" />
     <material-icon icon="photo"></material-icon>
   </material-fab>
 
