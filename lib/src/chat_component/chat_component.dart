@@ -35,12 +35,11 @@ class ChatComponent implements OnActivate {
 
   ChatComponent(this._chatService) {
     if (!_chatService.requireExplicitSignIn) return;
-
+    
     _chatService.signInState.listen((isSignedIn) {
       askingSignIn = !isSignedIn;
       if (isSignedIn) {
         signingIn = false;
-        _chatService.listenToUpdates();
       }
     });
   }

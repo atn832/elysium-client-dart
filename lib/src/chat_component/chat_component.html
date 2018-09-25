@@ -10,7 +10,7 @@
         <material-spinner></material-spinner>
     </span>
 </div>
-<material-button raised (trigger)="signOut()">
+<material-button *ngIf="chatService.requireExplicitSignIn" raised (trigger)="signOut()">
   Déconnecter
 </material-button>
 <user-list></user-list>
