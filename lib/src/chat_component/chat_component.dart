@@ -39,6 +39,7 @@ class ChatComponent implements OnActivate {
     chatService.signInState.listen((isSignedIn) {
       askingSignIn = !isSignedIn;
       if (isSignedIn) {
+        chatService.listenToUpdates();
         signingIn = false;
       }
     });
