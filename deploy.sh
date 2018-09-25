@@ -1,7 +1,9 @@
 if [ "$1" == "firebase" ]; then
+    HOST=elysium.wafrat.com
     SOURCE=web_firebase
-    DESTINATION=/var/www/html/E3
+    DESTINATION=/var/www/html
 else
+    HOST=m.wafrat.com
     SOURCE=web_prod
     DESTINATION=/var/www/html/E2
 fi
@@ -15,8 +17,6 @@ webdev build
 
 mv web $SOURCE
 mv web_dev web
-
-HOST=m.wafrat.com
 
 ssh root@$HOST "mkdir -p $DESTINATION/packages/time_machine"
 
