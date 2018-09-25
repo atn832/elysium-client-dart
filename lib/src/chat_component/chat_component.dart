@@ -27,16 +27,16 @@ import '../get_older_messages_component.dart';
   ],
 )
 class ChatComponent implements OnActivate {
-  final ChatService _chatService;
+  final ChatService chatService;
 
   String username;
   bool signingIn = false;
   bool askingSignIn = false;
 
-  ChatComponent(this._chatService) {
-    if (!_chatService.requireExplicitSignIn) return;
-    
-    _chatService.signInState.listen((isSignedIn) {
+  ChatComponent(this.chatService) {
+    if (!chatService.requireExplicitSignIn) return;
+
+    chatService.signInState.listen((isSignedIn) {
       askingSignIn = !isSignedIn;
       if (isSignedIn) {
         signingIn = false;
@@ -50,8 +50,9 @@ class ChatComponent implements OnActivate {
     if (username == null) {
       return;
     }
-    if (!_chatService.requireExplicitSignIn) {
-      signIn();
+    if (!chatService.requireExplicitSignIn) {
+      await signIn();
+      chatService.listenToUpdates();
     } else {
       askingSignIn = true;
     }
@@ -61,7 +62,7 @@ class ChatComponent implements OnActivate {
     askingSignIn = false;
     signingIn = true;
     try {
-      await _chatService.signIn(username);
+      await chatService.signIn(username);
     } catch(e) {
       window.alert(e);
     }
@@ -69,7 +70,7 @@ class ChatComponent implements OnActivate {
   }
 
   void signOut() {
-    _chatService.signOut();
+    chatService.signOut();
   }
 
   String getUsername(Map<String, String> parameters) {
