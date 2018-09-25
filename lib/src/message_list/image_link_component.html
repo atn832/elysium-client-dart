@@ -1,1 +1,8 @@
-<img src="{{uri}}" />
+<div>
+    <material-toggle
+        [disabled]="false"
+        [(checked)]="isImageVisible"
+        label="Photo {{isImageVisible ? 'ouverte' : 'fermée'}}.">
+    </material-toggle>
+</div>
+<img src="{{uri}}" *ngIf="isImageVisible" />
