@@ -64,11 +64,12 @@ class UserListComponent implements OnInit {
       if (timezone == null || timezones.containsKey(timezone)) return;
 
       try {
+        await TimeMachine.initialize();
         final tzdb = await DateTimeZoneProviders.tzdb;
         var tz = await tzdb[timezone];
         timezones[timezone] =  tz;
       } catch(e) {
-        print("Could not get timezone info for " + timezone);
+        print("Could not get timezone info for " + timezone + ": " + e);
       }
     });
   }

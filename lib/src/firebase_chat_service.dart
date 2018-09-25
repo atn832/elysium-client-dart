@@ -82,20 +82,6 @@ class FirebaseChatService implements ChatService {
         print("time machine error: " + e);
       }
 
-      // Track position.
-      try {
-        final watch = _geolocation.watchPosition(enableHighAccuracy: true, timeout: Duration(seconds: 1));
-        if (watch != null) {
-          watch.listen((p) {
-            currentLocation = p?.coordinates;
-          });
-        } else {
-          print("Cannot get geolocation.");
-        }
-      } catch(e) {
-        print("cannot watch position: " + e);
-      }
-
       // Update user list
       fs.Firestore firestore = fb.firestore();
       fs.CollectionReference ref = firestore.collection("users");
@@ -132,6 +118,21 @@ class FirebaseChatService implements ChatService {
     if (_listeningToUpdates) return;
 
     _listeningToUpdates = true;
+
+    // Track position.
+    try {
+      final watch = _geolocation.watchPosition(enableHighAccuracy: true, timeout: Duration(seconds: 1));
+      if (watch != null) {
+        watch.listen((p) {
+          currentLocation = p?.coordinates;
+        });
+      } else {
+        print("Cannot get geolocation.");
+      }
+    } catch(e) {
+      print("cannot watch position: " + e);
+    }
+
     fs.Firestore firestore = fb.firestore();
 
     // Listen to user changes.
