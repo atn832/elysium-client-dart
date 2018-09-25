@@ -41,7 +41,11 @@ class UserListComponent implements OnInit {
   }
 
   String getShortTimezone(String timezone) {
-    return timezone.split("/")[1].replaceAll("_", " ");
+    if (timezone.contains("/")) {
+      return timezone.split("/")[1].replaceAll("_", " ");
+    }
+    // Support "UTC".
+    return timezone;
   }
 
   String getLocalTime(String timezone) {  
