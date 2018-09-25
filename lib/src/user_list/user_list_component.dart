@@ -63,9 +63,13 @@ class UserListComponent implements OnInit {
       final timezone = u.timezone;
       if (timezone == null || timezones.containsKey(timezone)) return;
 
-      final tzdb = await DateTimeZoneProviders.tzdb;
-      var tz = await tzdb[timezone];
-      timezones[timezone] =  tz;
+      try {
+        final tzdb = await DateTimeZoneProviders.tzdb;
+        var tz = await tzdb[timezone];
+        timezones[timezone] =  tz;
+      } catch(e) {
+        print("Could not get timezone info for " + timezone);
+      }
     });
   }
 }
