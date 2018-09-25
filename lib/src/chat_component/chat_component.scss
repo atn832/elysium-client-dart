@@ -24,7 +24,19 @@
 
 .overlay {
   background-color: black;
-  opacity: .16;
+  opacity: .32;
+}
+
+.white-background {
+  background-color: white;
+}
+
+.white-foreground {
+  color: white;
+}
+
+.overlay-top {
+  position: relative;
 }
 
 material-spinner {

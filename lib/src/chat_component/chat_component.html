@@ -1,13 +1,21 @@
-<div class="signin" *ngIf="signingIn">
-  <span>
-      Chargement...
-      <material-spinner></material-spinner>
-  </span>
-  <span class="overlay"></span>
+<div class="signin" *ngIf="signingIn || askingSignIn">
+    <span class="overlay"></span>
+    <span class="overlay-top" *ngIf="askingSignIn">
+        <material-button class="white-background" raised (trigger)="signIn()">
+            S'identifier à Google
+        </material-button>
+    </span>
+    <span class="overlay-top white-foreground" *ngIf="signingIn">
+        Chargement...
+        <material-spinner></material-spinner>
+    </span>
 </div>
+<material-button raised (trigger)="signOut()">
+  Déconnecter
+</material-button>
 <user-list></user-list>
 <div class="scrollable">
-  <get-older-messages></get-older-messages>
-  <message-list (newMessage)="scrollToBottom"></message-list>
+    <get-older-messages></get-older-messages>
+    <message-list (newMessage)="scrollToBottom"></message-list>
 </div>
 <input-bar></input-bar>

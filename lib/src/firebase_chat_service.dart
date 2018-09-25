@@ -26,6 +26,8 @@ class FirebaseChatService implements ChatService {
   Coordinates currentLocation;
   final _newMessage = StreamController<Null>();
   final _newUsers = StreamController<Null>();
+  final _signInStateStreamController = StreamController<bool>();
+  bool _listeningToUpdates = false;
 
   Map<String, String> uidToName = Map();
  	final List<Person> userList = [];
@@ -38,13 +40,8 @@ class FirebaseChatService implements ChatService {
   DateTime threshold = DateTime.now().toUtc().subtract(Duration(days: 1));
   Duration getMoreDuration = Duration(days: 1);
 
-  final Completer authStateChangedCompleter;
-  Future authStateChanged;
-
   FirebaseChatService(this._reverseGeocodingService) :
-      _geolocation = Geolocation(),
-      authStateChangedCompleter = Completer() {
-    authStateChanged = authStateChangedCompleter.future;
+      _geolocation = Geolocation() {
     bubbles = bubbleService.bubbles;
     fb.initializeApp(
       apiKey: apiKey,
@@ -69,7 +66,6 @@ class FirebaseChatService implements ChatService {
     this.username = username;
 
     // Wait to fetch current sign-in info. If it times out, sign in.
-    await Future.any([authStateChanged, Future.delayed(Duration(seconds: 2))]);
     await loginWithGoogle();
   }
 
@@ -80,29 +76,43 @@ class FirebaseChatService implements ChatService {
       final user = auth.currentUser ?? (await auth.signInWithPopup(provider)).user;
 
       // Initialize time zone info.
-      await TimeMachine.initialize();
+      try {
+        await TimeMachine.initialize();
+      } catch(e) {
+        print("time machine error: " + e);
+      }
 
       // Track position.
-      final watch = _geolocation.watchPosition(enableHighAccuracy: true, timeout: Duration(seconds: 1));
-      if (watch != null) {
-        watch.listen((p) {
-          currentLocation = p.coordinates;
-        });
-      } else {
-        print("Cannot get geolocation.");
+      try {
+        final watch = _geolocation.watchPosition(enableHighAccuracy: true, timeout: Duration(seconds: 1));
+        if (watch != null) {
+          watch.listen((p) {
+            currentLocation = p?.coordinates;
+          });
+        } else {
+          print("Cannot get geolocation.");
+        }
+      } catch(e) {
+        print("cannot watch position: " + e);
       }
 
       // Update user list
       fs.Firestore firestore = fb.firestore();
       fs.CollectionReference ref = firestore.collection("users");
+      String timezone;
+      try {
+        timezone = DateTimeZone.local?.toString();
+      } catch(e) {
+        print("problem getting local timezone: " + e);
+      }
       ref.doc(user.uid).set({
         "name": username,
-        "timezone": DateTimeZone.local.toString(),
+        "timezone": timezone,
         "lastSeen": DateTime.now().toUtc(),
       });
 
       // Start listening to events
-      _connectToFirestore();
+      listenToUpdates();
     } catch (e) {
       throw "Error in sign in with google: $e";
     }
@@ -112,12 +122,16 @@ class FirebaseChatService implements ChatService {
   _setAuthListener() {
     // When the state of auth changes (user logs in/logs out).
     auth.onAuthStateChanged.listen((user) {
-      if (user == null) return;
-      authStateChangedCompleter.complete();
+      print("auth state changed: " + user.toString());
+      final bool isSignedIn = user != null;
+      _signInStateStreamController.add(isSignedIn);
     });
   }
 
-  _connectToFirestore() {
+  listenToUpdates() {
+    if (_listeningToUpdates) return;
+
+    _listeningToUpdates = true;
     fs.Firestore firestore = fb.firestore();
 
     // Listen to user changes.
@@ -277,5 +291,12 @@ class FirebaseChatService implements ChatService {
       }
     });
     return downloadUrlPromises[gsUrl];
+  }
+
+  bool get requireExplicitSignIn => true;
+  Stream<bool> get signInState => _signInStateStreamController.stream;
+
+  Future<void> signOut() {
+    return auth.signOut();
   }
 }

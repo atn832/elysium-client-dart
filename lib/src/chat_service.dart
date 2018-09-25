@@ -11,11 +11,13 @@ abstract class ChatService {
   Future<List<Bubble>> getBubbles();
   Bubble getUnsentBubble();
 
-  Future signIn(String username);
+  Future<void> signIn(String username);
+
+  void listenToUpdates();
   
   Future<List<Person>> getUserList();
   
-  Future sendMessage(String message);
+  Future<void> sendMessage(String message);
 
   Future<void> getOlderMessages();
 
@@ -23,5 +25,11 @@ abstract class ChatService {
   Stream<Null> get newUsers;
 
   bool get supportsUpload;
-  Future sendFiles(List<File> files);
+  Future<void> sendFiles(List<File> files);
+
+  bool get requireExplicitSignIn;
+
+  Future<void> signOut();
+
+  Stream<bool> get signInState;
 }

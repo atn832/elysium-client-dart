@@ -78,8 +78,6 @@ class HttpChatService extends ChatService {
       userId = data["user"]["ID"];
       channelId = data["channel"]["ID"];
 
-      await startPolling();
-
       // Initialize message queue.
       unsentBubble = Bubble(Person(username), [], DateTime.now());
 
@@ -90,7 +88,7 @@ class HttpChatService extends ChatService {
       final watch = _geolocation.watchPosition(enableHighAccuracy: true, timeout: Duration(seconds: 1));
       if (watch != null) {
         watch.listen((p) {
-          currentLocation = p.coordinates;
+          currentLocation = p?.coordinates;
         });
       } else {
         print("Cannot get geolocation.");
@@ -105,7 +103,7 @@ class HttpChatService extends ChatService {
     return signedIn;
   }
 
-  startPolling() async {
+  listenToUpdates() async {
     final events = await getMessages(true, -1, -1);
     updateMessageList(events);
     updateUserList(events);
@@ -288,6 +286,13 @@ class HttpChatService extends ChatService {
 
   get supportsUpload => false;
   Future sendFiles(List<File> files) {
+    throw "Not implemented";
+  }
+
+  bool get requireExplicitSignIn => false;
+  Stream<bool> get signInState => null;
+
+  Future<void> signOut() {
     throw "Not implemented";
   }
 }

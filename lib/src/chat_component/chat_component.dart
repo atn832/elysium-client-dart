@@ -17,21 +17,33 @@ import '../get_older_messages_component.dart';
   styleUrls: ['chat_component.css'],
   templateUrl: 'chat_component.html',
   directives: [
-    NgIf,
-    InputBarComponent,
     GetOlderMessagesComponent,
-    MessageListComponent,
-    UserListComponent,
+    InputBarComponent,
+    MaterialButtonComponent,
     MaterialSpinnerComponent,
+    MessageListComponent,
+    NgIf,
+    UserListComponent,
   ],
 )
 class ChatComponent implements OnActivate {
   final ChatService _chatService;
 
   String username;
-  bool signingIn;
+  bool signingIn = false;
+  bool askingSignIn = false;
 
-  ChatComponent(this._chatService);
+  ChatComponent(this._chatService) {
+    if (!_chatService.requireExplicitSignIn) return;
+
+    _chatService.signInState.listen((isSignedIn) {
+      askingSignIn = !isSignedIn;
+      if (isSignedIn) {
+        signingIn = false;
+        _chatService.listenToUpdates();
+      }
+    });
+  }
 
   @override
   void onActivate(_, RouterState current) async {
@@ -39,6 +51,15 @@ class ChatComponent implements OnActivate {
     if (username == null) {
       return;
     }
+    if (!_chatService.requireExplicitSignIn) {
+      signIn();
+    } else {
+      askingSignIn = true;
+    }
+  }
+
+  void signIn() async {
+    askingSignIn = false;
     signingIn = true;
     try {
       await _chatService.signIn(username);
@@ -46,6 +67,10 @@ class ChatComponent implements OnActivate {
       window.alert(e);
     }
     signingIn = false;
+  }
+
+  void signOut() {
+    _chatService.signOut();
   }
 
   String getUsername(Map<String, String> parameters) {

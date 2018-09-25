@@ -24,6 +24,8 @@ class HardcodedChatService extends ChatService {
   BubbleService mockBubbleService = BubbleService();
   ReverseGeocodingService _reverseGeocodingService;
 
+  StreamController<bool> _signInStateStreamController = StreamController<bool>();
+
   HardcodedChatService(this. _reverseGeocodingService) {
     Location location = Location(0.0, 0.0);
     _reverseGeocodingService.reverseGeocode(location.lat, location.lng)
@@ -37,6 +39,8 @@ class HardcodedChatService extends ChatService {
 
     mockUnsentBubble = Bubble(atn, ["looks like I lost connectivity"], DateTime.now());
 	}
+
+  listenToUpdates() => null;
 
   Future<List<Bubble>> getBubbles() async => mockBubbles;
   Bubble getUnsentBubble() => mockUnsentBubble;
@@ -66,4 +70,12 @@ class HardcodedChatService extends ChatService {
   Future sendFiles(List<File> files) {
     return Future.delayed(Duration(seconds: 5));
   }
+
+  bool get requireExplicitSignIn => true;
+
+  Future<void> signOut() {
+    _signInStateStreamController.add(false);
+  }
+
+  Stream<bool> get signInState => _signInStateStreamController.stream;
 }
