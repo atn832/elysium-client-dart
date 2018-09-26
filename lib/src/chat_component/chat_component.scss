@@ -48,6 +48,7 @@ material-spinner {
   @include shadow-elevation(3);
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .scrollable {
