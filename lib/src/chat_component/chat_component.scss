@@ -1,4 +1,5 @@
 @import 'package:angular_components/css/material/material';
+@import 'package:angular_components/css/material/shadow';
 
 :host {
   height: 100%;
@@ -41,6 +42,10 @@
 
 material-spinner {
   margin-left: 16px;
+}
+
+.top-bar {
+  @include shadow-elevation(3);
 }
 
 get-older-messages {

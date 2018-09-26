@@ -13,7 +13,9 @@
 <material-button *ngIf="chatService.requireExplicitSignIn" raised (trigger)="signOut()">
   Déconnecter
 </material-button>
-<user-list></user-list>
+<div class="top-bar">
+  <user-list></user-list>
+</div>
 <div class="scrollable">
     <get-older-messages></get-older-messages>
     <message-list (newMessage)="scrollToBottom"></message-list>

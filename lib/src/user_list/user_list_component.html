@@ -1,19 +1,17 @@
-<div>
-  <ul>
-    <li *ngIf="items.isEmpty">
-      <material-chip class="user hidden" [removable]="false">
-        &nbsp;
-      </material-chip>
-    </li>
-    <li *ngFor="let item of items; let i=index">
-      <material-chip class="user {{getColorClass(item)}}" [removable]="false">
-        <div>
-          {{item.name}}
-          <span class="timezone" *ngIf="item.timezone != null">
-            {{getShortTimezone(item.timezone)}}, {{getLocalTime(item.timezone)}}
-          </span>
-        </div>
-			</material-chip>
-    </li>
-  </ul>
-</div>
+<ul>
+  <li *ngIf="items.isEmpty">
+    <material-chip class="user hidden" [removable]="false">
+      &nbsp;
+    </material-chip>
+  </li>
+  <li *ngFor="let item of items; let i=index">
+    <material-chip class="user {{getColorClass(item)}}" [removable]="false">
+      <div>
+        {{item.name}}
+        <span class="timezone" *ngIf="item.timezone != null">
+          {{getShortTimezone(item.timezone)}}, {{getLocalTime(item.timezone)}}
+        </span>
+      </div>
+    </material-chip>
+  </li>
+</ul>

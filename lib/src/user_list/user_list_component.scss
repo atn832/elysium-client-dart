@@ -1,9 +1,4 @@
 @import 'package:angular_components/css/material/material';
-@import 'package:angular_components/css/material/shadow';
-
-:host {
-  @include shadow-elevation(3);
-}
 
 ul {
   list-style: none;
