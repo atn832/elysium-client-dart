@@ -7,16 +7,26 @@ enum Color { green, light_blue }
 @Injectable()
 class ColorService {
   RegExp startsWithAlphabet = RegExp(r"^[a-zA-Z]");
+  Map<String, Color> personNameToColor = Map();
+  Map<String, String> personNameToColorClass = Map();
 
   Color getColor(Person person) {
-    final modulo = startsWithAlphabetLetter(person.name) ?
-      person.name.codeUnitAt(0) % 2 : (person.name.codeUnitAt(0) + 1) % 2;
+    final name = person.name;
+    if (personNameToColor.containsKey(name)) {
+      return personNameToColor[name];
+    }
+    Color result;
+    final modulo = startsWithAlphabetLetter(name) ?
+      name.codeUnitAt(0) % 2 : (name.codeUnitAt(0) + 1) % 2;
     switch (modulo) {
       case 0:
-        return Color.green;
+        result = Color.green;
+        break;
       default:
-        return Color.light_blue;
+        result = Color.light_blue;
     }
+    personNameToColor[name] = result;
+    return result;
   }
 
   startsWithAlphabetLetter(String s) {
@@ -24,7 +34,13 @@ class ColorService {
   }
 
   String getColorClass(Person person) {
-    return getColor(person).toString().split('.')[1].replaceAll('_', '-');
+    final name = person.name;
+    if (personNameToColorClass.containsKey(name)) {
+      return personNameToColorClass[name];
+    }
+    final result = getColor(person).toString().split('.')[1].replaceAll('_', '-');;
+    personNameToColorClass[name] = result;
+    return result;
   }
 
 }
