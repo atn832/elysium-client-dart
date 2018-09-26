@@ -16,8 +16,9 @@ import 'reverse_geocoding_service.dart';
 class HardcodedChatService extends ChatService {
   static final frun = Person("frun");
   static final atn = Person("atn");
+  static final third = Person("third person with a long username");
 
-  final List<Person> mockUserList = <Person>[frun, atn];
+  final List<Person> mockUserList = <Person>[frun, atn, third];
   List<Bubble> mockBubbles;
   Bubble mockUnsentBubble;
 

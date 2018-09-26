@@ -50,8 +50,13 @@ material-spinner {
   align-items: center;
 }
 
-user-list {
+.scrollable {
   flex-grow: 1;
+  overflow-x: scroll;
+}
+
+user-list {
+  white-space: nowrap;
 }
 
 get-older-messages {
