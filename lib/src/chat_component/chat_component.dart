@@ -11,12 +11,14 @@ import '../input_bar/input_bar_component.dart';
 import '../message_list/message_list_component.dart';
 import '../user_list/user_list_component.dart';
 import '../get_older_messages_component.dart';
+import 'dropdown_menu_component.dart';
 
 @Component(
   selector: 'chat',
   styleUrls: ['chat_component.css'],
   templateUrl: 'chat_component.html',
   directives: [
+    ChatDropdownMenuComponent,
     GetOlderMessagesComponent,
     InputBarComponent,
     MaterialButtonComponent,

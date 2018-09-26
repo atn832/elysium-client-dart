@@ -45,11 +45,14 @@ class HardcodedChatService extends ChatService {
   Future<List<Bubble>> getBubbles() async => mockBubbles;
   Bubble getUnsentBubble() => mockUnsentBubble;
 
-  Future signIn(String username) {}
+  Future<void> signIn(String username) async {
+    await Future.delayed(Duration(seconds: 2));
+    _signInStateStreamController.add(true);
+  }
   
   Future<List<Person>> getUserList() async => mockUserList;
   
-  Future sendMessage(String message) {
+  Future<void> sendMessage(String message) {
     mockBubbleService.addMessage(Message(atn, message, DateTime.now(), null));
   }
 
@@ -73,7 +76,8 @@ class HardcodedChatService extends ChatService {
 
   bool get requireExplicitSignIn => true;
 
-  Future<void> signOut() {
+  Future<void> signOut() async {
+    await Future.delayed(Duration(seconds: 1));
     _signInStateStreamController.add(false);
   }
 

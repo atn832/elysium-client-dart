@@ -10,11 +10,9 @@
         <material-spinner></material-spinner>
     </span>
 </div>
-<material-button *ngIf="chatService.requireExplicitSignIn" raised (trigger)="signOut()">
-  Déconnecter
-</material-button>
 <div class="top-bar">
   <user-list></user-list>
+  <chat-dropdown-menu *ngIf="chatService.requireExplicitSignIn"></chat-dropdown-menu>
 </div>
 <div class="scrollable">
     <get-older-messages></get-older-messages>
