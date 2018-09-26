@@ -25,6 +25,7 @@ class UserListComponent implements OnInit {
 
   List<Person> items = [];
   Map<String, DateTimeZone> timezones = Map();
+  Map<String, String> timezoneToShortTimezone = Map();
 
   UserListComponent(this.chatService, this._colorService);
 
@@ -41,11 +42,18 @@ class UserListComponent implements OnInit {
   }
 
   String getShortTimezone(String timezone) {
-    if (timezone.contains("/")) {
-      return timezone.split("/")[1].replaceAll("_", " ");
+    if (timezoneToShortTimezone.containsKey(timezone)) {
+      return timezoneToShortTimezone[timezone];
     }
-    // Support "UTC".
-    return timezone;
+    String result;
+    if (timezone.contains("/")) {
+      result = timezone.split("/")[1].replaceAll("_", " ");
+    } else {
+      // Support "UTC".
+      result = timezone;
+    }
+    timezoneToShortTimezone[timezone] = result;
+    return result;
   }
 
   String getLocalTime(String timezone) {  
