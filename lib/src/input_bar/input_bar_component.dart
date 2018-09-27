@@ -29,7 +29,11 @@ class InputBarComponent {
   void add() {
     final m = message;
     message = '';
-    chatService.sendMessage(m);
+    if (m.trim() == "/clear") {
+      chatService.clear();
+    } else {
+      chatService.sendMessage(m);
+    }
   }
 
   void filesChanged(event) async {

@@ -300,4 +300,8 @@ class FirebaseChatService implements ChatService {
   Future<void> signOut() {
     return auth.signOut();
   }
+
+  Future<void> clear() {
+    throw "Not implemented";
+  }
 }

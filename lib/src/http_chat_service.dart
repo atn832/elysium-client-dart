@@ -295,4 +295,8 @@ class HttpChatService extends ChatService {
   Future<void> signOut() {
     throw "Not implemented";
   }
+
+  Future<void> clear() {
+    throw "Not implemented";
+  }
 }

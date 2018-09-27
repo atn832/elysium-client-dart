@@ -19,6 +19,8 @@ abstract class ChatService {
   
   Future<void> sendMessage(String message);
 
+  Future<void> clear();
+
   Future<void> getOlderMessages();
 
   Stream<Null> get newMessage;

@@ -79,4 +79,8 @@ class BubbleService {
   }
 
   get bubbles => _bubbles;
+
+  clear() {
+    _bubbles.clear();
+  }
 }

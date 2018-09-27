@@ -83,4 +83,9 @@ class HardcodedChatService extends ChatService {
   }
 
   Stream<bool> get signInState => _signInStateStreamController.stream;
+
+  Future<void> clear() {
+    mockBubbleService.clear();
+    return null;
+  }
 }
