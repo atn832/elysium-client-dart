@@ -296,7 +296,7 @@ class HttpChatService extends ChatService {
     throw "Not implemented";
   }
 
-  Future<void> clear() {
+  clear() {
     throw "Not implemented";
   }
 }

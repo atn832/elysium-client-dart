@@ -38,7 +38,8 @@ class FirebaseChatService implements ChatService {
   // Used to get past messages on sign-in.
   // And as the threshold when getting older messages.
   DateTime threshold = DateTime.now().toUtc().subtract(Duration(hours: 12));
-  Duration getMoreDuration = Duration(days: 1);
+  static Duration initialGetMoreDuration = const Duration(hours: 12);
+  Duration getMoreDuration = initialGetMoreDuration;
 
   FirebaseChatService(this._reverseGeocodingService) :
       _geolocation = Geolocation() {
@@ -301,7 +302,11 @@ class FirebaseChatService implements ChatService {
     return auth.signOut();
   }
 
-  Future<void> clear() {
-    throw "Not implemented";
+  clear() {
+    bubbleService.clear();
+
+    // Reset threshold and getMoreDuration.
+    threshold = DateTime.now().toUtc();
+    getMoreDuration = initialGetMoreDuration;
   }
 }

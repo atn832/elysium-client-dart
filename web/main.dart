@@ -15,8 +15,8 @@ import 'main.template.dart' as self;
 @GenerateInjector([
   routerProvidersHash, // You can use routerProviders in production
   const ClassProvider(ReverseGeocodingService),
-  // const ClassProvider(ChatService, useClass: FirebaseChatService),
-  const ClassProvider(ChatService, useClass: HardcodedChatService),
+  const ClassProvider(ChatService, useClass: FirebaseChatService),
+  // const ClassProvider(ChatService, useClass: HardcodedChatService),
   // const ClassProvider(ChatService, useClass: HttpChatService),
   const ClassProvider(Client, useClass: InMemoryDataService),
 ])
