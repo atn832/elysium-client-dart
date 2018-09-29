@@ -2,7 +2,7 @@
   <material-input label="Envoyer..."
                   autoFocus floatingLabel
                   [(ngModel)]="message"
-                  (keyup.enter)="add()">
+                  (keyup.enter)="send()">
   </material-input>
 
   <material-fab *ngIf="chatService.supportsUpload" mini raised [disabled]="sending">
@@ -11,7 +11,7 @@
     <material-icon icon="photo"></material-icon>
   </material-fab>
 
-  <material-fab mini raised (trigger)="add()" [disabled]="message.isEmpty">
-    <material-icon icon="add"></material-icon>
+  <material-fab mini raised (trigger)="send()" [disabled]="message.isEmpty">
+    <material-icon icon="send"></material-icon>
   </material-fab>
 </div>

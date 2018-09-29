@@ -26,7 +26,7 @@ class InputBarComponent {
 
   InputBarComponent(this.chatService);
 
-  void add() {
+  void send() {
     final m = message;
     message = '';
     if (m.trim() == "/clear") {
