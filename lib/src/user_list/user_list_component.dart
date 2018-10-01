@@ -12,6 +12,7 @@ import '../person.dart';
   selector: 'user-list',
   styleUrls: ['user_list_component.css'],
   templateUrl: 'user_list_component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   directives: [
     MaterialChipComponent,
     materialInputDirectives,
@@ -27,11 +28,16 @@ class UserListComponent {
 
   Map<String, DateTimeZone> timezones = Map();
   Map<String, String> timezoneToShortTimezone = Map();
+  ChangeDetectorRef ref;
 
-  UserListComponent(this._colorService) {
+  UserListComponent(this._colorService, ChangeDetectorRef this.ref) {
     Timer.periodic(Duration(seconds: 10), (t) {
       collectMissingTimeZonesFromUsers();
     });
+  }
+
+  markForCheck() {
+    ref.markForCheck();
   }
 
   String getColorClass(Person person) {

@@ -33,6 +33,9 @@ class ChatComponent implements OnActivate {
   @ViewChild(MessageListComponent)
   MessageListComponent messageListComponent;
 
+  @ViewChild(UserListComponent)
+  UserListComponent userListComponent;
+
   final ChatService chatService;
 
   String username;
@@ -69,6 +72,7 @@ class ChatComponent implements OnActivate {
     final scrollable = querySelector('.scrollable');
     scrollable.onScroll.transform(debounceStream(Duration(milliseconds: 500))).listen((e) {
       messageListComponent.updateLatestPositionFromBubble(users, scrollable.getBoundingClientRect());
+      userListComponent.markForCheck();
     });
   }
 
