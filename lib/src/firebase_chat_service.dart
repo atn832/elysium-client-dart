@@ -19,6 +19,8 @@ import 'reverse_geocoding_service.dart';
 
 /// Interface for a chat service.
 class FirebaseChatService implements ChatService {
+  final BubbleCountTrimThreshold = 20;
+
   fb.Auth auth;
   final ReverseGeocodingService _reverseGeocodingService;
   final Geolocation _geolocation;
@@ -234,6 +236,14 @@ class FirebaseChatService implements ChatService {
     }
 
     await ref.add(messageData);
+
+    // Only show latest bubbles to keep a smooth experience.
+    trimBubbles();
+  }
+
+  void trimBubbles() {
+    bubbleService.keepLatestBubbles(BubbleCountTrimThreshold);
+    threshold = bubbles.isNotEmpty ? bubbles[0].dateRange.startTime : DateTime.now().toUtc();
   }
 
   Future<void> getOlderMessages() async {
@@ -306,6 +316,7 @@ class FirebaseChatService implements ChatService {
     bubbleService.clear();
 
     // Reset threshold and getMoreDuration.
+    // TODO: is toUtc() needed?
     threshold = DateTime.now().toUtc();
     getMoreDuration = initialGetMoreDuration;
   }
