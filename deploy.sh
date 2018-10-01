@@ -1,7 +1,11 @@
 if [ "$1" == "firebase" ]; then
     HOST=elysium.wafrat.com
     SOURCE=web_firebase
-    DESTINATION=/var/www/html
+    if [ "$2" == "prod" ]; then
+        DESTINATION=/var/www/html
+    else
+        DESTINATION=/var/www/html/dev
+    fi
 else
     HOST=m.wafrat.com
     SOURCE=web_prod
