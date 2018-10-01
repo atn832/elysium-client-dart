@@ -12,7 +12,7 @@
 </div>
 <div class="top-bar">
   <div class="scrollable-top">
-      <user-list></user-list>
+      <user-list [users]="users"></user-list>
   </div>
   <chat-dropdown-menu *ngIf="chatService.requireExplicitSignIn"></chat-dropdown-menu>
 </div>

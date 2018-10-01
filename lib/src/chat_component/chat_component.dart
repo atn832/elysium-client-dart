@@ -5,6 +5,7 @@ import 'package:angular_components/angular_components.dart';
 import 'package:angular_router/angular_router.dart';
 
 import '../chat_service.dart';
+import '../person.dart';
 import '../route_paths.dart';
 
 import '../input_bar/input_bar_component.dart';
@@ -29,20 +30,26 @@ import 'dropdown_menu_component.dart';
   ],
 )
 class ChatComponent implements OnActivate {
+  @ViewChild(MessageListComponent)
+  MessageListComponent messageListComponent;
+
   final ChatService chatService;
 
   String username;
   bool signingIn = false;
   bool askingSignIn = false;
 
+  List<Person> users;
+
   ChatComponent(this.chatService) {
     if (!chatService.requireExplicitSignIn) return;
 
-    chatService.signInState.listen((isSignedIn) {
+    chatService.signInState.listen((isSignedIn) async {
       askingSignIn = !isSignedIn;
       if (isSignedIn) {
         chatService.listenToUpdates();
         signingIn = false;
+        users = await chatService.getUserList();
       }
     });
   }

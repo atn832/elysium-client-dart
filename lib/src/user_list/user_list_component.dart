@@ -4,7 +4,6 @@ import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:time_machine/time_machine.dart';
 
-import '../chat_service.dart';
 import '../color_service.dart';
 import '../person.dart';
 
@@ -19,20 +18,17 @@ import '../person.dart';
     NgIf,
   ],
 )
-class UserListComponent implements OnInit {
-  final ChatService chatService;
+class UserListComponent {
   final ColorService _colorService;
 
-  List<Person> items = [];
+  @Input()
+  List<Person> users;
+
   Map<String, DateTimeZone> timezones = Map();
   Map<String, String> timezoneToShortTimezone = Map();
 
-  UserListComponent(this.chatService, this._colorService);
-
-  @override
-  Future<Null> ngOnInit() async {
-    items = await chatService.getUserList();
-    this.chatService.newUsers.listen((e) async {
+  UserListComponent(this._colorService) {
+    Timer.periodic(Duration(seconds: 10), (t) {
       collectMissingTimeZonesFromUsers();
     });
   }
@@ -57,16 +53,19 @@ class UserListComponent implements OnInit {
   }
 
   String getLocalTime(String timezone) {  
-    final now = Instant.now();
-    final tz = timezones[timezone];
-    if (tz == null) return "";
+    if (timezone == null || !timezones.containsKey(timezone)) {
+      return "";
+    }
 
+    final tz = timezones[timezone];
+    final now = Instant.now();
     final localTime = now.inZone(tz);
     return localTime.toStringDDC('ddd HH:mm');
   }
 
   void collectMissingTimeZonesFromUsers() async {
-    final users = await this.chatService.getUserList();
+    if (users == null) return;
+    
     users.forEach((u) async {
       final timezone = u.timezone;
       if (timezone == null || timezones.containsKey(timezone)) return;
