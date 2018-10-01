@@ -1,4 +1,4 @@
 <div class="messages" *ngIf="bubbles != null && bubbles.isNotEmpty">
-  <bubble [bubble]="bubble" *ngFor="let bubble of bubbles"></bubble>
+  <bubble [bubble]="bubble" *ngFor="let bubble of bubbles; let i = index" id="{{i}}"></bubble>
   <bubble [bubble]="unsentBubble" [sending]="true"></bubble>
 </div>

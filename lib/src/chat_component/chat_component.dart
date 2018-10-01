@@ -66,6 +66,10 @@ class ChatComponent implements OnActivate {
     } else {
       askingSignIn = true;
     }
+    final scrollable = querySelector('.scrollable');
+    scrollable.onScroll.transform(debounceStream(Duration(milliseconds: 500))).listen((e) {
+      messageListComponent.updateLatestPositionFromBubble(users, scrollable.getBoundingClientRect());
+    });
   }
 
   void signIn() async {

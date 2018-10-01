@@ -12,6 +12,9 @@
           {{getShortTimezone(user.timezone)}}, {{getLocalTime(user.timezone)}}
         </span>
       </div>
+      <div *ngIf="user.location != null">
+        <img src="{{getImageLink(user.location)}}">
+      </div>
     </material-chip>
   </li>
 </ul>

@@ -5,6 +5,7 @@ import 'package:angular_components/angular_components.dart';
 import 'package:time_machine/time_machine.dart';
 
 import '../color_service.dart';
+import '../location.dart';
 import '../person.dart';
 
 @Component(
@@ -65,7 +66,7 @@ class UserListComponent {
 
   void collectMissingTimeZonesFromUsers() async {
     if (users == null) return;
-    
+
     users.forEach((u) async {
       final timezone = u.timezone;
       if (timezone == null || timezones.containsKey(timezone)) return;
@@ -79,5 +80,13 @@ class UserListComponent {
         print("Could not get timezone info for " + timezone + ": " + e);
       }
     });
+  }
+
+  String getImageLink(Location location) {
+    final lat = location.lat;
+    final lng = location.lng;
+    return "https://maps.googleapis.com/maps/api/staticmap?center=${lat}%2C%20${lng}&"
+      "zoom=10&size=200x150&maptype=roadmap&markers=color:red%7Clabel:A%7C${lat}%2C%20${lng}"
+      "&key=AIzaSyAjX06wBmeRKF0qGiEo0jwQGlvXjjf7vlA";
   }
 }
