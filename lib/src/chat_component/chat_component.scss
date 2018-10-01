@@ -51,6 +51,14 @@ material-spinner {
   flex-shrink: 0;
 }
 
+chat-dropdown-menu {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background-color: #fff;
+  border-radius: 20px;
+}
+
 .scrollable-top {
   flex-grow: 1;
   overflow-x: scroll;
