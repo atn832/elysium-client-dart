@@ -1,6 +1,9 @@
+import 'location.dart';
+
 class Person {
 	final String name;
   String timezone;
+  Location location;
 	
 	Person(this.name);
 
