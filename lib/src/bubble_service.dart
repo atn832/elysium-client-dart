@@ -8,17 +8,21 @@ const MinTimeBetweenBubbles = Duration(minutes: 5);
 class BubbleService {
   List<Bubble> _bubbles = [];
 
-  void addMessage(Message message) {
+  /**
+   * @return {bool} whether a newer message was added.
+   */
+  bool addMessage(Message message) {
     final insertionIndex = getInsertionIndex(message.time);
-    var mergedMessage =
-        _maybePrependToNextBubble(insertionIndex, message) ||
-        _maybeAppendToPreviousBubble(insertionIndex, message);
-    if (mergedMessage) return;
+    final prepended = _maybePrependToNextBubble(insertionIndex, message);
+    if (prepended) return false;
+    final appended = _maybeAppendToPreviousBubble(insertionIndex, message);
+    if (appended) return true;
 
     // Make a new bubble.
     final b = Bubble(message.author, [message.message], message.time);
     b.location = message.location;
     _bubbles.insert(insertionIndex, b);
+    return true;
   }
 
   bool _maybePrependToNextBubble(int insertionIndex, Message message) {

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 
 import 'package:angular/angular.dart';
+import 'package:angular_components/angular_components.dart';
 
 import 'bubble_component.dart';
 import '../bubble.dart';
@@ -12,6 +13,7 @@ import '../person.dart';
   selector: 'message-list',
   styleUrls: ['message_list_component.css'],
   templateUrl: 'message_list_component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   directives: [
     NgFor,
     NgIf,
@@ -32,12 +34,15 @@ class MessageListComponent implements OnInit, AfterViewChecked {
   @Output()
   Stream<Null> get newMessage => _newMessage.stream;
 
-  MessageListComponent(this.chatService);
+  final ChangeDetectorRef ref;
+
+  MessageListComponent(this.chatService, ChangeDetectorRef this.ref);
 
   @override
   Future<Null> ngOnInit() async {
-    chatService.newMessage.listen((t) {
-      newMessageAdded = true;
+    chatService.newMessage.transform(debounceStream(Duration(milliseconds: 100))).listen((t) {
+      newMessageAdded = t;
+      ref.markForCheck();
     });
     bubbles = await chatService.getBubbles();
     unsentBubble = chatService.getUnsentBubble();

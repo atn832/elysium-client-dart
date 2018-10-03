@@ -23,7 +23,8 @@ abstract class ChatService {
 
   Future<void> getOlderMessages();
 
-  Stream<Null> get newMessage;
+  // true if for newer messages, false for past messages or when existing message metadata changes.
+  Stream<bool> get newMessage;
   Stream<Null> get newUsers;
 
   bool get supportsUpload;

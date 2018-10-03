@@ -26,7 +26,7 @@ class FirebaseChatService implements ChatService {
   final Geolocation _geolocation;
   final bubbleService = BubbleService();
   Coordinates currentLocation;
-  final _newMessage = StreamController<Null>();
+  final _newMessage = StreamController<bool>();
   final _newUsers = StreamController<Null>();
   final _signInStateStreamController = StreamController<bool>();
   bool _listeningToUpdates = false;
@@ -39,8 +39,8 @@ class FirebaseChatService implements ChatService {
 
   // Used to get past messages on sign-in.
   // And as the threshold when getting older messages.
-  DateTime threshold = DateTime.now().toUtc().subtract(Duration(hours: 12));
-  static Duration initialGetMoreDuration = const Duration(hours: 12);
+  DateTime threshold = DateTime.now().toUtc().subtract(Duration(days: 2));
+  static Duration initialGetMoreDuration = const Duration(days: 2);
   Duration getMoreDuration = initialGetMoreDuration;
 
   FirebaseChatService(this._reverseGeocodingService) :
@@ -167,7 +167,10 @@ class FirebaseChatService implements ChatService {
         final loc = location != null ? Location(location.latitude, location.longitude) : null;
         if (loc != null) {
           _reverseGeocodingService.reverseGeocode(loc.lat, loc.lng)
-              .then((s) => loc.name = s);
+              .then((s) {
+                loc.name = s;
+                _newMessage.add(false);
+              });
         }
         // Parse the rest of the message.
         final name = uidToName[e["uid"]];
@@ -179,13 +182,14 @@ class FirebaseChatService implements ChatService {
         );
       });
     if (newMessages.isNotEmpty) {
+      bool newerMessages = false;
       newMessages.forEach((m) {
         final message = m as Message;
         // Add to bubbles.
-        bubbleService.addMessage(message);
+        newerMessages = bubbleService.addMessage(message);
       });
       // Notify listeners.
-      _newMessage.add(null);
+      _newMessage.add(newerMessages);
     }
   }
 
@@ -264,7 +268,7 @@ class FirebaseChatService implements ChatService {
     getMoreDuration = getMoreDuration * 2;
   }
 
-  Stream<Null> get newMessage => _newMessage.stream;
+  Stream<bool> get newMessage => _newMessage.stream;
   Stream<Null> get newUsers => _newUsers.stream;
 
   get supportsUpload => true;
