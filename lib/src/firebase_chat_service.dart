@@ -19,7 +19,7 @@ import 'reverse_geocoding_service.dart';
 
 /// Interface for a chat service.
 class FirebaseChatService implements ChatService {
-  final BubbleCountTrimThreshold = 20;
+  final BubbleCountTrimThreshold = 200;
 
   fb.Auth auth;
   final ReverseGeocodingService _reverseGeocodingService;
