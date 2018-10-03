@@ -23,4 +23,6 @@ input {
   height: 100%;
   opacity: 0;
   z-index: 1;
+  /* Prevents the browser's default "Choose file" from breaking the layout. */
+  overflow: hidden;
 }
