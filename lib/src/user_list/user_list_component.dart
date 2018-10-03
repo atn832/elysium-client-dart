@@ -32,7 +32,7 @@ class UserListComponent {
   ChangeDetectorRef ref;
 
   UserListComponent(this._colorService, ChangeDetectorRef this.ref) {
-    Timer.periodic(Duration(seconds: 10), (t) {
+    Timer.periodic(Duration(seconds: 3), (t) {
       collectMissingTimeZonesFromUsers();
     });
   }
@@ -83,6 +83,7 @@ class UserListComponent {
         final tzdb = await DateTimeZoneProviders.tzdb;
         var tz = await tzdb[timezone];
         timezones[timezone] =  tz;
+        ref.markForCheck();
       } catch(e) {
         print("Could not get timezone info for " + timezone + ": " + e);
       }
