@@ -4,6 +4,7 @@ import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:time_machine/time_machine.dart';
 
+import '../api_key.dart';
 import '../color_service.dart';
 import '../location.dart';
 import '../person.dart';
@@ -93,6 +94,6 @@ class UserListComponent {
     final lng = location.lng;
     return "https://maps.googleapis.com/maps/api/staticmap?center=${lat}%2C%20${lng}&"
       "zoom=10&size=150x100&maptype=roadmap&markers=color:red%7C${lat}%2C%20${lng}"
-      "&key=AIzaSyAjX06wBmeRKF0qGiEo0jwQGlvXjjf7vlA";
+      "&key=${ApiKey}";
   }
 }
