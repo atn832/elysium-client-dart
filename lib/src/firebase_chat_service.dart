@@ -323,5 +323,8 @@ class FirebaseChatService implements ChatService {
     // TODO: is toUtc() needed?
     threshold = DateTime.now().toUtc();
     getMoreDuration = initialGetMoreDuration;
+
+    // Notify listeners of a change.
+    _newMessage.add(false);
   }
 }

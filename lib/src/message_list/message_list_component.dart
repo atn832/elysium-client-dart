@@ -62,7 +62,7 @@ class MessageListComponent implements OnInit, AfterViewChecked {
     // As soon as
     bool startListening = false;
     Set<Person> peopleToProcess = Set.from(users);
-    messages.children.reversed.forEach((c) {
+    messages?.children?.reversed?.forEach((c) {
       if (c == null || c.id == null || c.id == "") return;
 
       if (peopleToProcess.isEmpty) return;
