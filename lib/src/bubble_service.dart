@@ -21,8 +21,9 @@ class BubbleService {
     // Make a new bubble.
     final b = Bubble(message.author, [message.message], message.time);
     b.location = message.location;
+    final bool last = insertionIndex == _bubbles.length;
     _bubbles.insert(insertionIndex, b);
-    return true;
+    return last;
   }
 
   bool _maybePrependToNextBubble(int insertionIndex, Message message) {
@@ -90,7 +91,7 @@ class BubbleService {
 
   keepLatestBubbles(int latestToKeep) {
     if (_bubbles.length - latestToKeep <= 0) return;
-    
+
     _bubbles.removeRange(0, _bubbles.length - latestToKeep);
   }
 }
