@@ -89,6 +89,8 @@ class BubbleService {
   }
 
   keepLatestBubbles(int latestToKeep) {
+    if (_bubbles.length - latestToKeep <= 0) return;
+    
     _bubbles.removeRange(0, _bubbles.length - latestToKeep);
   }
 }
