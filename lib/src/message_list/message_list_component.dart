@@ -40,8 +40,10 @@ class MessageListComponent implements OnInit, AfterViewChecked {
 
   @override
   Future<Null> ngOnInit() async {
-    chatService.newMessage.transform(debounceStream(Duration(milliseconds: 100))).listen((t) {
-      newMessageAdded = t;
+    chatService.newMessage.transform(StreamTransformer.fromHandlers(handleData: (newerMessage, eventSink) {
+      newMessageAdded = newMessageAdded || newerMessage;
+      eventSink.add(newerMessage);
+    })).transform(debounceStream(Duration(milliseconds: 100))).listen((t) {
       ref.markForCheck();
     });
     bubbles = await chatService.getBubbles();

@@ -169,6 +169,7 @@ class FirebaseChatService implements ChatService {
           _reverseGeocodingService.reverseGeocode(loc.lat, loc.lng)
               .then((s) {
                 loc.name = s;
+                print("Notify of new message false");
                 _newMessage.add(false);
               });
         }
@@ -182,14 +183,15 @@ class FirebaseChatService implements ChatService {
         );
       });
     if (newMessages.isNotEmpty) {
-      bool newerMessages = false;
+      bool hasNewerMessages = false;
       newMessages.forEach((m) {
         final message = m as Message;
         // Add to bubbles.
-        newerMessages = bubbleService.addMessage(message);
+        final isNewerMessage = bubbleService.addMessage(message);
+        hasNewerMessages = isNewerMessage || hasNewerMessages;
       });
       // Notify listeners.
-      _newMessage.add(newerMessages);
+      _newMessage.add(hasNewerMessages);
     }
   }
 
