@@ -70,7 +70,7 @@ class ChatComponent implements OnActivate {
       askingSignIn = true;
     }
     final scrollable = querySelector('.scrollable');
-    scrollable.onScroll.transform(debounceStream(Duration(milliseconds: 100))).listen((e) {
+    scrollable.onScroll.transform(throttleStream(Duration(milliseconds: 100))).listen((e) {
       messageListComponent.updateLatestPositionFromBubble(users, scrollable.getBoundingClientRect());
       userListComponent.markForCheck();
     });
