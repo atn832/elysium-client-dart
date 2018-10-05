@@ -12,7 +12,7 @@ else
     DESTINATION=/var/www/html/E2
 fi
 
-echo Deploying from $SOURCE...
+echo Deploying from $SOURCE to $DESTINATION...
 
 mv web web_dev
 mv $SOURCE web
