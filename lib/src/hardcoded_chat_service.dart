@@ -37,7 +37,7 @@ class HardcodedChatService extends ChatService {
     mockBubbleService.addMessage(Message(frun, "hello!", DateTime(2018, 8, 30), location));
     mockBubbleService.addMessage(Message(frun, "i just landed.", DateTime(2018, 8, 30), location));
 		mockBubbleService.addMessage(Message(atn, "where are you?", DateTime(2018, 8, 31), null));
-
+    newMessageStream.add(true);
     mockUnsentBubble = Bubble(atn, ["looks like I lost connectivity"], DateTime.now());
 	}
 
@@ -55,6 +55,7 @@ class HardcodedChatService extends ChatService {
   
   Future<void> sendMessage(String message) {
     mockBubbleService.addMessage(Message(atn, message, DateTime.now(), null));
+    newMessageStream.add(true);
   }
 
   Future<void> getOlderMessages() async {
@@ -65,9 +66,11 @@ class HardcodedChatService extends ChatService {
     for (var i = 0; i < 10; i++) {
       mockBubbleService.addMessage(Message(Person('atn'), 'message ' + i.toString(), wayOlder, null));
     }
+    newMessageStream.add(false);
   }
 
-  Stream<Null> get newMessage => StreamController<Null>().stream;
+  final newMessageStream = StreamController<bool>();
+  Stream<bool> get newMessage => newMessageStream.stream;
   Stream<Null> get newUsers => StreamController<Null>().stream;
 
   get supportsUpload => true;
