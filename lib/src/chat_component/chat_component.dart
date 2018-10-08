@@ -54,6 +54,9 @@ class ChatComponent implements OnActivate {
         chatService.listenToUpdates();
         signingIn = false;
         users = await chatService.getUserList();
+
+        // Ask for permission to send notifications.
+        Notification.requestPermission();
       }
     });
   }
@@ -108,9 +111,6 @@ class ChatComponent implements OnActivate {
     signingIn = true;
     try {
       await chatService.signIn(username);
-
-      // Ask for permission to send notifications.
-      Notification.requestPermission();
     } catch(e) {
       window.alert(e);
     }
