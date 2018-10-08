@@ -89,7 +89,15 @@ class ChatComponent implements OnActivate {
 
             final author = last.author?.name;
             final timestamp = last.dateRange.endTime;
-            title.text = author + " " + formatter.format(timestamp);
+            final notificationText = author + " " + formatter.format(timestamp);;
+            title.text = notificationText;
+
+            // Send notification only if it's a different author.
+            // Username can be null if chatService hasn't finished signing in yet.
+            // TODO: clean up so the null check is not required.
+            if (chatService.username != null && chatService.username != author) {
+              Notification(notificationText);
+            }
           });
         }
       });
@@ -100,6 +108,9 @@ class ChatComponent implements OnActivate {
     signingIn = true;
     try {
       await chatService.signIn(username);
+
+      // Ask for permission to send notifications.
+      Notification.requestPermission();
     } catch(e) {
       window.alert(e);
     }
