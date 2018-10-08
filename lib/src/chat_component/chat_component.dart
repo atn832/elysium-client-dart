@@ -97,8 +97,7 @@ class ChatComponent implements OnActivate {
 
             // Send notification only if it's a different author.
             // Username can be null if chatService hasn't finished signing in yet.
-            // TODO: clean up so the null check is not required.
-            if (chatService.username != null && chatService.username != author) {
+            if (username != author) {
               Notification(notificationText);
             }
           });
