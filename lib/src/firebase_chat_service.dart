@@ -27,6 +27,7 @@ class FirebaseChatService implements ChatService {
   final bubbleService = BubbleService();
   Coordinates currentLocation;
   final _newMessage = StreamController<bool>();
+  Stream _newMessageBroadcastStream;
   final _newUsers = StreamController<Null>();
   final _signInStateStreamController = StreamController<bool>();
   bool _listeningToUpdates = false;
@@ -45,6 +46,7 @@ class FirebaseChatService implements ChatService {
 
   FirebaseChatService(this._reverseGeocodingService) :
       _geolocation = Geolocation() {
+    _newMessageBroadcastStream = _newMessage.stream.asBroadcastStream();
     bubbles = bubbleService.bubbles;
     fb.initializeApp(
       apiKey: apiKey,
@@ -270,7 +272,7 @@ class FirebaseChatService implements ChatService {
     getMoreDuration = getMoreDuration * 2;
   }
 
-  Stream<bool> get newMessage => _newMessage.stream;
+  Stream<bool> get newMessage => _newMessageBroadcastStream;
   Stream<Null> get newUsers => _newUsers.stream;
 
   get supportsUpload => true;
