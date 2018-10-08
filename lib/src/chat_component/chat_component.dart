@@ -69,6 +69,7 @@ class ChatComponent implements OnActivate {
     } else {
       askingSignIn = true;
     }
+    // Update user positions.
     final scrollable = querySelector('.scrollable');
     scrollable.onScroll.transform(throttleStream(Duration(milliseconds: 100))).listen((e) {
       messageListComponent.updateLatestPositionFromBubble(users, scrollable.getBoundingClientRect());
