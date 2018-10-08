@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'package:intl/intl.dart';
 
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
@@ -75,6 +76,23 @@ class ChatComponent implements OnActivate {
       messageListComponent.updateLatestPositionFromBubble(users, scrollable.getBoundingClientRect());
       userListComponent.markForCheck();
     });
+
+    // Update title on new message.
+    final title = querySelector("title");
+    var formatter = new DateFormat('Hm');
+    chatService.newMessage
+      .listen((newer) {
+        if (newer) {
+          chatService.getBubbles().then((bubbles) {
+            final last = bubbles?.last;
+            if (last == null) return;
+
+            final author = last.author?.name;
+            final timestamp = last.dateRange.endTime;
+            title.text = author + " " + formatter.format(timestamp);
+          });
+        }
+      });
   }
 
   void signIn() async {
