@@ -36,7 +36,7 @@ class FirebaseChatService implements ChatService {
  	final List<Person> userList = [];
   List<Bubble> bubbles;
   Bubble unsentBubble;
-  String username;
+  String _username;
 
   // Used to get past messages on sign-in.
   // And as the threshold when getting older messages.
@@ -68,11 +68,13 @@ class FirebaseChatService implements ChatService {
 
   Future signIn(String username) async {
     print("signing in as " + username);
-    this.username = username;
+    this._username = username;
 
     // Wait to fetch current sign-in info. If it times out, sign in.
     await loginWithGoogle();
   }
+
+  String get username => _username;
 
   // Logins with the Google auth provider.
   loginWithGoogle() async {
