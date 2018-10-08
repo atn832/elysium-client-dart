@@ -12,7 +12,6 @@ abstract class ChatService {
   Bubble getUnsentBubble();
 
   Future<void> signIn(String username);
-  String get username;
 
   void listenToUpdates();
   

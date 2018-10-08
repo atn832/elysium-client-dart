@@ -41,8 +41,6 @@ class HardcodedChatService extends ChatService {
     mockUnsentBubble = Bubble(atn, ["looks like I lost connectivity"], DateTime.now());
 	}
 
-  String get username => "atn";
-
   listenToUpdates() => null;
 
   Future<List<Bubble>> getBubbles() async => mockBubbles;
