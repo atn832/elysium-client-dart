@@ -281,7 +281,7 @@ class FirebaseChatService implements ChatService {
     // Create a root reference
     var ref = fb.storage().ref("/");
     files.forEach((f) async {
-      final task = ref.child(f.name).put(f);
+      final task = ref.child(f.name.replaceAll(' ', '_')).put(f);
       final snapshot = await task.future;
       print(snapshot.ref.bucket);
       print(snapshot.ref.fullPath);
