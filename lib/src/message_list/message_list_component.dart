@@ -30,6 +30,7 @@ class MessageListComponent implements OnInit, AfterViewChecked {
   Bubble unsentBubble;
 
   bool newMessageAdded = false;
+  bool hasRedrawn = false;
   final _newMessage = StreamController<Null>();
   @Output()
   Stream<Null> get newMessage => _newMessage.stream;
@@ -45,6 +46,7 @@ class MessageListComponent implements OnInit, AfterViewChecked {
       eventSink.add(newerMessage);
     })).transform(debounceStream(Duration(milliseconds: 100))).listen((t) {
       ref.markForCheck();
+      hasRedrawn = true;
     });
     bubbles = await chatService.getBubbles();
     unsentBubble = chatService.getUnsentBubble();
@@ -52,9 +54,13 @@ class MessageListComponent implements OnInit, AfterViewChecked {
 
   ngAfterViewChecked() {
     // Notify that new messages have been rendered.
-    if (newMessageAdded) {
-      _newMessage.add(null);
-      newMessageAdded = false;
+    if (hasRedrawn) {
+      // Only scroll once we have redrawn since the newMessagesAdded flag was turned on.
+      if (newMessageAdded) {
+        _newMessage.add(null);
+        newMessageAdded = false;
+      }
+      hasRedrawn = false;
     }
   }
 
