@@ -41,7 +41,11 @@ class BubbleComponent {
     final localTimeDate = instant.inLocalZone();
     // Use DDC variant because of https://github.com/dart-lang/sdk/issues/33876.
     final todayInLocalTime = Instant.now().inLocalZone();
-    if (todayInLocalTime.zone.toString() == localTimeDate.zone.toString()) {
+    // Make it approximately midnight.
+    final todayMorning = todayInLocalTime.subtract(
+      Time.duration(Duration(hours: todayInLocalTime.hourOfDay, minutes: todayInLocalTime.minuteOfHour)))
+      .toDateTimeLocal();
+    if (localTimeDate.toDateTimeLocal().isAfter(todayMorning)) {
       return localTimeDate.toStringDDC('HH:mm');
     }
     return localTimeDate.toStringDDC('ddd dd MMM, HH:mm');

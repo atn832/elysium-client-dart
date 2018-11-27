@@ -125,6 +125,7 @@ class ChatComponent implements OnActivate {
   }
 
   scrollToBottom() {
+    print('scrollToBottom');
     final scrollable = querySelector('.scrollable');
     scrollable.scrollTop = scrollable.scrollHeight;
   }
