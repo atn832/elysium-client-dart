@@ -12,7 +12,16 @@ Created from templates made available by Stagehand under a BSD-style
 
 ## Set up
 
-Install Dart by following instructions at https://webdev.dartlang.org/guides/get-started#2-install-dart.
+Install Dart by following instructions at
+https://webdev.dartlang.org/guides/get-started#2-install-dart.
+
+### Avoiding compile error
+
+To avoid compile error `Target of URI doesn't exist: 'io_none.dart'.`, git
+clone time_machine and resource. Make time_machine depend directly on the
+clone. Then in the clone add the following comment:
+`// ignore: URI_DOES_NOT_EXIST`. Read more at
+https://github.com/Dana-Ferguson/time_machine/issues/9.
 
 Run the chat by running `webdev serve`.
 
