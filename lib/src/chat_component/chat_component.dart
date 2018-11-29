@@ -42,6 +42,7 @@ class ChatComponent implements OnActivate {
   String username;
   bool signingIn = false;
   bool askingSignIn = false;
+  bool stayAtTheBottom = true;
 
   List<Person> users;
 
@@ -124,9 +125,18 @@ class ChatComponent implements OnActivate {
     return parameters[usernameParam];
   }
 
-  scrollToBottom() {
-    print('scrollToBottom');
+  maybeScrollToBottom() {
+    print('maybeScrollToBottom');
+    if (!stayAtTheBottom) {
+      return;
+    }
     final scrollable = querySelector('.scrollable');
     scrollable.scrollTop = scrollable.scrollHeight;
+  }
+
+  onScroll(e) {
+    final scrollable = querySelector('.scrollable');
+    final userScrolledToTheBottom = scrollable.scrollTop + scrollable.clientHeight == scrollable.scrollHeight;
+    stayAtTheBottom = userScrolledToTheBottom;
   }
 }

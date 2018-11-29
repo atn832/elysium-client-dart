@@ -16,8 +16,8 @@
   </div>
   <chat-dropdown-menu *ngIf="chatService.requireExplicitSignIn"></chat-dropdown-menu>
 </div>
-<div class="scrollable">
+<div class="scrollable" (scroll)="onScroll">
     <get-older-messages></get-older-messages>
-    <message-list (newMessage)="scrollToBottom"></message-list>
+    <message-list (newMessage)="maybeScrollToBottom"></message-list>
 </div>
 <input-bar></input-bar>
