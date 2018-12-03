@@ -19,4 +19,5 @@ class ImageLinkComponent {
   Uri uri;
 
   bool isImageVisible = false;
+  bool isFullWidth = false;
 }

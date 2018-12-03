@@ -5,4 +5,12 @@
         label="Photo {{isImageVisible ? 'ouverte' : 'fermée'}}.">
     </material-toggle>
 </div>
-<img src="{{uri}}" *ngIf="isImageVisible" />
+<div>
+    <material-toggle
+        *ngIf="isImageVisible"
+        [disabled]="false"
+        [(checked)]="isFullWidth"
+        label="Photo {{isFullWidth ? 'agrandie' : 'minimisée'}}.">
+    </material-toggle>
+</div>
+<img src="{{uri}}" *ngIf="isImageVisible" [class.full-width]="isFullWidth" />
