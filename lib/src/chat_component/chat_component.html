@@ -14,7 +14,7 @@
   <div class="scrollable-top">
       <user-list [users]="users"></user-list>
   </div>
-  <chat-dropdown-menu *ngIf="chatService.requireExplicitSignIn"></chat-dropdown-menu>
+  <!-- <chat-dropdown-menu *ngIf="chatService.requireExplicitSignIn"></chat-dropdown-menu> -->
 </div>
 <div class="scrollable" (scroll)="onScroll">
     <get-older-messages></get-older-messages>
