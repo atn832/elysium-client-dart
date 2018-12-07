@@ -10,4 +10,8 @@
     <input *ngIf="!sending" type="file" accept="image/png, image/jpeg" (change)="filesChanged" />
     <material-icon icon="photo"></material-icon>
   </material-fab>
+
+  <material-fab mini raised (trigger)="send()" [disabled]="message.isEmpty">
+    <material-icon icon="send"></material-icon>
+  </material-fab>
 </div>
