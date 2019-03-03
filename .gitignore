@@ -16,3 +16,4 @@ firebase_info.dart
 
 # Auto-generated test files
 *.g.dart
+.DS_Store
