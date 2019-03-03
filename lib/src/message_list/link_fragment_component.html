@@ -1,6 +1,6 @@
 <span [ngSwitch]="getMediaType(fragment.url)">
     <image-link *ngSwitchCase="'image'"
-        [uri]="resolvedUri" [displayName]="fragment.url"></image-link>
+        [uri]="fragment | resolve | async" [displayName]="fragment.url"></image-link>
     <regular-link *ngSwitchDefault
-        [uri]="resolvedUri" [displayName]="fragment.url"></regular-link>
+        [uri]="fragment | resolve | async" [displayName]="fragment.url"></regular-link>
 </span>
