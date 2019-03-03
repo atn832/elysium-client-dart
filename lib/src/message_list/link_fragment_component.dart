@@ -25,7 +25,8 @@ class LinkFragmentComponent {
   LinkFragment fragment;
 
   bool isImage(String url) {
-    return url.endsWith(".png") || url.endsWith(".jpg") || url.endsWith(".jpeg");
+    final lowerCaseUrl = url.toLowerCase();
+    return lowerCaseUrl.endsWith(".png") || lowerCaseUrl.endsWith(".jpg") || lowerCaseUrl.endsWith(".jpeg");
   }
 
   getMediaType(String url) {
