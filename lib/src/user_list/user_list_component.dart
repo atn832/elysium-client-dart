@@ -90,6 +90,13 @@ class UserListComponent {
     });
   }
 
+  String getMapUrl(Location location) {
+    if (location == null) return null;
+    final lat = location.lat;
+    final lng = location.lng;
+    return "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
+  }
+
   String getImageLink(Location location) {
     final lat = location.lat;
     final lng = location.lng;

@@ -5,14 +5,16 @@
     </material-chip>
   </li>
   <li *ngFor="let user of users; let i=index">
-    <material-chip class="user {{getColorClass(user)}}" [removable]="false">
-      <div>
-        {{user.name}}
-        <span class="timezone" *ngIf="user.timezone != null">
-          {{getShortTimezone(user.timezone)}}, {{getLocalTime(user.timezone)}}
-        </span>
-      </div>
-      <img class="map" src="{{getImageLink(user.location)}}" *ngIf="user.location != null">
-    </material-chip>
+    <a target="_blank" [href]="getMapUrl(user.location)">
+      <material-chip class="user {{getColorClass(user)}}" [removable]="false">
+        <div>
+          {{user.name}}
+          <span class="timezone" *ngIf="user.timezone != null">
+            {{getShortTimezone(user.timezone)}}, {{getLocalTime(user.timezone)}}
+          </span>
+        </div>
+        <img class="map" [src]="getImageLink(user.location)" *ngIf="user.location != null">
+      </material-chip>
+    </a>
   </li>
 </ul>
