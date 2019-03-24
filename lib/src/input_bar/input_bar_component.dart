@@ -1,7 +1,6 @@
-import "dart:html";
-
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
+import 'package:angular_forms/angular_forms.dart';
 
 import '../chat_service.dart';
 
@@ -15,6 +14,7 @@ import '../chat_service.dart';
     MaterialSpinnerComponent,
     NgIf,
     materialInputDirectives,
+    formDirectives,
   ],
 )
 
