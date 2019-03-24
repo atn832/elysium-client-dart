@@ -25,6 +25,12 @@ material-chip {
   border-radius: 13px;
 }
 
+@media (max-width: 450px) {
+  .map {
+    display: none;
+  }
+}
+
 .hidden {
   visibility: hidden;
 }
