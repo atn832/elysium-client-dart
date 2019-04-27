@@ -50,8 +50,11 @@ material-chip {
 }
 
 .dim {
-  margin-left: 8px;
   font-size: 13px;
+}
+
+.timezone {
+  margin-left: 8px;
 }
 
 .green .dim {
@@ -60,8 +63,4 @@ material-chip {
 
 .light-blue .dim {
   color: $mat-light-blue-100;
-}
-
-.newline {
-  display: block;
 }
