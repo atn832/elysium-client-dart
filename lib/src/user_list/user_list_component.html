@@ -9,9 +9,10 @@
       <material-chip class="user {{getColorClass(user)}}" [removable]="false">
         <div>
           {{user.name}}
-          <span class="timezone" *ngIf="user.timezone != null">
+          <span class="dim" *ngIf="user.timezone != null">
             {{getShortTimezone(user.timezone)}}, {{getLocalTime(user.timezone)}}
           </span>
+          <span class="newline dim">{{user.badge}}</span>
         </div>
         <img class="map" [src]="getImageLink(user.location)" *ngIf="user.location != null">
       </material-chip>

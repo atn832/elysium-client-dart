@@ -49,15 +49,19 @@ material-chip {
 	color: #fff;
 }
 
-.timezone {
+.dim {
   margin-left: 8px;
   font-size: 13px;
 }
 
-.green .timezone {
+.green .dim {
   color: $mat-green-100;
 }
 
-.light-blue .timezone {
+.light-blue .dim {
   color: $mat-light-blue-100;
+}
+
+.newline {
+  display: block;
 }

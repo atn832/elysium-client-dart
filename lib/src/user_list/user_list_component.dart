@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
+import 'package:elysium_client/src/badge_service.dart';
 import 'package:time_machine/time_machine.dart';
 
 import '../api_key.dart';
@@ -23,6 +24,7 @@ import '../person.dart';
 )
 class UserListComponent {
   final ColorService _colorService;
+  final BadgeService _badgeService;
 
   @Input()
   List<Person> users;
@@ -31,9 +33,10 @@ class UserListComponent {
   Map<String, String> timezoneToShortTimezone = Map();
   ChangeDetectorRef ref;
 
-  UserListComponent(this._colorService, ChangeDetectorRef this.ref) {
+  UserListComponent(this._colorService, this._badgeService, ChangeDetectorRef this.ref) {
     Timer.periodic(Duration(seconds: 3), (t) {
       collectMissingTimeZonesFromUsers();
+      updateBadges();
     });
   }
 
@@ -86,6 +89,20 @@ class UserListComponent {
         ref.markForCheck();
       } catch(e) {
         print("Could not get timezone info for " + timezone + ": " + e);
+      }
+    });
+  }
+
+  void updateBadges() async {
+    if (users == null) return;
+
+    users.forEach((u) async {
+      final name = u.name;
+      try {
+        u.badge = await _badgeService.getBadge(name);
+        ref.markForCheck();
+      } catch(e) {
+        print("Could not get badge for $name" + e);
       }
     });
   }

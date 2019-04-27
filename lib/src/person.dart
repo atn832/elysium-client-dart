@@ -4,6 +4,7 @@ class Person {
 	final String name;
   String timezone;
   Location location;
+  String badge;
 	
 	Person(this.name);
 
