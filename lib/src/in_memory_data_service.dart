@@ -644,6 +644,29 @@ class InMemoryDataService extends MockClient {
     ]
   };
 
+  static const YoutubeDataResponse = {
+    "kind": "youtube#channelListResponse",
+    "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/gOnFkv5hseqI2Z6ZL-R99K6HAy4\"",
+    "pageInfo": {
+      "totalResults": 1,
+      "resultsPerPage": 5
+    },
+    "items": [
+      {
+      "kind": "youtube#channel",
+      "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/RSeZaAR3E4778U3KjDbpDVeMbNk\"",
+      "id": "UCj1uvaVv-iHtFvSCFoiLpYw",
+      "statistics": {
+        "viewCount": 388450,
+        "commentCount": 0,
+        "subscriberCount": 14474,
+        "hiddenSubscriberCount": false,
+        "videoCount": 27
+      }
+      }
+    ]
+  };
+
   static const GetOlderMessagesResponse = {
     "chanList": [
       {
@@ -797,6 +820,11 @@ class InMemoryDataService extends MockClient {
             await Future.delayed(Duration(seconds: 2));
             // Reverse geocode
             data = ReverseGeocodeResponse;
+            break;
+          case 'channels':
+            await Future.delayed(Duration(seconds: 2));
+            // Reverse geocode
+            data = YoutubeDataResponse;
         }
         break;
       default:
