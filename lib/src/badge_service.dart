@@ -28,7 +28,7 @@ class BadgeService {
       final response = await _http.get(_url);
       final data = extractData(response) as Map<String, dynamic>;
       final subscriberCount = data["items"][0]["statistics"]["subscriberCount"];
-      _cache = '$subscriberCount followers';
+      _cache = '$subscriberCount fans';
       Future.delayed(Duration(minutes: 30), () {
         _cache = null;
       });
