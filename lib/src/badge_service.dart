@@ -76,5 +76,4 @@ class BadgeService {
     final knownWords = knownCards / 2;
     return '$knownWords words';
   }
-  // /users/SD9Do3G9ylbFMjVGeqdyaBO3LH02/statistics/2019-04-26T17:44:07.957813
 }
