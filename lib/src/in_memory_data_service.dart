@@ -657,11 +657,11 @@ class InMemoryDataService extends MockClient {
       "etag": "\"XpPGQXPnxQJhLgs6enD_n8JR4Qk/RSeZaAR3E4778U3KjDbpDVeMbNk\"",
       "id": "UCj1uvaVv-iHtFvSCFoiLpYw",
       "statistics": {
-        "viewCount": 388450,
-        "commentCount": 0,
-        "subscriberCount": 14474,
+        "viewCount": "388450",
+        "commentCount": "0",
+        "subscriberCount": "14474",
         "hiddenSubscriberCount": false,
-        "videoCount": 27
+        "videoCount": "27"
       }
       }
     ]

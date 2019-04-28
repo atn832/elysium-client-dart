@@ -7,10 +7,13 @@ import 'package:http/http.dart';
 
 import 'package:firebase/firebase.dart' as fb;
 import 'package:firebase/firestore.dart' as fs;
+import 'package:intl/intl.dart';
 
 import 'firebase_cards_info.dart';
 import 'api_key.dart';
 import 'http_util.dart';
+
+final numberFormat = NumberFormat.decimalPattern('fr');
 
 @Injectable()
 class BadgeService {
@@ -41,8 +44,9 @@ class BadgeService {
       try {
         final response = await _http.get(_url);
         final data = extractData(response) as Map<String, dynamic>;
-        final subscriberCount = data["items"][0]["statistics"]["subscriberCount"];
-        _cache[name] = '$subscriberCount fans';
+        final subscriberCount = int.parse(data["items"][0]["statistics"]["subscriberCount"]);
+        final formattedCount = numberFormat.format(subscriberCount);
+        _cache[name] = '$formattedCount fans';
         setResetTimeout(name);
         return _cache[name];
       } catch (e) {
@@ -73,7 +77,7 @@ class BadgeService {
     final knownCards = data['LearningProgress.known'] +
       data['LearningProgress.newish'] +
       data['LearningProgress.wellKnown'];
-    final knownWords = knownCards / 2;
-    return '$knownWords words';
+    final knownWords = numberFormat.format(knownCards / 2);
+    return '$knownWords mots';
   }
 }
