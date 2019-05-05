@@ -77,7 +77,7 @@ class BadgeService {
     final knownCards = data['LearningProgress.known'] +
       data['LearningProgress.newish'] +
       data['LearningProgress.wellKnown'];
-    final knownWords = numberFormat.format(knownCards / 2);
+    final knownWords = numberFormat.format((knownCards / 2).toInt());
     return '$knownWords mots';
   }
 }
