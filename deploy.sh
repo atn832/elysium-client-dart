@@ -26,6 +26,7 @@ ssh root@$HOST "mkdir -p $DESTINATION/packages/time_machine"
 
 scp build/index.html root@$HOST:$DESTINATION
 scp build/main.dart.js root@$HOST:$DESTINATION
+scp sw.dart.js root@$HOST:$DESTINATION
 scp build/styles.css root@$HOST:$DESTINATION
 scp build/favicon.png root@$HOST:$DESTINATION
 

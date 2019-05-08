@@ -4,6 +4,7 @@ import 'package:angular_router/angular_router.dart';
 import 'package:elysium_client/src/badge_service.dart';
 import 'package:http/browser_client.dart';
 import 'package:http/http.dart';
+import 'package:service_worker/window.dart' as sw;
 
 import 'package:elysium_client/app_component.template.dart' as ng;
 import 'package:elysium_client/src/chat_service.dart';
@@ -24,5 +25,10 @@ import 'main.template.dart' as self;
 final InjectorFactory injector = self.injector$Injector;
 
 void main() {
+  if (sw.isSupported) {
+    sw.register('sw.dart.js');
+  } else {
+    print('ServiceWorkers are not supported.');
+  }
   runApp(ng.AppComponentNgFactory, createInjector: injector);
 }

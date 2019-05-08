@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_router/angular_router.dart';
+import 'package:service_worker/window.dart' as sw;
+import 'package:service_worker/window.dart';
 
 import '../chat_service.dart';
 import '../person.dart';
@@ -87,7 +89,7 @@ class ChatComponent implements OnActivate {
     chatService.newMessage
       .listen((newer) {
         if (newer) {
-          chatService.getBubbles().then((bubbles) {
+          chatService.getBubbles().then((bubbles) async {
             final last = bubbles?.last;
             if (last == null) return;
 
@@ -99,7 +101,9 @@ class ChatComponent implements OnActivate {
             // Send notification only if it's a different author.
             // Username can be null if chatService hasn't finished signing in yet.
             if (username != author) {
-              Notification(notificationText);
+              final registration = await sw.getRegistration('sw.dart.js');
+              registration.showNotification(notificationText,
+                ShowNotificationOptions()..tag = 'new_message');
             }
           });
         }
