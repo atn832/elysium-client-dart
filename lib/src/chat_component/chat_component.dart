@@ -5,6 +5,7 @@ import 'package:angular/angular.dart';
 import 'package:angular_components/angular_components.dart';
 import 'package:angular_router/angular_router.dart';
 import 'package:service_worker/window.dart' as sw;
+import 'package:service_worker/src/service_worker_api.dart' as swa;
 import 'package:service_worker/window.dart';
 
 import '../chat_service.dart';
@@ -45,6 +46,8 @@ class ChatComponent implements OnActivate {
   bool signingIn = false;
   bool askingSignIn = false;
   bool stayAtTheBottom = true;
+
+  swa.Notification latestNotification;
 
   List<Person> users;
 
@@ -102,8 +105,9 @@ class ChatComponent implements OnActivate {
             // Username can be null if chatService hasn't finished signing in yet.
             if (username != author) {
               final registration = await sw.getRegistration('sw.dart.js');
-              registration.showNotification(notificationText,
+              final notificationEvent = await registration.showNotification(notificationText,
                 ShowNotificationOptions()..tag = 'new_message');
+              latestNotification = notificationEvent.notification;
             }
           });
         }
@@ -142,5 +146,13 @@ class ChatComponent implements OnActivate {
     final scrollable = querySelector('.scrollable');
     final userScrolledToTheBottom = scrollable.scrollTop + scrollable.clientHeight == scrollable.scrollHeight;
     stayAtTheBottom = userScrolledToTheBottom;
+    clearNotifications();
+  }
+
+  clearNotifications() async {
+    if (latestNotification == null) return;
+
+    latestNotification.close();
+    latestNotification = null;
   }
 }
