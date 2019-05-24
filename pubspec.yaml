@@ -9,21 +9,22 @@ environment:
 
 dependencies:
   angular: ^5.1.0
-  angular_components: ^0.10.1
+  angular_components: ^0.13.0
   angular_router: ^2.0.0-alpha+20
   firebase: ^5.0.0
+  googleapis_auth: ^0.2.7
   http: ^0.12.0
   service_worker: ^0.2.3
   stream_transform: ^0.0.6
   # Workaround for https://github.com/dart-lang/sdk/issues/34177.
   time_machine:
-    path: /Users/anhtuan/git/time_machine
+    path: ../time_machine
 
 dev_dependencies:
   angular_test: ^2.1.0
-  build_runner: ^1.1.2
-  build_test: ^0.10.2
-  build_web_compilers: ^0.4.0
+  build_runner: ^1.4.0
+  build_test: ^0.10.7+3
+  build_web_compilers: ^2.0.0
   mockito: ^4.0.0
   sass_builder: ^2.0.0
   pageloader: ^3.0.2
@@ -32,3 +33,5 @@ dev_dependencies:
 dependency_overrides:
 # Because firebase >=5.0.0 depends on http ^0.11.3 and elysium_client depends on http ^0.12.0, firebase >=5.0.0 is forbidden
   http: ^0.12.0+1
+# Because angular_components 0.13.0 depends on build_config >=0.2.6 <0.4.0 and build_runner 1.4.0 depends on build_config >=0.4.0 <0.4.1
+  build_config: ^0.4.0
