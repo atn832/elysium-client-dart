@@ -24,6 +24,9 @@ class ReverseGeocodingService {
       }
       final response = await _httpCache[_url];
       final data = extractData(response) as Map<String, dynamic>;
+      if (data["results"] == null || data["results"].length == 0) {
+        return "${lat.toStringAsPrecision(4)}, ${lng.toStringAsPrecision(4)}";
+      }
       final firstResult = data["results"][0];
       final components = firstResult["address_components"];
       final List<String> usefulComponents = [];
