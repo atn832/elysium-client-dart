@@ -105,6 +105,7 @@ class FirebaseChatService implements ChatService {
       // Start listening to events
       listenToUpdates();
     } catch (e) {
+      print(e);
       throw "Error in sign in with google: $e";
     }
   }
@@ -233,8 +234,9 @@ class FirebaseChatService implements ChatService {
     fs.Firestore firestore = fb.firestore();
     fs.CollectionReference ref = firestore.collection("messages");
 
+    final uid = auth.currentUser.uid;
     final Map<String, dynamic> messageData = {
-      "uid": auth.currentUser.uid,
+      "uid": uid,
       "content": message,
       "timezone": DateTimeZone.local.toString(),
       "timestamp": DateTime.now().toUtc()
@@ -244,6 +246,11 @@ class FirebaseChatService implements ChatService {
     }
 
     await ref.add(messageData);
+
+    fs.CollectionReference usersRef = firestore.collection("users");
+    usersRef.doc(uid).set({
+      "lastTalked": DateTime.now().toUtc(),
+    }, fs.SetOptions(merge: true));
 
     // Only show latest bubbles to keep a smooth experience.
     trimBubbles();
