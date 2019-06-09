@@ -40,7 +40,7 @@ class FirebaseChatService implements ChatService {
 
   // Used to get past messages on sign-in.
   // And as the threshold when getting older messages.
-  DateTime threshold = DateTime.now().toUtc().subtract(Duration(hours: 12));
+  DateTime threshold;
   static Duration initialGetMoreDuration = const Duration(hours: 12);
   Duration getMoreDuration = initialGetMoreDuration;
 
@@ -120,7 +120,11 @@ class FirebaseChatService implements ChatService {
     });
   }
 
-  listenToUpdates() {
+  getLastTalked() {
+    return DateTime.now().toUtc().subtract(Duration(hours: 12));
+  }
+
+  listenToUpdates() async {
     if (_listeningToUpdates) return;
 
     _listeningToUpdates = true;
@@ -147,9 +151,10 @@ class FirebaseChatService implements ChatService {
       updateUserList(allDocs);
     });
 
+    final lastTalked = getLastTalked();
     // Listen to message changes.
     fs.CollectionReference ref = firestore.collection("messages");
-    ref.where("timestamp", ">", threshold).onSnapshot.listen((querySnapshot) {
+    ref.where("timestamp", ">=", lastTalked).onSnapshot.listen((querySnapshot) {
       final allData = querySnapshot.docChanges()
         .where((change) => change.type == "added")
         .map((change) => change.doc.data());
