@@ -120,8 +120,17 @@ class FirebaseChatService implements ChatService {
     });
   }
 
-  getLastTalked() {
-    return DateTime.now().toUtc().subtract(Duration(hours: 12));
+  getLastTalked() async {
+    fs.Firestore firestore = fb.firestore();
+    final uid = auth.currentUser.uid;
+    final user = await firestore.collection("users").doc(uid).get();
+    var lastTalked = user.get("lastTalked") as DateTime;
+    if (lastTalked == null) {
+      lastTalked = DateTime.now().toUtc().subtract(Duration(hours: 12));
+    } else {
+      lastTalked = lastTalked.subtract(Duration(minutes: 1));
+    }
+    return lastTalked;
   }
 
   listenToUpdates() async {
@@ -151,7 +160,7 @@ class FirebaseChatService implements ChatService {
       updateUserList(allDocs);
     });
 
-    final lastTalked = getLastTalked();
+    final lastTalked = await getLastTalked();
     // Listen to message changes.
     fs.CollectionReference ref = firestore.collection("messages");
     ref.where("timestamp", ">=", lastTalked).onSnapshot.listen((querySnapshot) {
