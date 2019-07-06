@@ -161,6 +161,7 @@ class FirebaseChatService implements ChatService {
     });
 
     final lastTalked = await getLastTalked();
+    threshold = lastTalked;
     // Listen to message changes.
     fs.CollectionReference ref = firestore.collection("messages");
     ref.where("timestamp", ">=", lastTalked).onSnapshot.listen((querySnapshot) {
