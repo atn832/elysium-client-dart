@@ -85,6 +85,10 @@ class MessageListComponent implements OnInit, AfterViewChecked {
       peopleToProcess.forEach((p) {
         try {
           Bubble bubble = bubbles[int.parse(c.id)];
+          // Ignore null locations
+          if (bubble.location == null) {
+            return;
+          }
           // TODO: compare better.
           if (p.name == bubble.author.name) {
             processed.add(p);
