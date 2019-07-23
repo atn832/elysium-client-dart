@@ -219,6 +219,13 @@ class FirebaseChatService implements ChatService {
       .map((doc) {
         // Update map of id to username
         final u = doc.data();
+
+        // Ignore who haven't talked in a week.
+        final lastTalked = u["lastTalked"] as DateTime;
+        if (lastTalked != null && DateTime.now().difference(lastTalked) > Duration(days: 7)) {
+          return null;
+        }
+
         final name = u["name"];
         uidToName[doc.id] = name;
 
@@ -231,7 +238,11 @@ class FirebaseChatService implements ChatService {
         }
         return p;
       })
-      .forEach((p) => newUserList.add(p));
+      .forEach((p) {
+        if (p != null) {
+          newUserList.add(p);
+        }
+      });
     if (!areListsEqual(userList, newUserList)) {
       print("Updating user list");
       userList.removeRange(0, userList.length);
