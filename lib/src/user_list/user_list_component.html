@@ -12,7 +12,7 @@
           <span class="dim timezone" *ngIf="user.timezone != null">
             {{getShortTimezone(user.timezone)}}, {{getLocalTime(user.timezone)}}
           </span>
-          <div class="dim badge">{{user.badge}}</div>
+          <div class="dim badge" *ngIf="user.badge != ''">{{user.badge}}</div>
         </div>
         <img class="map" [src]="getImageLink(user.location)" *ngIf="user.location != null">
       </material-chip>
