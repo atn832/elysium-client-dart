@@ -49,6 +49,11 @@ material-chip {
 	color: #fff;
 }
 
+.orange {
+	background-color: $mat-deep-orange-500;
+	color: #fff;
+}
+
 .dim {
   font-size: 13px;
 }
@@ -63,6 +68,10 @@ material-chip {
 
 .light-blue .dim {
   color: $mat-light-blue-100;
+}
+
+.orange .dim {
+  color: $mat-deep-orange-100;
 }
 
 .badge {
