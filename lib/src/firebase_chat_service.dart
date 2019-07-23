@@ -96,7 +96,7 @@ class FirebaseChatService implements ChatService {
       } catch(e) {
         print("problem getting local timezone: " + e);
       }
-      ref.doc(user.uid).set({
+      await ref.doc(user.uid).set({
         "name": username,
         "timezone": timezone,
         "lastSeen": DateTime.now().toUtc(),
