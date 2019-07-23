@@ -1,7 +1,7 @@
 import 'package:angular/core.dart';
 import 'person.dart';
 
-enum Color { green, light_blue }
+enum Color { green, light_blue, orange }
 
 /// Service that returns the color associated to a person.
 @Injectable()
@@ -17,13 +17,16 @@ class ColorService {
     }
     Color result;
     final modulo = startsWithAlphabetLetter(name) ?
-      name.codeUnitAt(0) % 2 : (name.codeUnitAt(0) + 1) % 2;
+      name.codeUnitAt(0) % 3 : (name.codeUnitAt(0) + 1) % 3;
     switch (modulo) {
       case 0:
-        result = Color.green;
+        result = Color.light_blue;
+        break;
+      case 1:
+        result = Color.orange;
         break;
       default:
-        result = Color.light_blue;
+        result = Color.green;
     }
     personNameToColor[name] = result;
     return result;

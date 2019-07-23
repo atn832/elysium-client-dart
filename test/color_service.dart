@@ -9,21 +9,22 @@ import 'package:elysium_client/src/person.dart';
 void main() {
   ColorService colorService = ColorService();
 
-  Person atn = Person("atn");
   Person tuan = Person("퇀");
-  Person frun = Person("frun");
   Person yuanyuan = Person("元元");
+  Person chris = Person("Chris");
 
   tearDown(disposeAnyRunningTest);
 
   test('Green for frun', () {
-    expect(colorService.getColor(frun), Color.green);
     expect(colorService.getColor(yuanyuan), Color.green);
   });
 
   test('Blue for atn', () {
-    expect(colorService.getColor(atn), Color.light_blue);
     expect(colorService.getColor(tuan), Color.light_blue);
+  });
+
+  test('Orange for Chris', () {
+    expect(colorService.getColor(chris), Color.orange);
   });
 
 }

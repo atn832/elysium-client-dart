@@ -13,8 +13,8 @@
 	line-height: 38px;
 	text-align: center;
 	flex-basis: 36px;
-    flex-shrink: 0;
-    margin-right: 8px;
+	flex-shrink: 0;
+	margin-right: 8px;
 }
 
 .bubble.green {
@@ -24,6 +24,16 @@
 
 .header.green {
 	background-color: $mat-green-500;
+	color: #fff;
+}
+
+.bubble.orange {
+	background-color: $mat-deep-orange-50;
+	border-color: $mat-deep-orange-100;
+}
+
+.header.orange {
+	background-color: $mat-deep-orange-500;
 	color: #fff;
 }
 
