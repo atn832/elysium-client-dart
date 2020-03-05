@@ -24,14 +24,13 @@ class BadgeService {
 
   BadgeService(this._http) {
     app = fb.initializeApp(
-      name: 'Cards',
-      apiKey: apiKey,
-      authDomain: authDomain,
-      databaseURL: databaseURL,
-      projectId: projectId,
-      storageBucket: storageBucket,
-      messagingSenderId: messagingSenderId
-    );
+        name: 'Cards',
+        apiKey: apiKey,
+        authDomain: authDomain,
+        databaseURL: databaseURL,
+        projectId: projectId,
+        storageBucket: storageBucket,
+        messagingSenderId: messagingSenderId);
   }
 
   Future<String> getBadge(String name) async {
@@ -39,12 +38,14 @@ class BadgeService {
       return _cache[name];
     }
     if (name == '元元') {
-      final _url = 'https://www.googleapis.com/youtube/v3/channels?part=statistics&' +
-        'forUsername=Fruncoyy&key=$ApiKey';
+      final _url =
+          'https://www.googleapis.com/youtube/v3/channels?part=statistics&' +
+              'forUsername=Fruncoyy&key=$ApiKey';
       try {
         final response = await _http.get(_url);
         final data = extractData(response) as Map<String, dynamic>;
-        final subscriberCount = int.parse(data["items"][0]["statistics"]["subscriberCount"]);
+        final subscriberCount =
+            int.parse(data["items"][0]["statistics"]["subscriberCount"]);
         final formattedCount = numberFormat.format(subscriberCount);
         _cache[name] = '$formattedCount fans';
         setResetTimeout(name);
@@ -69,15 +70,20 @@ class BadgeService {
 
   Future<String> getStats() async {
     fs.Firestore firestore = fb.firestore(app);
-    final latest = await firestore.collection("users").doc("SD9Do3G9ylbFMjVGeqdyaBO3LH02").collection("statistics")
-      .orderBy("datetime", "desc")
-      .limit(1)
-      .get();
+    final latest = await firestore
+        .collection("users")
+        .doc("SD9Do3G9ylbFMjVGeqdyaBO3LH02")
+        .collection("statistics")
+        .orderBy("datetime", "desc")
+        .limit(1)
+        .get();
     final data = latest.docs.first.data();
     final knownCards = data['LearningProgress.known'] +
-      data['LearningProgress.newish'] +
-      data['LearningProgress.wellKnown'];
+        data['LearningProgress.newish'] +
+        data['LearningProgress.wellKnown'];
     final knownWords = numberFormat.format((knownCards / 2).toInt());
-    return '$knownWords mots';
+    final unseenCards = data['LearningProgress.unseen'];
+    final unknownWords = numberFormat.format((unseenCards / 2).toInt());
+    return '$knownWords mots, $unknownWords restants';
   }
 }
