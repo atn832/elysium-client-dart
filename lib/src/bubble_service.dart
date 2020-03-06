@@ -53,7 +53,9 @@ class BubbleService {
         // Append.
         prevBubble.messages.add(message.message);
         prevBubble.dateRange.expand(message.time);
-        prevBubble.location = message.location;        
+        if (message.location != null) {
+          prevBubble.location = message.location;
+        }
         return true;
       } 
     }
