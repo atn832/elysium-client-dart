@@ -11,7 +11,6 @@ import 'package:time_machine/time_machine.dart';
 import 'bubble.dart';
 import 'bubble_service.dart';
 import 'chat_service.dart';
-import 'geolocation_dartdevc_polyfill.dart';
 import 'http_util.dart';
 import 'list_util.dart';
 import 'location.dart';
@@ -31,7 +30,7 @@ class HttpChatService extends ChatService {
   Coordinates currentLocation;
   
   HttpChatService(this._http, this._reverseGeocodingService) :
-      _geolocation = Geolocation(),
+      _geolocation = window.navigator.geolocation,
       signInCompleter = Completer() {
     signedIn = signInCompleter.future;
     bubbles = bubbleService.bubbles;
@@ -88,7 +87,7 @@ class HttpChatService extends ChatService {
       final watch = _geolocation.watchPosition(enableHighAccuracy: true, timeout: Duration(seconds: 1));
       if (watch != null) {
         watch.listen((p) {
-          currentLocation = p?.coordinates;
+          currentLocation = p?.coords;
         });
       } else {
         print("Cannot get geolocation.");

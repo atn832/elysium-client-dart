@@ -10,7 +10,7 @@ import 'bubble.dart';
 import 'bubble_service.dart';
 import 'chat_service.dart';
 import 'firebase_info.dart';
-import 'geolocation_dartdevc_polyfill.dart';
+// import 'geolocation_dartdevc_polyfill.dart';
 import 'list_util.dart';
 import 'location.dart';
 import 'message.dart';
@@ -45,7 +45,7 @@ class FirebaseChatService implements ChatService {
   Duration getMoreDuration = initialGetMoreDuration;
 
   FirebaseChatService(this._reverseGeocodingService) :
-      _geolocation = Geolocation() {
+      _geolocation = window.navigator.geolocation {
     _newMessageBroadcastStream = _newMessage.stream.asBroadcastStream();
     bubbles = bubbleService.bubbles;
     fb.initializeApp(
@@ -143,7 +143,7 @@ class FirebaseChatService implements ChatService {
       final watch = _geolocation.watchPosition(enableHighAccuracy: true, timeout: Duration(seconds: 1));
       if (watch != null) {
         watch.listen((p) {
-          currentLocation = p?.coordinates;
+          currentLocation = p?.coords;
         });
       } else {
         print("Cannot get geolocation.");
